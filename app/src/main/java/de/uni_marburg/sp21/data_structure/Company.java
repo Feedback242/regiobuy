@@ -43,4 +43,8 @@ public class Company {
     public ShopTypes getTypes() {
         return types;
     }
+
+    public ArrayList<Organization> getOrganizations() {
+        return organizations;
+    }
 }
