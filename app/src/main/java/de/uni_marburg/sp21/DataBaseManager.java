@@ -13,6 +13,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.uni_marburg.sp21.data_structure.Company;
+
 public class DataBaseManager {
 
     public static void getCompanyList(FirebaseFirestore db) {

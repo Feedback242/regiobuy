@@ -1,4 +1,4 @@
-package de.uni_marburg.sp21;
+package de.uni_marburg.sp21.data_structure;
 
 import java.util.Date;
 

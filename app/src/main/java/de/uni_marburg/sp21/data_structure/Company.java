@@ -1,7 +1,6 @@
-package de.uni_marburg.sp21;
+package de.uni_marburg.sp21.data_structure;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class Company {
     private final int ID;
@@ -29,4 +28,19 @@ public class Company {
         this.geoHash = geoHash;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public ShopTypes getTypes() {
+        return types;
+    }
 }
