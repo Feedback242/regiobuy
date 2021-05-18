@@ -9,7 +9,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
 import de.uni_marburg.sp21.R;
 
 public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder> {
@@ -64,14 +63,20 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
         public ViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
             text = itemView.findViewById(R.id.textCheck);
-            checkbox = itemView.findViewById(R.id.imageCheck);
+            checkbox = itemView.findViewById(R.id.openedCheckbox);
             isChecked = false;
-            checkbox.setOnClickListener(new View.OnClickListener() {
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(listener != null){
                         int position = getAdapterPosition();
                         if(position != RecyclerView.NO_POSITION){
+                            isChecked = !isChecked;
+                            if (isChecked){
+                                checkbox.setImageResource(R.drawable.ic_baseline_radio_button_checked_24);
+                            }else {
+                                checkbox.setImageResource(R.drawable.ic_baseline_radio_button_unchecked_24);
+                            }
                             listener.onItemClick(position, isChecked);
                         }
                     }
