@@ -27,7 +27,6 @@ import de.uni_marburg.sp21.data_structure.Location;
 import de.uni_marburg.sp21.data_structure.Message;
 import de.uni_marburg.sp21.data_structure.Organization;
 import de.uni_marburg.sp21.data_structure.ProductGroup;
-import de.uni_marburg.sp21.data_structure.ShopTypes;
 
 public class DataBaseManager {
 
@@ -77,10 +76,9 @@ public class DataBaseManager {
                                 }
 
 
-                                //TODO implement types
+
                                 if(document.get("types") != null){
-                                    ArrayList<String> list = (ArrayList<String>) document.get("types");
-                                    company.setTypes(new ShopTypes(list));
+                                    company.setTypes((ArrayList<String>) document.get("types"));
                                 }
 
                                 if(document.get("owner") != null){

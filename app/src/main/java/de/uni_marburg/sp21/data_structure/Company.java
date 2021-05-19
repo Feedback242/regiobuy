@@ -12,7 +12,7 @@ public class Company implements Serializable {
     private String description;
     private String mail;
     private String url;
-    private ShopTypes types;
+    private ArrayList<ShopType> shopTypes;
     private String owner;
 //    private TimeInterval[] openingHours = new TimeInterval[7];
     private HashMap openingHours;
@@ -49,8 +49,8 @@ public class Company implements Serializable {
         return address;
     }
 
-    public ShopTypes getTypes() {
-        return types;
+    public ArrayList<ShopType> getTypes() {
+        return shopTypes;
     }
 
     public ArrayList<Organization> getOrganizations() {
@@ -81,8 +81,8 @@ public class Company implements Serializable {
         this.url = url;
     }
 
-    public void setTypes(ShopTypes types) {
-        this.types = types;
+    public void setTypes(ArrayList<String> types) {
+        //TODO: implement types
     }
 
     public void setOwner(String owner) {
