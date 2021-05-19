@@ -10,8 +10,11 @@ import android.widget.ImageView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import de.uni_marburg.sp21.data_structure.Address;
 import de.uni_marburg.sp21.data_structure.Category;
 import de.uni_marburg.sp21.data_structure.Company;
 import de.uni_marburg.sp21.data_structure.ShopType;
@@ -46,9 +49,11 @@ public class MainActivity extends AppCompatActivity {
      //   buildRecyclerView();
      //   buildFilter();
 
-
     }
 
+    /**
+     * builds the Filter BottomSheetFragment, when clicked on the filterButton
+     */
     private void buildFilter(){
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,23 +64,51 @@ public class MainActivity extends AppCompatActivity {
                 settingsDialog.setOnItemClickListener(new BottomSheetFilter.OnItemClickListener() {
                     @Override
                     public void onOrganisationClick(int position, boolean isChecked) {
-                        //TODO
+
                     }
 
                     @Override
                     public void onTypeClick(int position, boolean isChecked) {
-                        //TODO
+
                     }
 
                     @Override
                     public void onCategoryClick(int position, boolean isChecked) {
-                        //TODO
+
+                    }
+
+                    @Override
+                    public void onTimeStartChanged(String time) {
+
+                    }
+
+                    @Override
+                    public void onTimeEndChanged(String time) {
+
+                    }
+
+                    @Override
+                    public void onTimeDateChanged(String time) {
+
+                    }
+
+                    @Override
+                    public void onDeliveryClick(boolean isDelivery) {
+
+                    }
+
+                    @Override
+                    public void onOpenedClick(boolean isOpen) {
+
                     }
                 });
             }
         });
     }
 
+    /**
+     * builds the main RecyclerView
+     */
     private void buildRecyclerView(){
         recyclerView = findViewById(R.id.recyclerView);
         adapter = new CompanyAdapter(companies);
@@ -87,4 +120,11 @@ public class MainActivity extends AppCompatActivity {
  //   private void createTestList(){
  //       companies = new ArrayList<>(Arrays.asList(new Company("name", 1, new Address("Gladenbach", "Bahnhofstraße 1", "35075"), "geoHash")));
  //   }
+    /**
+     * creates a test list, with one company
+     */
+    private void createTestList(){
+        companies = new ArrayList<>(Arrays.asList(new Company("name", "1", new Address("Gladenbach", "Bahnhofstraße 1", "35075"), "geoHash"),
+                new Company("name", "1", new Address("Gladenbach", "Bahnhofstraße 1", "35075"), "geoHash")));
+    }
 }

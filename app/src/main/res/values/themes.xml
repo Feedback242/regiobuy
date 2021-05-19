@@ -4,7 +4,7 @@
         <!-- Primary brand color. -->
         <item name="colorPrimary">#2196F3</item>
         <item name="colorPrimaryVariant">#3F51B5</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnPrimary">#1E1E1E</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">#2196F3</item>
         <item name="colorSecondaryVariant">#3F51B5</item>
@@ -28,8 +28,6 @@
 
     <style name="CustomBottomSheetDialogTheme" parent="Theme.Design.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/CustomBottomSheetStyle</item>
-        <item name="android:textColor">#1E1E1E</item>
-        <item name="android:textColorHighlight">#000000</item>
         <item name="android:textColorPrimary">?attr/colorOnPrimary</item>
         <item name="android:colorBackgroundFloating">#FFFFFF</item>
     </style>
