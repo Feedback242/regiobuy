@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.SearchView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
 
     private ImageView filterButton;
+    private SearchView searchView;
 
 
     @Override
@@ -41,12 +43,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        searchView = findViewById(R.id.searchView);
+
         database = FirebaseFirestore.getInstance();
         companies = DataBaseManager.getCompanyList(database, MainActivity.this);
         filterButton = findViewById(R.id.filterButton);
         buildRecyclerView();
         buildFilter();
-
     }
 
     /**
