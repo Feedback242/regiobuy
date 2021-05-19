@@ -82,7 +82,27 @@ public class Company implements Serializable {
     }
 
     public void setTypes(ArrayList<String> types) {
-        //TODO: implement types
+        ArrayList<ShopType> list = new ArrayList<>();
+        for(int i = 0; i < types.size(); i++){
+            switch (types.get(i)) {
+                case "producer":
+                    list.add(ShopType.PRODUCER);
+                    break;
+                case "shop":
+                    list.add(ShopType.SHOP);
+                    break;
+                case "restaurant":
+                    list.add(ShopType.RESTAURANT);
+                    break;
+                case "hotel":
+                    list.add(ShopType.HOTEL);
+                    break;
+                case "mart":
+                    list.add(ShopType.MART);
+                    break;
+            }
+            }
+        this.shopTypes = list;
     }
 
     public void setOwner(String owner) {
