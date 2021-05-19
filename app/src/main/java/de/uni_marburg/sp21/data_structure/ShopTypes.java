@@ -9,4 +9,8 @@ public class ShopTypes implements Serializable {
     public ShopTypes(ArrayList<String> shopTypes) {
         //TODO: Strings to ShopTypes
     }
+
+    public ArrayList<ShopType> getShopTypes() {
+        return shopTypes;
+    }
 }
