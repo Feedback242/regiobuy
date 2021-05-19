@@ -1,6 +1,8 @@
 package de.uni_marburg.sp21.data_structure;
 
-public class Organization {
+import java.io.Serializable;
+
+public class Organization implements Serializable {
     private final Double ID;
     private String name;
     private String url;

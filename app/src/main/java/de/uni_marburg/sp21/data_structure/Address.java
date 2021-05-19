@@ -1,6 +1,8 @@
 package de.uni_marburg.sp21.data_structure;
 
-public class Address {
+import java.io.Serializable;
+
+public class Address implements Serializable {
     private String city;
     private String street;
     private String zip;

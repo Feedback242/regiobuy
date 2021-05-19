@@ -2,9 +2,11 @@ package de.uni_marburg.sp21.data_structure;
 
 import androidx.annotation.NonNull;
 
+import java.io.Serializable;
+
 import de.uni_marburg.sp21.filter.CheckItem;
 
-public enum Category {
+public enum Category implements Serializable {
     VEGETABLES,
     FRUITS,
     MEAT,

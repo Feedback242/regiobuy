@@ -1,9 +1,10 @@
 package de.uni_marburg.sp21.data_structure;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Company {
+public class Company implements Serializable {
     private final String ID;
     private String name;
     private Address address;

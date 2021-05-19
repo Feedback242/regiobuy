@@ -1,5 +1,6 @@
 package de.uni_marburg.sp21;
 
+import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -9,8 +10,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.gson.Gson;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +31,9 @@ import de.uni_marburg.sp21.data_structure.ShopTypes;
 
 public class DataBaseManager {
 
-    public static List<Company> getCompanyList(FirebaseFirestore db) {
+    private static final String COMPANIES_FILENAME = "RegioBuy.ser";
+
+    public static List<Company> getCompanyList(FirebaseFirestore db, Context context) {
         List<Company> companies = new ArrayList<>();
 
         db.collection("companies")
@@ -33,6 +41,7 @@ public class DataBaseManager {
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        List<Company> temp = new ArrayList<>();
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(MainActivity.TAG, document.getData().toString());
@@ -137,19 +146,44 @@ public class DataBaseManager {
                                     System.out.println("test");
                                 }
 
-                                companies.add(company);
+                                temp.add(company);
                                 System.out.println("test");
 
                             }
                             System.out.println("test");
+                            save(temp, context);
                         } else {
                             Log.w(MainActivity.TAG, "Error getting documents.", task.getException());
                         }
                     }
                 });
-
-        System.out.println("test");
+        companies = load(context);
         return companies;
+    }
 
+    private static void save(List<Company> companies, Context context){
+        File path = context.getExternalFilesDir(null);
+        File file = new File(path, COMPANIES_FILENAME);
+
+        try{
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file));
+            out.writeObject(companies);
+            out.close();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    private static List<Company> load(Context context) {
+        File path = context.getExternalFilesDir(null);
+        File file = new File(path, COMPANIES_FILENAME);
+        List<Company> groceryLists = new ArrayList<>();
+        try {
+            ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
+            groceryLists = (List<Company>) in.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return groceryLists;
     }
 }

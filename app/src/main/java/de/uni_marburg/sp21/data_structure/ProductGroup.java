@@ -1,8 +1,9 @@
 package de.uni_marburg.sp21.data_structure;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class ProductGroup {
+public class ProductGroup implements Serializable {
     private Category category;
     private boolean rawProd;
     private Double producer;

@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -41,13 +42,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         database = FirebaseFirestore.getInstance();
-        DataBaseManager.getCompanyList(database);
+        companies = DataBaseManager.getCompanyList(database, MainActivity.this);
         filterButton = findViewById(R.id.filterButton);
-
-      //  createTestList();
-
-     //   buildRecyclerView();
-     //   buildFilter();
+        buildRecyclerView();
+        buildFilter();
 
     }
 
@@ -115,16 +113,5 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
-    }
-
- //   private void createTestList(){
- //       companies = new ArrayList<>(Arrays.asList(new Company("name", 1, new Address("Gladenbach", "Bahnhofstraße 1", "35075"), "geoHash")));
- //   }
-    /**
-     * creates a test list, with one company
-     */
-    private void createTestList(){
-        companies = new ArrayList<>(Arrays.asList(new Company("name", "1", new Address("Gladenbach", "Bahnhofstraße 1", "35075"), "geoHash"),
-                new Company("name", "1", new Address("Gladenbach", "Bahnhofstraße 1", "35075"), "geoHash")));
     }
 }

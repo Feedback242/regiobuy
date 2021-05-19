@@ -1,6 +1,8 @@
 package de.uni_marburg.sp21.data_structure;
 
-public class Location {
+import java.io.Serializable;
+
+public class Location implements Serializable {
     private double latitude;
     private double longitude;
 

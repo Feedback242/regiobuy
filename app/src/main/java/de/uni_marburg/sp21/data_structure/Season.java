@@ -1,6 +1,8 @@
 package de.uni_marburg.sp21.data_structure;
 
-public enum Season {
+import java.io.Serializable;
+
+public enum Season implements Serializable {
     SPRING,
     SUMMER,
     AUTUMN,
