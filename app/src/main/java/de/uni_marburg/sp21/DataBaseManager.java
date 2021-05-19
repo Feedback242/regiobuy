@@ -48,6 +48,10 @@ public class DataBaseManager {
 
                                 Company company = new Company((String) document.getId());
 
+                                if(document.get("name") != null){
+                                    company.setName((String)document.get("name"));
+                                }
+
                                 if(document.get("address") != null){
                                     HashMap map = (HashMap<String, String>)document.get("address");
                                     Address address = new Address((String)map.get("city"), (String)map.get("street"), (String)map.get("zip"));

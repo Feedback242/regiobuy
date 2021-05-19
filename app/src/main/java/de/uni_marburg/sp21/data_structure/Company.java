@@ -31,6 +31,8 @@ public class Company implements Serializable {
         this.geoHash = geoHash;
     }
 
+
+
     public Company(String ID) {
         this.ID = ID;
     }
