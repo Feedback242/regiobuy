@@ -1,21 +1,22 @@
 package de.uni_marburg.sp21.data_structure;
 
 public class Organization {
-    private final int ID;
+    private final Double ID;
     private String name;
     private String url;
 
-    public Organization(final int ID, String name) {
+    public Organization(final Double ID, String name, String url) {
         this.ID = ID;
         this.name = name;
-        this.url = "";
+        this.url = url;
     }
+
 
     public String getName() {
         return name;
     }
 
-    public int getID() {
+    public double getID() {
         return ID;
     }
 

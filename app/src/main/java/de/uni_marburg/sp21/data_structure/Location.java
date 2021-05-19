@@ -1,19 +1,19 @@
 package de.uni_marburg.sp21.data_structure;
 
 public class Location {
-    private float latitude;
-    private float longitude;
+    private double latitude;
+    private double longitude;
 
-    public Location(float latitude, float longitude) {
+    public Location(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
     }
 
-    public float getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public float getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 }

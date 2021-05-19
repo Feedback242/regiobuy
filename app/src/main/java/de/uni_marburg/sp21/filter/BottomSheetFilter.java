@@ -1,7 +1,6 @@
 package de.uni_marburg.sp21.filter;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,15 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import de.uni_marburg.sp21.CompanyAdapter;
 import de.uni_marburg.sp21.R;
-import de.uni_marburg.sp21.data_structure.Category;
-import de.uni_marburg.sp21.data_structure.Company;
-import de.uni_marburg.sp21.data_structure.Organization;
-import de.uni_marburg.sp21.data_structure.ShopTypes;
 
 public class BottomSheetFilter extends BottomSheetDialogFragment {
 
