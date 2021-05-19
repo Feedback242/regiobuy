@@ -14,7 +14,7 @@ public class Company implements Serializable {
     private String url;
     private ArrayList<ShopType> shopTypes;
     private String owner;
-//    private TimeInterval[] openingHours = new TimeInterval[7];
+//  private TimeInterval[] openingHours = new TimeInterval[7];
     private HashMap openingHours;
     private boolean deliveryService;
     private ArrayList<Organization> organizations;
