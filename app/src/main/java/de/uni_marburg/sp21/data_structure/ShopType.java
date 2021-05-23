@@ -33,4 +33,17 @@ public enum ShopType implements Serializable {
             default: return "";
         }
     }
+
+    public static ShopType valueOF(String name){
+        switch (name){
+            case "Markt": return MART;
+            case "Geschäft": return SHOP;
+            case "Hotel": return HOTEL ;
+            case "Direktproduzent": return PRODUCER;
+            case "Restaurant": return RESTAURANT;
+            default: return null;
+        }
+    }
+
+
 }

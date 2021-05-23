@@ -50,6 +50,21 @@ public class MainActivity extends AppCompatActivity {
         filterButton = findViewById(R.id.filterButton);
         buildRecyclerView();
         buildFilter();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                adapter.getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText == null || newText.length()== 0 ){
+                    adapter.getFilter().filter("");
+                }
+                return false;
+            }
+        });
     }
 
     /**
@@ -65,17 +80,29 @@ public class MainActivity extends AppCompatActivity {
                 settingsDialog.setOnItemClickListener(new BottomSheetFilter.OnItemClickListener() {
                     @Override
                     public void onOrganisationClick(int position, boolean isChecked) {
-
+                        if (isChecked) {
+                            settingsDialog.getORGANISATIONS()[position].check();
+                        } else {
+                            settingsDialog.getORGANISATIONS()[position].unCheck();
+                        }
                     }
 
                     @Override
                     public void onTypeClick(int position, boolean isChecked) {
-
+                        if (isChecked) {
+                            settingsDialog.getTYPES()[position].check();
+                        } else {
+                            settingsDialog.getTYPES()[position].unCheck();
+                        }
                     }
 
                     @Override
                     public void onCategoryClick(int position, boolean isChecked) {
-
+                        if (isChecked) {
+                            settingsDialog.getCATEGORIES()[position].check();
+                        } else {
+                            settingsDialog.getCATEGORIES()[position].unCheck();
+                        }
                     }
 
                     @Override
