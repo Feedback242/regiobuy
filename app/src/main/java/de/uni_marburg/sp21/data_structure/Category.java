@@ -21,7 +21,7 @@ public enum Category implements Serializable {
     PASTA;
 
 
-    public static CheckItem[] createCheckItemList(){
+    public static CheckItem[] createCheckItemArray(){
      CheckItem[] checkItem = new CheckItem[Category.values().length];
      for (int i = 0; i < checkItem.length; i++){
          checkItem[i] = new CheckItem(Category.values()[i].toString());

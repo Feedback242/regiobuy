@@ -20,7 +20,7 @@ import de.uni_marburg.sp21.data_structure.ShopType;
 import de.uni_marburg.sp21.filter.BottomSheetFilter;
 import de.uni_marburg.sp21.filter.CheckItem;
 
-public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHolder> implements Filterable {
+public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHolder> {
 
     private List<Company> companies;
     private List<Company> companyFullList;
@@ -56,6 +56,7 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
         return companies.size();
     }
 
+    /*
     private Filter exampleFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
@@ -86,6 +87,7 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
             notifyDataSetChanged();
         }
     };
+
     @Override
     public Filter getFilter() {
         return exampleFilter;
@@ -100,6 +102,7 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
 
         return result;
     }
+    */
 
     public List<CheckItem> allCheckedItems(){
          List<CheckItem> allCheckedItems = new ArrayList();

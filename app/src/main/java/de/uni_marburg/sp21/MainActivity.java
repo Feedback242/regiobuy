@@ -5,18 +5,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SearchView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import de.uni_marburg.sp21.data_structure.Address;
 import de.uni_marburg.sp21.data_structure.Category;
 import de.uni_marburg.sp21.data_structure.Company;
 import de.uni_marburg.sp21.data_structure.ShopType;
@@ -29,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseFirestore database;
 
     public List<Company> companies;
+    public List<Company> filteredCompanies;
 
     private CompanyAdapter adapter;
     private RecyclerView recyclerView;
@@ -37,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView filterButton;
     private SearchView searchView;
 
+    private CheckItem[] categories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,24 +47,50 @@ public class MainActivity extends AppCompatActivity {
 
         database = FirebaseFirestore.getInstance();
         companies = DataBaseManager.getCompanyList(database, MainActivity.this);
+        filteredCompanies = new ArrayList<>(companies);
+
         filterButton = findViewById(R.id.filterButton);
         buildRecyclerView();
         buildFilter();
+        Button button = findViewById(R.id.testButton);
+
+        categories = Category.createCheckItemArray();
+        //TODO for other checkitem arrays..
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String string = searchView.getQuery().toString();
+                filter(string);
+            }
+        });
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                adapter.getFilter().filter(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (newText == null || newText.length()== 0 ){
-                    adapter.getFilter().filter("");
+                if (!(newText == null || newText.length()== 0 )){
+                    filter(newText);
                 }
                 return false;
             }
+
         });
+
+    }
+
+    private void filter(String s){
+        filteredCompanies.clear();
+        for(Company c : companies){
+            if(c.getName().toLowerCase().contains(s.toLowerCase())){
+                filteredCompanies.add(c);
+            }
+        }
+        adapter.notifyDataSetChanged();
     }
 
     /**
@@ -75,34 +101,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //TODO Array aller organizations übergeben
-                BottomSheetFilter settingsDialog = new BottomSheetFilter(MainActivity.this, new CheckItem[]{new CheckItem("test")}, Category.createCheckItemList(), ShopType.createCheckItemList());
+                BottomSheetFilter settingsDialog = new BottomSheetFilter(MainActivity.this, new CheckItem[]{new CheckItem("test")}, categories, ShopType.createCheckItemArray());
                 settingsDialog.show(getSupportFragmentManager(), "SETTINGS_SHEET");
                 settingsDialog.setOnItemClickListener(new BottomSheetFilter.OnItemClickListener() {
                     @Override
                     public void onOrganisationClick(int position, boolean isChecked) {
-                        if (isChecked) {
-                            settingsDialog.getORGANISATIONS()[position].check();
-                        } else {
-                            settingsDialog.getORGANISATIONS()[position].unCheck();
-                        }
                     }
 
                     @Override
                     public void onTypeClick(int position, boolean isChecked) {
-                        if (isChecked) {
-                            settingsDialog.getTYPES()[position].check();
-                        } else {
-                            settingsDialog.getTYPES()[position].unCheck();
-                        }
                     }
 
                     @Override
                     public void onCategoryClick(int position, boolean isChecked) {
-                        if (isChecked) {
-                            settingsDialog.getCATEGORIES()[position].check();
-                        } else {
-                            settingsDialog.getCATEGORIES()[position].unCheck();
-                        }
+                        categories[position].check();
                     }
 
                     @Override
@@ -139,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void buildRecyclerView(){
         recyclerView = findViewById(R.id.recyclerView);
-        adapter = new CompanyAdapter(companies);
+        adapter = new CompanyAdapter(filteredCompanies);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);

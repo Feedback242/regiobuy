@@ -21,7 +21,7 @@ public enum ShopType implements Serializable {
     private final int[] SHOP_DRAWABLE_IDS = new int[]{R.drawable.shop0, R.drawable.shop1};
     private final int[] PRODUCER_DRAWABLE_IDS = new int[]{R.drawable.producer0, R.drawable.producer1};
 
-    public static CheckItem[] createCheckItemList() {
+    public static CheckItem[] createCheckItemArray() {
         CheckItem[] checkItem = new CheckItem[ShopType.values().length];
         for (int i = 0; i < checkItem.length; i++) {
             checkItem[i] = new CheckItem(ShopType.values()[i].toString());
