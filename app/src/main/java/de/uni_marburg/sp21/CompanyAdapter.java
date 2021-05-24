@@ -38,7 +38,9 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
         holder.name.setText(currentCompany.getName());
         holder.description.setText(currentCompany.getDescription());
         holder.location.setText(currentCompany.getAddress().getZip() + " " + currentCompany.getAddress().getCity());
-        holder.image.setImageResource(getImage(currentCompany));
+        List<ShopType> shopTypes = currentCompany.getTypes();
+        ShopType randomTypeFromList = shopTypes.get(new Random().nextInt(shopTypes.size()));
+        holder.image.setImageResource(randomTypeFromList.toDrawableID());
     }
 
     @Override
@@ -59,25 +61,6 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
             image = itemView.findViewById(R.id.image);
             description = itemView.findViewById(R.id.description);
             location = itemView.findViewById(R.id.location);
-        }
-    }
-
-    private int getImage(Company company){
-        ArrayList<ShopType> types = company.getTypes();
-        ShopType shopType;
-        if(types != null) {
-            int r = new Random().nextInt(types.size());
-            shopType = types.get(r);
-        } else {
-            return R.drawable.shop;
-        }
-
-        switch (shopType){
-            case RESTAURANT: return R.drawable.restaurant;
-            case PRODUCER: return R.drawable.producer;
-            case HOTEL: return R.drawable.hotel;
-            case MART: return R.drawable.mart;
-            default: return R.drawable.shop;
         }
     }
 }

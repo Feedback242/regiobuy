@@ -3,6 +3,8 @@ package de.uni_marburg.sp21.data_structure;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Company implements Serializable {
     private final String ID;
@@ -15,12 +17,12 @@ public class Company implements Serializable {
     private ArrayList<ShopType> shopTypes;
     private String owner;
 //  private TimeInterval[] openingHours = new TimeInterval[7];
-    private HashMap openingHours;
+    private Map<String, ArrayList<String>> openingHours;
     private boolean deliveryService;
-    private ArrayList<Organization> organizations;
+    private List<Organization> organizations;
     private String openingHoursComments;
-    private ArrayList<Message> messages;
-    private ArrayList<ProductGroup> productGroups;
+    private List<Message> messages;
+    private List<ProductGroup> productGroups;
     private String productsDescription;
     private String geoHash;
 
@@ -49,11 +51,11 @@ public class Company implements Serializable {
         return address;
     }
 
-    public ArrayList<ShopType> getTypes() {
+    public List<ShopType> getTypes() {
         return shopTypes;
     }
 
-    public ArrayList<Organization> getOrganizations() {
+    public List<Organization> getOrganizations() {
         return organizations;
     }
 
@@ -81,27 +83,11 @@ public class Company implements Serializable {
         this.url = url;
     }
 
-    public void setTypes(ArrayList<String> types) {
+    public void setTypes(List<String> types) {
         ArrayList<ShopType> list = new ArrayList<>();
-        for(int i = 0; i < types.size(); i++){
-            switch (types.get(i)) {
-                case "producer":
-                    list.add(ShopType.PRODUCER);
-                    break;
-                case "shop":
-                    list.add(ShopType.SHOP);
-                    break;
-                case "restaurant":
-                    list.add(ShopType.RESTAURANT);
-                    break;
-                case "hotel":
-                    list.add(ShopType.HOTEL);
-                    break;
-                case "mart":
-                    list.add(ShopType.MART);
-                    break;
-            }
-            }
+        for(String s : types){
+            list.add(ShopType.fromDatabaseString(s));
+        }
         this.shopTypes = list;
     }
 
@@ -109,7 +95,7 @@ public class Company implements Serializable {
         this.owner = owner;
     }
 
-    public void setOpeningHours(HashMap openingHours) {
+    public void setOpeningHours(Map openingHours) {
         this.openingHours = openingHours;
     }
 
@@ -117,7 +103,7 @@ public class Company implements Serializable {
         this.deliveryService = deliveryService;
     }
 
-    public void setOrganizations(ArrayList<Organization> organizations) {
+    public void setOrganizations(List<Organization> organizations) {
         this.organizations = organizations;
     }
 
@@ -125,11 +111,11 @@ public class Company implements Serializable {
         this.openingHoursComments = openingHoursComments;
     }
 
-    public void setMessages(ArrayList<Message> messages) {
+    public void setMessages(List<Message> messages) {
         this.messages = messages;
     }
 
-    public void setProductGroups(ArrayList<ProductGroup> productGroups) {
+    public void setProductGroups(List<ProductGroup> productGroups) {
         this.productGroups = productGroups;
     }
 

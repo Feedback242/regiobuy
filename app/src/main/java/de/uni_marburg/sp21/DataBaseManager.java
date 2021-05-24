@@ -20,18 +20,26 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.uni_marburg.sp21.data_structure.Address;
+import de.uni_marburg.sp21.data_structure.Category;
 import de.uni_marburg.sp21.data_structure.Company;
 import de.uni_marburg.sp21.data_structure.Location;
 import de.uni_marburg.sp21.data_structure.Message;
 import de.uni_marburg.sp21.data_structure.Organization;
 import de.uni_marburg.sp21.data_structure.ProductGroup;
+import de.uni_marburg.sp21.data_structure.Season;
 
 public class DataBaseManager {
 
     private static final String COMPANIES_FILENAME = "RegioBuy.ser";
 
+    /**
+     * @param db the Firebase Database
+     * @param context the Context of the Activity
+     * @return returns a List of Companies parsed from the Firebase Database
+     */
     public static List<Company> getCompanyList(FirebaseFirestore db, Context context) {
         List<Company> companies = new ArrayList<>();
 
@@ -43,120 +51,108 @@ public class DataBaseManager {
                         List<Company> temp = new ArrayList<>();
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(MainActivity.TAG, document.getData().toString());
 
-                                Company company = new Company((String) document.getId());
+                                Map<String, Object> documentMap = document.getData();
+                                Company company = new Company(documentMap.get("id").toString());
 
-                                if(document.get("name") != null){
-                                    company.setName((String)document.get("name"));
+                                //name
+                                if(documentMap.get("name") != null){
+                                    company.setName(documentMap.get("name").toString());
                                 }
-
-                                if(document.get("address") != null){
-                                    HashMap map = (HashMap<String, String>)document.get("address");
-                                    Address address = new Address((String)map.get("city"), (String)map.get("street"), (String)map.get("zip"));
-                                    company.setAddress(address);
+                                //description
+                                if(documentMap.get("description") != null){
+                                    company.setDescription(documentMap.get("description").toString());
                                 }
-
-                                if(document.get("location") != null){
-                                    HashMap map = (HashMap<String, Double>)document.get("location");
-                                    Location location = new Location((Double)map.get("lon"), (Double)map.get("lat"));
+                                //mail
+                                if(documentMap.get("mail") != null){
+                                    company.setMail(documentMap.get("mail").toString());
+                                }
+                                //url
+                                if(documentMap.get("url") != null){
+                                    company.setUrl(documentMap.get("url").toString());
+                                }
+                                //owner
+                                if(documentMap.get("owner") != null){
+                                    company.setOwner(documentMap.get("owner").toString());
+                                }
+                                //deliveryService
+                                if(documentMap.get("deliveryService") != null){
+                                    company.setDeliveryService(Boolean.parseBoolean(documentMap.get("deliveryService").toString()));
+                                }
+                                //openingHoursComment
+                                if(documentMap.get("openingHoursComments") != null){
+                                    company.setOpeningHoursComments(documentMap.get("openingHoursComments").toString());
+                                }
+                                //productsDescription
+                                if(documentMap.get("productsDescription") != null){
+                                    company.setProductsDescription(documentMap.get("productsDescription").toString());
+                                }
+                                //geoHash
+                                if(documentMap.get("geoHash") != null){
+                                    company.setGeoHash(documentMap.get("geoHash").toString());
+                                }
+                                //productGroups
+                                if(document.get("productGroups") != null) {
+                                    List<Map> productGroupList = (ArrayList<Map>) document.get("productGroups");
+                                    List<ProductGroup> productGroups = new ArrayList<>();
+                                    for (Map m : productGroupList) {
+                                        ProductGroup productGroup = new ProductGroup(Category.fromDatabaseString(m.get("category").toString()), (Double) m.get("producer"));
+                                        productGroup.setRawProd((Boolean) m.get("rawProduct"));
+                                        List<String> seasonsStrings = (ArrayList<String>) m.get("seasons");
+                                        List<Season> seasons = new ArrayList<>();
+                                        for (String s : seasonsStrings) {
+                                            seasons.add(Season.fromDatabaseString(s));
+                                        }
+                                        productGroup.setSeasons(seasons);
+                                        productGroup.setProductTags((ArrayList<String>) m.get("productTags"));
+                                        productGroups.add(productGroup);
+                                    }
+                                    company.setProductGroups(productGroups);
+                                }
+                                //messages
+                                if(document.get("messages") != null) {
+                                    List<Map> messagesList = (ArrayList<Map>) document.get("messages");
+                                    List<Message> messages = new ArrayList<>();
+                                    for (Map m : messagesList) {
+                                        messages.add(new Message(m.get("date").toString(), m.get("content").toString()));
+                                    }
+                                    company.setMessages(messages);
+                                }
+                                //organisations
+                                if(document.get("organizations") != null) {
+                                    List<Map> organisationsList = (ArrayList<Map>) documentMap.get("organizations");
+                                    List<Organization> organizations = new ArrayList<>();
+                                    for (Map m : organisationsList) {
+                                        organizations.add(new Organization((Double) m.get("id"), m.get("name").toString(), m.get("url").toString()));
+                                    }
+                                    company.setOrganizations(organizations);
+                                }
+                                //openingHours
+                                if(document.get("openingHours") != null) {
+                                    Map<String, ArrayList<String>> openingHoursMap = (Map<String, ArrayList<String>>) documentMap.get("openingHours");
+                                    company.setOpeningHours(openingHoursMap);
+                                }
+                                //types
+                                if(document.get("types") != null) {
+                                    List<String> types = (ArrayList<String>) documentMap.get("types");
+                                    company.setTypes(types);
+                                }
+                                //location
+                                if(document.get("location") != null) {
+                                    Map<String, Object> locationMap = (Map<String, Object>) documentMap.get("location");
+                                    Location location = new Location((Double) locationMap.get("lat"), (Double) locationMap.get("lon"));
                                     company.setLocation(location);
                                 }
-
-                                if(document.get("description") != null){
-                                    company.setDescription((String)document.get("description"));
+                                //address
+                                if(document.get("address") != null) {
+                                    Map<String, Object> addressMap = (Map<String, Object>) documentMap.get("address");
+                                    Address address = new Address(addressMap.get("city").toString(), addressMap.get("street").toString(), addressMap.get("zip").toString());
+                                    company.setAddress(address);
                                 }
-
-                                if(document.get("mail") != null){
-                                    company.setMail((String)document.get("mail"));
-                                }
-
-                                if(document.get("url") != null){
-                                    company.setUrl((String)document.get("url"));
-                                }
-
-
-
-                                if(document.get("types") != null){
-                                    company.setTypes((ArrayList<String>) document.get("types"));
-                                }
-
-                                if(document.get("owner") != null){
-                                    company.setOwner((String)document.get("owner"));
-                                }
-
-                                if(document.get("openingHours") != null){
-                                    company.setOpeningHours((HashMap<String, ArrayList<String>>)document.get("openingHours"));
-                                }
-
-                                if(document.get("deliveryService") != null){
-                                    company.setDeliveryService((Boolean)document.get("deliveryService"));
-                                }
-
-                                if(document.get("organizations") != null){
-                                    ArrayList arrayList = (ArrayList<HashMap>)document.get("organizations");
-                                    ArrayList orgs = new ArrayList<Organization>();
-                                    if(!arrayList.isEmpty()){
-                                        for(int i = 0; i < arrayList.size(); i++){
-                                            HashMap hashMap = (HashMap) arrayList.get(i);
-                                            orgs.add(new Organization((Double)hashMap.get("id"), (String)hashMap.get("name"), (String)hashMap.get("url")));
-                                        }
-                                    }
-                                    company.setOrganizations(orgs);
-                                }
-
-                                if(document.get("openingHoursComments") != null){
-                                    company.setOpeningHoursComments((String)document.get("openingHoursComments"));
-                                }
-
-                                if(document.get("messages") != null){
-                                    ArrayList arrayList = (ArrayList)document.get("messages");
-                                    ArrayList messages = new ArrayList<Message>();
-                                    if (!arrayList.isEmpty()){
-                                        for(int i = 0; i < arrayList.size(); i++){
-                                            HashMap hashMap = (HashMap)arrayList.get(i);
-                                            messages.add(new Message((String)hashMap.get("date"), (String)hashMap.get("content")));
-                                        }
-                                    }
-                                }
-
-                                if(document.get("productGroups") != null){
-                                    ArrayList arrayList = (ArrayList)document.get("productGroups");
-                                    if(!arrayList.isEmpty()){
-                                        for(int i = 0; i < arrayList.size(); i++){
-                                            HashMap hashMap = (HashMap)arrayList.get(i);
-                                            ProductGroup productGroup = new ProductGroup((String)hashMap.get("category"), (Double)hashMap.get("producer"));
-                                            if(hashMap.containsKey("rawProduct")){
-                                                productGroup.setRawProd((Boolean)hashMap.get("rawProduct"));
-                                            }
-                                            if(hashMap.containsKey("seasons")){
-                                                productGroup.setSeasons((ArrayList<String>)hashMap.get("seasons"));
-                                            }
-                                            if(hashMap.containsKey("productTags")){
-                                                productGroup.setSeasons((ArrayList<String>)hashMap.get("productTags"));
-                                            }
-                                        }
-                                    }
-                                }
-
-                                if(document.get("productsDescription") != null){
-                                    company.setProductsDescription((String)document.get("productsDescription"));
-                                }
-
-                                if(document.get("geoHash") != null){
-                                    company.setGeoHash((String)document.get("geoHash"));
-                                    System.out.println("test");
-                                }
-
                                 temp.add(company);
-                                System.out.println("test");
-
                             }
-                            System.out.println("test");
-                            save(temp, context);
-                        } else {
-                            Log.w(MainActivity.TAG, "Error getting documents.", task.getException());
                         }
+                        save(temp, context);
                     }
                 });
         companies = load(context);

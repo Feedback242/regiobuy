@@ -48,4 +48,21 @@ public enum Category implements Serializable {
             default: return "";
         }
     }
+
+    public static Category fromDatabaseString(String s) {
+        switch (s) {
+            case "vegetables": return VEGETABLES;
+            case "fruits": return FRUITS;
+            case "meat": return MEAT;
+            case "meatproducts": return MEAT_PRODUCTS;
+            case "cereals": return CEREALS;
+            case "milk": return MILK;
+            case "milkproducts": return MILK_PRODUCTS;
+            case "eggs": return EGGS;
+            case "honey": return HONEY;
+            case "beverages": return BEVERAGES;
+            case "bakedgoods": return PASTA;
+            default: return PASTA;
+        }
+    }
 }

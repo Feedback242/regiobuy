@@ -6,5 +6,18 @@ public enum Season implements Serializable {
     SPRING,
     SUMMER,
     AUTUMN,
-    WINTER
+    WINTER;
+
+    public static Season fromDatabaseString(String s) {
+        switch (s) {
+            case "spring":
+                return SPRING;
+            case "summer":
+                return SUMMER;
+            case "autumn":
+                return AUTUMN;
+            default:
+                return WINTER;
+        }
+    }
 }
