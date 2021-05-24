@@ -26,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
 
+import de.uni_marburg.sp21.MainActivity;
 import de.uni_marburg.sp21.R;
 
 public class BottomSheetFilter extends BottomSheetDialogFragment {
@@ -37,17 +38,17 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
     //categoryRV (ProduktKategorien)
     private RecyclerView recyclerViewCategories;
     private FilterAdapter adapterCategories;
-    private CheckItem[] CATEGORIES;
+    private static CheckItem[] CATEGORIES;
 
     //typeRV (Betriebsarten)
     private RecyclerView recyclerViewTypes;
     private FilterAdapter adapterTypes;
-    private CheckItem[] TYPES;
+    private static CheckItem[] TYPES;
 
     //organisationRV (Organisationen)
     private RecyclerView recyclerViewOrganisations;
     private FilterAdapter adapterOrganisations;
-    private CheckItem[] ORGANISATIONS;
+    private static CheckItem[] ORGANISATIONS;
 
     private ImageView timePickerStart;
     private ImageView timePickerEnd;
@@ -71,6 +72,7 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
         this.TYPES = TYPES;
         this.CATEGORIES = CATEGORIES;
     }
+
 
     /**
      * builds the three RecyclerViews and sets some onClicks
@@ -252,6 +254,49 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
         onClicks();
     }
 
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        System.out.println("onPause");
+        onResume();
+
+
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if(!itemView.isShown()) {
+            BottomSheetBehavior.from((View) itemView.getParent()).setHideable(true);
+            BottomSheetBehavior.from((View) itemView.getParent()).setState(BottomSheetBehavior.STATE_HIDDEN);
+        }else {
+            BottomSheetBehavior.from((View) itemView.getParent()).setHideable(false);
+            BottomSheetBehavior.from((View) itemView.getParent()).setState(BottomSheetBehavior.STATE_EXPANDED);
+        }
+
+    }
+
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        System.out.println("Dester");
+    }
+
+    public static CheckItem[] getCATEGORIES() {
+        return CATEGORIES;
+    }
+
+    public static CheckItem[] getORGANISATIONS() {
+        return ORGANISATIONS;
+    }
+
+    public static CheckItem[] getTYPES() {
+        return TYPES;
+    }
+
     /**
      * Sets the listener
      * @param listener an instance of the Interface below, to pass values
@@ -273,4 +318,7 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
         void onDeliveryClick(boolean isDelivery);
         void onOpenedClick(boolean isOpen);
     }
+
+
+
 }

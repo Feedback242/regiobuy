@@ -28,6 +28,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
         return viewHolder;
     }
 
+
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         CheckItem currentCheckItem = checkItems[position];
@@ -64,7 +65,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
             super(itemView);
             text = itemView.findViewById(R.id.textCheck);
             checkbox = itemView.findViewById(R.id.openedCheckbox);
-            isChecked = false;
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -78,10 +79,13 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
                                 checkbox.setImageResource(R.drawable.ic_baseline_radio_button_unchecked_24);
                             }
                             listener.onItemClick(position, isChecked);
+                            System.out.println(position);
                         }
                     }
                 }
             });
         }
+
+
     }
 }
