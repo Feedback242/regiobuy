@@ -63,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
         filterButton = findViewById(R.id.filterButton);
         buildRecyclerView();
         buildFilter();
-        Button button = findViewById(R.id.testButton);
 
         categories = Category.createCheckItemArray();
         types = ShopType.createCheckItemArray();
@@ -221,26 +220,26 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onTypeClick(int position, boolean isChecked) {
+                        types[position].check(isChecked);
                         if (isChecked) {
-                            types[position].check();
                             companies.iterator().forEachRemaining(x -> {
                                 if (x.getTypes().contains(types[position]))
                                     filteredCompanies.add(x);
                                 else filteredCompanies.remove(x);
                             });
                         } else {
-                            types[position].unCheck();
                             companies.iterator().forEachRemaining(x -> {
                                 if (!(x.getTypes().contains(types[position])))
                                     filteredCompanies.add(x);
                             });
                         }
+                        adapter.notifyDataSetChanged();
                     }
 
                     @Override
                     public void onCategoryClick(int position, boolean isChecked) {
+                        categories[position].check(isChecked);
                         if (isChecked) {
-                            categories[position].check();
                             companies.iterator().forEachRemaining(x -> {
                                 x.getProductGroups().iterator().forEachRemaining(a -> {
                                     if(a.getCategory().toString().equals(categories[position].getText()))
@@ -248,7 +247,6 @@ public class MainActivity extends AppCompatActivity {
                                 else filteredCompanies.remove(x);
                             }); });
                         } else {
-                            categories[position].unCheck();
                             companies.iterator().forEachRemaining(x -> {
                                 x.getProductGroups().iterator().forEachRemaining(a -> {
                                     if(!(a.getCategory().toString().equals(categories[position].getText())))
@@ -256,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
                         });
                     });
                         }
-                        categories[position].check(isChecked);
+                        adapter.notifyDataSetChanged();
                     }
 
                     @Override
