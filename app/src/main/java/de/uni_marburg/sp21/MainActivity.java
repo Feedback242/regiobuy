@@ -121,25 +121,49 @@ public class MainActivity extends AppCompatActivity {
 
         for (Company c : companies) {
 
+            boolean hasType = false;
+            List<ShopType> shopTypes = c.getTypes();
+            for(ShopType companyTypes : shopTypes){
+                for (CheckItem types : types) {
+                    if(companyTypes.toString().equals(types.getText())){
+                        hasType = true;
+                    }
+                }
+            }
+            if(!hasType){
+                break;
+            }
+
+            boolean hasOrganisation = false;
+            List<Organization> companyOrganisations = c.getOrganizations();
+            for(Organization companyOrganisation : companyOrganisations){
+                for (CheckItem organisation : organisations) {
+                    if(companyOrganisation.getName().equals(organisation.getText())){
+                        hasOrganisation = true;
+                    }
+                }
+            }
+            if(!hasOrganisation){
+                break;
+            }
+
+            boolean hasCategory = false;
+            List<ProductGroup> companyProductGroups = c.getProductGroups();
+            for(ProductGroup p : companyProductGroups){
+                for (CheckItem cat : categories) {
+                    if(cat.isChecked() && cat.getText().equals(p.getCategory().toString())){
+                        hasCategory = true;
+                    }
+                }
+            }
+            if(!hasCategory){
+                break;
+            }
+
             boolean isDefaultRestrictions = true;
-
-            for (CheckItem t : types) {
-                if(t.isChecked()){
-
-                }
-            }
-            for (CheckItem o : organisations) {
-                if(o.isChecked()){
-                }
-            }
-            for (CheckItem cat : categories) {
-                if(cat.isChecked()){
-
-                }
-            }
             for (CheckItem r : restrictions) {
                 if(r.isChecked()){
-
+                    isDefaultRestrictions = false;
                 }
             }
 
@@ -269,6 +293,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onTypeClick(int position, boolean isChecked) {
                         types[position].check(isChecked);
+                        /*
                         if (isChecked) {
                             companies.iterator().forEachRemaining(x -> {
                                 if (x.getTypes().contains(types[position]))
@@ -282,11 +307,14 @@ public class MainActivity extends AppCompatActivity {
                             });
                         }
                         adapter.notifyDataSetChanged();
+
+                         */
                     }
 
                     @Override
                     public void onCategoryClick(int position, boolean isChecked) {
                         categories[position].check(isChecked);
+                        /*
                         if (isChecked) {
                             companies.iterator().forEachRemaining(x -> {
                                 x.getProductGroups().iterator().forEachRemaining(a -> {
@@ -303,6 +331,8 @@ public class MainActivity extends AppCompatActivity {
                     });
                         }
                         adapter.notifyDataSetChanged();
+
+                        */
                     }
 
                     @Override

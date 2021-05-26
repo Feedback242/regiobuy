@@ -81,6 +81,7 @@ public class Company implements Serializable {
     public Map<String, ArrayList<String>> getOpeningHours() {
         return openingHours;
     }
+    
 
     public void setName(String name) {
         this.name = name;
