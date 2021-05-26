@@ -27,4 +27,8 @@ public class ProductGroup implements Serializable {
         this.category = category;
         this.producer = producer;
     }
+
+    public List<String> getProductTags() {
+        return productTags;
+    }
 }

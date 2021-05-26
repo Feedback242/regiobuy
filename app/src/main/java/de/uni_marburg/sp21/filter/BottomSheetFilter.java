@@ -50,6 +50,11 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
     private FilterAdapter adapterOrganisations;
     private static CheckItem[] ORGANISATIONS;
 
+    //restrictionRV (Einschränkungen)
+    private RecyclerView recyclerViewRestrictions;
+    private FilterAdapter adapterRestrictions;
+    private static CheckItem[] RESTRICTIONS;
+
     private ImageView timePickerStart;
     private ImageView timePickerEnd;
     private ImageView timePickerDate;
@@ -66,37 +71,49 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
     private boolean isCheckedOpen;
     private boolean isCheckedDelivery;
 
-    public BottomSheetFilter(Context context, final CheckItem[] ORGANIZATIONS, final CheckItem[] CATEGORIES, final CheckItem[] TYPES){
+    public BottomSheetFilter(Context context, final CheckItem[] ORGANIZATIONS, final CheckItem[] CATEGORIES, final CheckItem[] TYPES, final CheckItem[] RESTRICTIONS){
         this.context = context;
-        this.ORGANISATIONS = ORGANISATIONS;
+        this.ORGANISATIONS = ORGANIZATIONS;
         this.TYPES = TYPES;
         this.CATEGORIES = CATEGORIES;
+        this.RESTRICTIONS = RESTRICTIONS;
     }
 
-
-    /**
-     * builds the three RecyclerViews and sets some onClicks
-     */
-    private void buildRecyclerView(){
+    private void buildRecyclerView(int recyclerViewID, RecyclerView recyclerView, FilterAdapter adapter, CheckItem[] checkItems){
         recyclerViewCategories = itemView.findViewById(R.id.categoryRV);
         recyclerViewTypes = itemView.findViewById(R.id.typesRV);
         recyclerViewOrganisations = itemView.findViewById(R.id.organisationRV);
+        recyclerViewRestrictions = itemView.findViewById(R.id.restrictionsnRV);
 
+        adapterRestrictions = new FilterAdapter(RESTRICTIONS);
         adapterCategories = new FilterAdapter(CATEGORIES);
         adapterTypes = new FilterAdapter(TYPES);
-        adapterOrganisations = new FilterAdapter(new CheckItem[]{new CheckItem("name")});
+        adapterOrganisations = new FilterAdapter(ORGANISATIONS);
 
         RecyclerView.LayoutManager layoutManagerCategory = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
         RecyclerView.LayoutManager layoutManagerTypes = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
         RecyclerView.LayoutManager layoutManagerOrganisations = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+        RecyclerView.LayoutManager linearLayoutManagerRestrictions = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
 
         recyclerViewCategories.setLayoutManager(layoutManagerCategory);
         recyclerViewTypes.setLayoutManager(layoutManagerTypes);
         recyclerViewOrganisations.setLayoutManager(layoutManagerOrganisations);
+        recyclerViewRestrictions.setLayoutManager(linearLayoutManagerRestrictions);
 
         recyclerViewCategories.setAdapter(adapterCategories);
         recyclerViewTypes.setAdapter(adapterTypes);
         recyclerViewOrganisations.setAdapter(adapterOrganisations);
+        recyclerViewRestrictions.setAdapter(adapterRestrictions);
+    }
+
+    /**
+     * builds the three RecyclerViews and sets some onClicks
+     */
+    private void buildRecyclerViews(){
+        buildRecyclerView(R.id.restrictionsnRV, recyclerViewRestrictions, adapterRestrictions, RESTRICTIONS);
+        buildRecyclerView(R.id.typesRV, recyclerViewTypes, adapterTypes, TYPES);
+        buildRecyclerView(R.id.organisationRV, recyclerViewOrganisations, adapterOrganisations, ORGANISATIONS);
+        buildRecyclerView(R.id.categoryRV, recyclerViewCategories, adapterCategories, CATEGORIES);
 
         adapterCategories.setOnItemClickListener(new FilterAdapter.OnItemClickListener() {
             @Override
@@ -124,6 +141,15 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
                 }
             }
         });
+
+        adapterRestrictions.setOnItemClickListener(new FilterAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position, boolean isChecked) {
+                if(listener != null) {
+                    listener.onRestrictionClick(position, isChecked);
+                }
+            }
+        });
     }
 
     private void buildTimePicker(){
@@ -134,8 +160,6 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
         startTime = itemView.findViewById(R.id.startTime);
         endTime = itemView.findViewById(R.id.endTime);
         dateTime = itemView.findViewById(R.id.dateTime);
-
-        Calendar calendar = Calendar.getInstance();
 
         timePickerStart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -249,7 +273,7 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
         super.onStart();
         //this expands the bottom sheet even after a config change
         BottomSheetBehavior.from((View) itemView.getParent()).setState(BottomSheetBehavior.STATE_EXPANDED);
-        buildRecyclerView();
+        buildRecyclerViews();
         buildTimePicker();
         onClicks();
     }
@@ -285,18 +309,6 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
         System.out.println("Dester");
     }
 
-    public static CheckItem[] getCATEGORIES() {
-        return CATEGORIES;
-    }
-
-    public static CheckItem[] getORGANISATIONS() {
-        return ORGANISATIONS;
-    }
-
-    public static CheckItem[] getTYPES() {
-        return TYPES;
-    }
-
     /**
      * Sets the listener
      * @param listener an instance of the Interface below, to pass values
@@ -312,13 +324,11 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
         void onOrganisationClick(int position, boolean isChecked);
         void onTypeClick(int position, boolean isChecked);
         void onCategoryClick(int position, boolean isChecked);
+        void onRestrictionClick(int position, boolean isChecked);
         void onTimeStartChanged(String time);
         void onTimeEndChanged(String time);
         void onTimeDateChanged(String time);
         void onDeliveryClick(boolean isDelivery);
         void onOpenedClick(boolean isOpen);
     }
-
-
-
 }

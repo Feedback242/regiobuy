@@ -9,12 +9,8 @@ public class CheckItem {
         isChecked = false;
     }
 
-    public void check() {
-        isChecked = true;
-    }
-
-    public void unCheck() {
-        isChecked = false;
+    public void check(boolean isChecked) {
+        this.isChecked = isChecked;
     }
 
     public boolean isChecked() {

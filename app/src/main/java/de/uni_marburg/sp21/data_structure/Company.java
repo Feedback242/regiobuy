@@ -16,7 +16,6 @@ public class Company implements Serializable {
     private String url;
     private ArrayList<ShopType> shopTypes;
     private String owner;
-//  private TimeInterval[] openingHours = new TimeInterval[7];
     private Map<String, ArrayList<String>> openingHours;
     private boolean deliveryService;
     private List<Organization> organizations;
@@ -57,6 +56,26 @@ public class Company implements Serializable {
 
     public List<Organization> getOrganizations() {
         return organizations;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public String getProductsDescription() {
+        return productsDescription;
+    }
+
+    public List<ProductGroup> getProductGroups() {
+        return productGroups;
+    }
+
+    public String getOpeningHoursComments() {
+        return openingHoursComments;
+    }
+
+    public List<Message> getMessages() {
+        return messages;
     }
 
     public void setName(String name) {

@@ -13,4 +13,8 @@ public class Message implements Serializable {
         this.date = date;
         this.content = content;
     }
+
+    public String getContent() {
+        return content;
+    }
 }

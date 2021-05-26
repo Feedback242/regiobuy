@@ -13,10 +13,14 @@ import android.widget.SearchView;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import de.uni_marburg.sp21.data_structure.Category;
 import de.uni_marburg.sp21.data_structure.Company;
+import de.uni_marburg.sp21.data_structure.Message;
+import de.uni_marburg.sp21.data_structure.Organization;
+import de.uni_marburg.sp21.data_structure.ProductGroup;
 import de.uni_marburg.sp21.data_structure.ShopType;
 import de.uni_marburg.sp21.filter.BottomSheetFilter;
 import de.uni_marburg.sp21.filter.CheckItem;
@@ -27,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseFirestore database;
 
     public List<Company> companies;
-    public List<Company> filteredCompanies;
+    public HashSet<Company> filteredCompanies;
 
     private CompanyAdapter adapter;
     private RecyclerView recyclerView;
@@ -37,6 +41,11 @@ public class MainActivity extends AppCompatActivity {
     private SearchView searchView;
 
     private CheckItem[] categories;
+    private CheckItem[] organisations;
+    private CheckItem[] restrictions;
+    private CheckItem[] types;
+    private boolean isOpen;
+    private boolean isDelivery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,23 +56,19 @@ public class MainActivity extends AppCompatActivity {
 
         database = FirebaseFirestore.getInstance();
         companies = DataBaseManager.getCompanyList(database, MainActivity.this);
-        filteredCompanies = new ArrayList<>(companies);
+        filteredCompanies = new HashSet<>(companies);
 
         filterButton = findViewById(R.id.filterButton);
         buildRecyclerView();
         buildFilter();
-        Button button = findViewById(R.id.testButton);
 
         categories = Category.createCheckItemArray();
-        //TODO for other checkitem arrays..
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String string = searchView.getQuery().toString();
-                filter(string);
-            }
-        });
+        types = ShopType.createCheckItemArray();
+        organisations = getOrganisations();
+        restrictions = new CheckItem[]{new CheckItem("Name Betrieb"), new CheckItem("Name Besitzer"), new CheckItem("Arten Betrieb"),
+                new CheckItem("Adresse"), new CheckItem("Beschreibung Betrieb"), new CheckItem("Beschreibung Produkte"),
+                new CheckItem("Schlagworte Produktgruppen"), new CheckItem("Öffnungseit Anmerkung"), new CheckItem("Name Organisation"),
+                new CheckItem("Nachrichten des Betriebes")};
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -78,43 +83,150 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return false;
             }
-
         });
 
     }
 
-    private void filter(String s){
-        filteredCompanies.clear();
+    private CheckItem[] getOrganisations(){
+        HashSet<String> set = new HashSet<>();
         for(Company c : companies){
-            if(c.getName().toLowerCase().contains(s.toLowerCase())){
-                filteredCompanies.add(c);
+            List<Organization> orgs = c.getOrganizations();
+            for(Organization o : orgs){
+                set.add(o.getName());
             }
         }
-        adapter.notifyDataSetChanged();
+        List<CheckItem> temp = new ArrayList<>();
+        for (String s : set){
+            temp.add(new CheckItem(s));
+        }
+        return temp.toArray(new CheckItem[temp.size()]);
     }
 
-    /**
-     * builds the Filter BottomSheetFragment, when clicked on the filterButton
-     */
+    private void filter(String s) {
+        filteredCompanies.clear();
+        for (Company c : companies) {
+            for (CheckItem r : restrictions) {
+                if (r.isChecked()) {
+                    //company name
+                    if (restrictions[0].equals(r.getText())) {
+                        if (c.getName().contains(s)) {
+                            filteredCompanies.add(c);
+                        }
+                    }
+                    //name owner
+                    else if (restrictions[1].equals(r.getText())) {
+                        if (c.getOwner().contains(s)) {
+                            filteredCompanies.add(c);
+                        }
+                    }
+                    //type
+                    else if (restrictions[2].equals(r.getText())) {
+                        for (ShopType shopType : ShopType.values()){
+                            if (shopType.toString().contains(s)) {
+                                filteredCompanies.add(c);
+                                break;
+                            }
+                        }
+                    }
+                    //adress
+                    else if (restrictions[3].equals(r.getText())) {
+                        if (c.getAddress().getCity().contains(s)) {
+                            filteredCompanies.add(c);
+                        }
+                        if (c.getAddress().getStreet().contains(s)) {
+                            filteredCompanies.add(c);
+                        }
+                        if (c.getAddress().getZip().contains(s)) {
+                            filteredCompanies.add(c);
+                        }
+                    }
+                    //description companie
+                    else if (restrictions[4].equals(r.getText())) {
+                        if (c.getDescription().contains(s)) {
+                            filteredCompanies.add(c);
+                        }
+                    }
+                    //description products
+                    else if (restrictions[5].equals(r.getText())) {
+                        if (c.getProductsDescription().contains(s)) {
+                            filteredCompanies.add(c);
+                        }
+                    }
+                    //product tags
+                    else if (restrictions[6].equals(r.getText())) {
+                        List<ProductGroup> productGroups = c.getProductGroups();
+                        boolean isAdded = false;
+                        for (ProductGroup p : productGroups){
+                            for(String tag : p.getProductTags()){
+                                if (tag.contains(s)) {
+                                    filteredCompanies.add(c);
+                                    isAdded = true;
+                                    break;
+                                }
+                            }
+                            if (isAdded) break;
+                        }
+                    }
+                    //opening hours comments
+                    else if (restrictions[7].equals(r.getText())) {
+                        if (c.getOpeningHoursComments().contains(s)) {
+                            filteredCompanies.add(c);
+                        }
+                    }
+                    //organisation names
+                    else if (restrictions[8].equals(r.getText())) {
+                        List<Organization> orgs = c.getOrganizations();
+                        for (Organization o : orgs){
+                            if (o.getName().contains(s)) {
+                                filteredCompanies.add(c);
+                                break;
+                            }
+                        }
+                    }
+                    //messages
+                    else if (restrictions[9].equals(r.getText())) {
+                        List<Message> messages = c.getMessages();
+                        for (Message m : messages){
+                            if (m.getContent().contains(s)) {
+                                filteredCompanies.add(c);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+
+
     private void buildFilter(){
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //TODO Array aller organizations übergeben
-                BottomSheetFilter settingsDialog = new BottomSheetFilter(MainActivity.this, new CheckItem[]{new CheckItem("test")}, categories, ShopType.createCheckItemArray());
+                BottomSheetFilter settingsDialog = new BottomSheetFilter(MainActivity.this, organisations, categories, types, restrictions);
                 settingsDialog.show(getSupportFragmentManager(), "SETTINGS_SHEET");
                 settingsDialog.setOnItemClickListener(new BottomSheetFilter.OnItemClickListener() {
                     @Override
                     public void onOrganisationClick(int position, boolean isChecked) {
+                        organisations[position].check(isChecked);
                     }
 
                     @Override
                     public void onTypeClick(int position, boolean isChecked) {
+                        types[position].check(isChecked);
                     }
 
                     @Override
                     public void onCategoryClick(int position, boolean isChecked) {
-                        categories[position].check();
+                        categories[position].check(isChecked);
+                    }
+
+                    @Override
+                    public void onRestrictionClick(int position, boolean isChecked) {
+                        restrictions[position].check(isChecked);
                     }
 
                     @Override
@@ -133,22 +245,19 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onDeliveryClick(boolean isDelivery) {
-
+                    public void onDeliveryClick(boolean isD) {
+                        isDelivery = isD;
                     }
 
                     @Override
-                    public void onOpenedClick(boolean isOpen) {
-
+                    public void onOpenedClick(boolean isO) {
+                        isOpen = isO;
                     }
                 });
             }
         });
     }
 
-    /**
-     * builds the main RecyclerView
-     */
     private void buildRecyclerView(){
         recyclerView = findViewById(R.id.recyclerView);
         adapter = new CompanyAdapter(filteredCompanies);
