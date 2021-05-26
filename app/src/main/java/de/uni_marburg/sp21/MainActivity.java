@@ -13,10 +13,12 @@ import android.widget.SearchView;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import de.uni_marburg.sp21.data_structure.Category;
 import de.uni_marburg.sp21.data_structure.Company;
+import de.uni_marburg.sp21.data_structure.Organization;
 import de.uni_marburg.sp21.data_structure.ShopType;
 import de.uni_marburg.sp21.filter.BottomSheetFilter;
 import de.uni_marburg.sp21.filter.CheckItem;
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private SearchView searchView;
 
     private CheckItem[] categories;
+    private CheckItem[] types;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         Button button = findViewById(R.id.testButton);
 
         categories = Category.createCheckItemArray();
+        types = ShopType.createCheckItemArray();
         //TODO for other checkitem arrays..
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -84,10 +88,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void filter(String s){
-        filteredCompanies.clear();
-        for(Company c : companies){
-            if(c.getName().toLowerCase().contains(s.toLowerCase())){
-                filteredCompanies.add(c);
+        String[] search = s.split("\"\"");
+        for(Company c : filteredCompanies){
+
+            if( !(c.getName().contains(search.toString()))){
+
+                filteredCompanies.remove(c);
             }
         }
         adapter.notifyDataSetChanged();
@@ -101,23 +107,62 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //TODO Array aller organizations übergeben
-                BottomSheetFilter settingsDialog = new BottomSheetFilter(MainActivity.this, new CheckItem[]{new CheckItem("test")}, categories, ShopType.createCheckItemArray());
+                List<Organization> organisation = new ArrayList();
+                for (Company company : companies){
+                    organisation.addAll(company.getOrganizations());
+                }
+                CheckItem[] organisations = new CheckItem[organisation.size()];
+                for (int i = 0; i < organisations.length; i++){
+                    organisations[i] = new CheckItem(organisation.get(i).getName());
+                }
+
+                BottomSheetFilter settingsDialog = new BottomSheetFilter(MainActivity.this, organisations, categories, types);
                 settingsDialog.show(getSupportFragmentManager(), "SETTINGS_SHEET");
                 settingsDialog.setOnItemClickListener(new BottomSheetFilter.OnItemClickListener() {
                     @Override
                     public void onOrganisationClick(int position, boolean isChecked) {
+
                     }
 
                     @Override
                     public void onTypeClick(int position, boolean isChecked) {
+                        if (isChecked) {
+                            types[position].check();
+                            companies.iterator().forEachRemaining(x -> {
+                                if (x.getTypes().contains(types[position]))
+                                    filteredCompanies.add(x);
+                                else filteredCompanies.remove(x);
+                            });
+                        } else {
+                            types[position].unCheck();
+                            companies.iterator().forEachRemaining(x -> {
+                                if (!(x.getTypes().contains(types[position])))
+                                    filteredCompanies.add(x);
+                            });
+                        }
                     }
 
                     @Override
                     public void onCategoryClick(int position, boolean isChecked) {
-                        categories[position].check();
-                    }
+                        if (isChecked) {
+                            categories[position].check();
+                            companies.iterator().forEachRemaining(x -> {
+                                x.getProductGroups().iterator().forEachRemaining(a -> {
+                                    if(a.getCategory().toString().equals(categories[position].getText()))
+                                    filteredCompanies.add(x);
+                                else filteredCompanies.remove(x);
+                            }); });
+                        } else {
+                            categories[position].unCheck();
+                            companies.iterator().forEachRemaining(x -> {
+                                x.getProductGroups().iterator().forEachRemaining(a -> {
+                                    if(!(a.getCategory().toString().equals(categories[position].getText())))
+                                        filteredCompanies.remove(x);
+                        });
+                    });
+                        }
 
-                    @Override
+}                    @Override
                     public void onTimeStartChanged(String time) {
 
                     }
@@ -135,6 +180,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onDeliveryClick(boolean isDelivery) {
 
+
                     }
 
                     @Override
@@ -144,6 +190,7 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
+        adapter.notifyDataSetChanged();
     }
 
     /**

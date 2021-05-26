@@ -149,6 +149,7 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
                         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                             String time = hourOfDay + ":" + minute;
                             startTime.setText(time);
+                            listener.onTimeStartChanged(time);
                         }
                     }, hours, mins, true);
                     timePickerDialog.show();
@@ -168,6 +169,7 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
                         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                             String time = hourOfDay + ":" + minute;
                             endTime.setText(time);
+                            listener.onTimeEndChanged(time);
                         }
 
                     }, hours, mins, true);
@@ -191,6 +193,7 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
                         c.set(year, month, dayOfMonth);
                         String time = format.format(c.getTime());
                         dateTime.setText(time);
+                        listener.onTimeDateChanged(time);
                     }
                 }, year, month, day);
                 datePickerDialog.show();
@@ -215,6 +218,7 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
                 }else {
                     deliveryCheckbox.setImageResource(R.drawable.ic_baseline_radio_button_unchecked_24);
                 }
+                listener.onDeliveryClick(isCheckedOpen);
             }
         });
 
@@ -227,6 +231,7 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
                 }else {
                     openedCheckbox.setImageResource(R.drawable.ic_baseline_radio_button_unchecked_24);
                 }
+                listener.onOpenedClick(isCheckedOpen);
             }
         });
     }

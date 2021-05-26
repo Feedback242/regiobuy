@@ -59,6 +59,10 @@ public class Company implements Serializable {
         return organizations;
     }
 
+    public List<ProductGroup> getProductGroups() {
+        return productGroups;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
