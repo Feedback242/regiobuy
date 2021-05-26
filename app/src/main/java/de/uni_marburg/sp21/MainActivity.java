@@ -85,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
             public boolean onQueryTextChange(String newText) {
                 if (!(newText == null || newText.length()== 0 )){
                     Log.d(TAG, "-");
-                    filteredCompanies.clear();
                     filterCompaniesSet.clear();
                     filter(newText.toLowerCase());
                     adapter.notifyDataSetChanged();
@@ -114,100 +113,118 @@ public class MainActivity extends AppCompatActivity {
 
     private void filter(String s) {
         for (Company c : companies) {
+            boolean isDefault = true;
             for (CheckItem r : restrictions) {
-                if (r.isChecked()) {
-                    //company name
-                    if (restrictions[0].getText().equals(r.getText())) {
-                        if (c.getName().toLowerCase().contains(s)) {
-                            filterCompaniesSet.add(c);
-                            Log.d(TAG, "company name: " + c.getName());
-                        }
-                    }
-                    //name owner
-                    else if (restrictions[1].getText().equals(r.getText())) {
-                        if (c.getOwner().contains(s)) {
-                            filterCompaniesSet.add(c);
-                        }
-                    }
-                    //type
-                    else if (restrictions[2].getText().equals(r.getText())) {
-                        for (ShopType shopType : ShopType.values()){
-                            if (shopType.toString().contains(s)) {
+                if(r.isChecked()){
+                    isDefault = false;
+                }
+            }
+            //default search (only company name and city)
+            if(isDefault){
+                if (c.getName().toLowerCase().contains(s)) {
+                    filterCompaniesSet.add(c);
+                    Log.d(TAG, "company name: " + c.getName());
+                }
+                if (c.getAddress().getCity().toLowerCase().contains(s)) {
+                    filterCompaniesSet.add(c);
+                }
+            } else {
+                for (CheckItem r : restrictions) {
+                    if (r.isChecked()) {
+                        //company name
+                        if (restrictions[0].getText().equals(r.getText())) {
+                            if (c.getName().toLowerCase().contains(s)) {
                                 filterCompaniesSet.add(c);
-                                Log.d(TAG, "type: " + c.getName());
-                                break;
+                                Log.d(TAG, "company name: " + c.getName());
                             }
                         }
-                    }
-                    //adress
-                    else if (restrictions[3].getText().equals(r.getText())) {
-                        if (c.getAddress().getCity().contains(s)) {
-                            filterCompaniesSet.add(c);
+                        //name owner
+                        else if (restrictions[1].getText().equals(r.getText())) {
+                            if (c.getOwner().toLowerCase().contains(s)) {
+                                filterCompaniesSet.add(c);
+                            }
                         }
-                        if (c.getAddress().getStreet().contains(s)) {
-                            filterCompaniesSet.add(c);
-                        }
-                        if (c.getAddress().getZip().contains(s)) {
-                            filterCompaniesSet.add(c);
-                        }
-                    }
-                    //description companie
-                    else if (restrictions[4].getText().equals(r.getText())) {
-                        if (c.getDescription().contains(s)) {
-                            filterCompaniesSet.add(c);
-                        }
-                    }
-                    //description products
-                    else if (restrictions[5].getText().equals(r.getText())) {
-                        if (c.getProductsDescription().contains(s)) {
-                            filterCompaniesSet.add(c);
-                        }
-                    }
-                    //product tags
-                    else if (restrictions[6].getText().equals(r.getText())) {
-                        List<ProductGroup> productGroups = c.getProductGroups();
-                        boolean isAdded = false;
-                        for (ProductGroup p : productGroups){
-                            for(String tag : p.getProductTags()){
-                                if (tag.contains(s)) {
+                        //type
+                        else if (restrictions[2].getText().equals(r.getText())) {
+                            for (ShopType shopType : ShopType.values()) {
+                                if (shopType.toString().toLowerCase().contains(s)) {
                                     filterCompaniesSet.add(c);
-                                    isAdded = true;
+                                    Log.d(TAG, "type: " + c.getName());
                                     break;
                                 }
                             }
-                            if (isAdded) break;
                         }
-                    }
-                    //opening hours comments
-                    else if (restrictions[7].getText().equals(r.getText())) {
-                        if (c.getOpeningHoursComments().contains(s)) {
-                            filterCompaniesSet.add(c);
-                        }
-                    }
-                    //organisation names
-                    else if (restrictions[8].getText().equals(r.getText())) {
-                        List<Organization> orgs = c.getOrganizations();
-                        for (Organization o : orgs){
-                            if (o.getName().contains(s)) {
+                        //adress
+                        else if (restrictions[3].getText().equals(r.getText())) {
+                            if (c.getAddress().getCity().toLowerCase().contains(s)) {
                                 filterCompaniesSet.add(c);
-                                break;
+                            }
+                            if (c.getAddress().getStreet().toLowerCase().contains(s)) {
+                                filterCompaniesSet.add(c);
+                            }
+                            if (c.getAddress().getZip().toLowerCase().contains(s)) {
+                                filterCompaniesSet.add(c);
                             }
                         }
-                    }
-                    //messages
-                    else if (restrictions[9].getText().equals(r.getText())) {
-                        List<Message> messages = c.getMessages();
-                        for (Message m : messages){
-                            if (m.getContent().contains(s)) {
+                        //description companie
+                        else if (restrictions[4].getText().equals(r.getText())) {
+                            if (c.getDescription().toLowerCase().contains(s)) {
                                 filterCompaniesSet.add(c);
-                                break;
+                            }
+                        }
+                        //description products
+                        else if (restrictions[5].getText().equals(r.getText())) {
+                            if (c.getProductsDescription().toLowerCase().contains(s)) {
+                                filterCompaniesSet.add(c);
+                            }
+                        }
+                        //product tags
+                        else if (restrictions[6].getText().equals(r.getText())) {
+                            List<ProductGroup> productGroups = c.getProductGroups();
+                            boolean isAdded = false;
+                            for (ProductGroup p : productGroups) {
+                                for (String tag : p.getProductTags()) {
+                                    if (tag.toLowerCase().contains(s)) {
+                                        filterCompaniesSet.add(c);
+                                        isAdded = true;
+                                        break;
+                                    }
+                                }
+                                if (isAdded) break;
+                            }
+                        }
+                        //opening hours comments
+                        else if (restrictions[7].getText().equals(r.getText())) {
+                            if (c.getOpeningHoursComments().toLowerCase().contains(s)) {
+                                filterCompaniesSet.add(c);
+                            }
+                        }
+                        //organisation names
+                        else if (restrictions[8].getText().equals(r.getText())) {
+                            List<Organization> orgs = c.getOrganizations();
+                            for (Organization o : orgs) {
+                                if (o.getName().toLowerCase().contains(s)) {
+                                    filterCompaniesSet.add(c);
+                                    break;
+                                }
+                            }
+                        }
+                        //messages
+                        else if (restrictions[9].getText().equals(r.getText())) {
+                            List<Message> messages = c.getMessages();
+                            for (Message m : messages) {
+                                if (m.getContent().toLowerCase().contains(s)) {
+                                    filterCompaniesSet.add(c);
+                                    break;
+                                }
                             }
                         }
                     }
                 }
             }
         }
-        filteredCompanies = new ArrayList<>(filterCompaniesSet);
+        filteredCompanies.clear();
+        filteredCompanies.addAll(filterCompaniesSet);
     }
 
     /**
