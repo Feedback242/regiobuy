@@ -111,19 +111,19 @@ public class MainActivity extends AppCompatActivity {
             for (CheckItem r : restrictions) {
                 if (r.isChecked()) {
                     //company name
-                    if (restrictions[0].equals(r.getText())) {
+                    if (restrictions[0].getText().equals(r.getText())) {
                         if (c.getName().contains(s)) {
                             filteredCompanies.add(c);
                         }
                     }
                     //name owner
-                    else if (restrictions[1].equals(r.getText())) {
+                    else if (restrictions[1].getText().equals(r.getText())) {
                         if (c.getOwner().contains(s)) {
                             filteredCompanies.add(c);
                         }
                     }
                     //type
-                    else if (restrictions[2].equals(r.getText())) {
+                    else if (restrictions[2].getText().equals(r.getText())) {
                         for (ShopType shopType : ShopType.values()){
                             if (shopType.toString().contains(s)) {
                                 filteredCompanies.add(c);
@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                     //adress
-                    else if (restrictions[3].equals(r.getText())) {
+                    else if (restrictions[3].getText().equals(r.getText())) {
                         if (c.getAddress().getCity().contains(s)) {
                             filteredCompanies.add(c);
                         }
@@ -144,19 +144,19 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                     //description companie
-                    else if (restrictions[4].equals(r.getText())) {
+                    else if (restrictions[4].getText().equals(r.getText())) {
                         if (c.getDescription().contains(s)) {
                             filteredCompanies.add(c);
                         }
                     }
                     //description products
-                    else if (restrictions[5].equals(r.getText())) {
+                    else if (restrictions[5].getText().equals(r.getText())) {
                         if (c.getProductsDescription().contains(s)) {
                             filteredCompanies.add(c);
                         }
                     }
                     //product tags
-                    else if (restrictions[6].equals(r.getText())) {
+                    else if (restrictions[6].getText().equals(r.getText())) {
                         List<ProductGroup> productGroups = c.getProductGroups();
                         boolean isAdded = false;
                         for (ProductGroup p : productGroups){
@@ -171,13 +171,13 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                     //opening hours comments
-                    else if (restrictions[7].equals(r.getText())) {
+                    else if (restrictions[7].getText().equals(r.getText())) {
                         if (c.getOpeningHoursComments().contains(s)) {
                             filteredCompanies.add(c);
                         }
                     }
                     //organisation names
-                    else if (restrictions[8].equals(r.getText())) {
+                    else if (restrictions[8].getText().equals(r.getText())) {
                         List<Organization> orgs = c.getOrganizations();
                         for (Organization o : orgs){
                             if (o.getName().contains(s)) {
@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                     //messages
-                    else if (restrictions[9].equals(r.getText())) {
+                    else if (restrictions[9].getText().equals(r.getText())) {
                         List<Message> messages = c.getMessages();
                         for (Message m : messages){
                             if (m.getContent().contains(s)) {

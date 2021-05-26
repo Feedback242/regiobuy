@@ -78,6 +78,10 @@ public class Company implements Serializable {
         return messages;
     }
 
+    public Map<String, ArrayList<String>> getOpeningHours() {
+        return openingHours;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
