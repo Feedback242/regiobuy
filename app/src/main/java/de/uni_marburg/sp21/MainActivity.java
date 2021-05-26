@@ -86,9 +86,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onQueryTextChange(String newText) {
                 if (!(newText == null || newText.length()== 0 )){
                     Log.d(TAG, "-");
-                    filterCompaniesSet.clear();
                     filter(newText.toLowerCase());
-                    adapter.notifyDataSetChanged();
                 } else {
                     filteredCompanies.clear();
                     filteredCompanies.addAll(companies);
@@ -118,46 +116,70 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void filter(String s) {
-
+        filterCompaniesSet.clear();
         for (Company c : companies) {
 
-            boolean hasType = false;
-            List<ShopType> shopTypes = c.getTypes();
-            for(ShopType companyTypes : shopTypes){
-                for (CheckItem types : types) {
-                    if(companyTypes.toString().equals(types.getText())){
-                        hasType = true;
-                    }
+            boolean isDefaultType = true;
+            for (CheckItem check : types) {
+                if(check.isChecked()){
+                    isDefaultType = false;
                 }
             }
-            if(!hasType){
-                break;
+            if(!isDefaultType) {
+                boolean hasType = false;
+                List<ShopType> shopTypes = c.getTypes();
+                for (ShopType companyTypes : shopTypes) {
+                    for (CheckItem type : types) {
+                        if (type.isChecked() && companyTypes.toString().equals(type.getText())) {
+                            hasType = true;
+                        }
+                    }
+                }
+                if (!hasType) {
+                    continue;
+                }
             }
 
-            boolean hasOrganisation = false;
-            List<Organization> companyOrganisations = c.getOrganizations();
-            for(Organization companyOrganisation : companyOrganisations){
-                for (CheckItem organisation : organisations) {
-                    if(companyOrganisation.getName().equals(organisation.getText())){
-                        hasOrganisation = true;
-                    }
+            boolean isDefaultOrganisation = true;
+            for (CheckItem check : organisations) {
+                if(check.isChecked()){
+                    isDefaultType = false;
                 }
             }
-            if(!hasOrganisation){
-                break;
+            if(!isDefaultOrganisation) {
+                boolean hasOrganisation = false;
+                List<Organization> companyOrganisations = c.getOrganizations();
+                for (Organization companyOrganisation : companyOrganisations) {
+                    for (CheckItem organisation : organisations) {
+                        if (organisation.isChecked() && companyOrganisation.getName().equals(organisation.getText())) {
+                            hasOrganisation = true;
+                        }
+                    }
+                }
+                if (!hasOrganisation) {
+                    continue;
+                }
             }
 
-            boolean hasCategory = false;
-            List<ProductGroup> companyProductGroups = c.getProductGroups();
-            for(ProductGroup p : companyProductGroups){
-                for (CheckItem cat : categories) {
-                    if(cat.isChecked() && cat.getText().equals(p.getCategory().toString())){
-                        hasCategory = true;
-                    }
+            boolean isDefaultCategory = true;
+            for (CheckItem check : categories) {
+                if(check.isChecked()){
+                    isDefaultType = false;
                 }
             }
-            if(!hasCategory){
-                break;
+            if(!isDefaultType) {
+                boolean hasCategory = false;
+                List<ProductGroup> companyProductGroups = c.getProductGroups();
+                for (ProductGroup p : companyProductGroups) {
+                    for (CheckItem cat : categories) {
+                        if (cat.isChecked() && cat.getText().equals(p.getCategory().toString())) {
+                            hasCategory = true;
+                        }
+                    }
+                }
+                if (!hasCategory) {
+                    continue;
+                }
             }
 
             boolean isDefaultRestrictions = true;
@@ -273,6 +295,7 @@ public class MainActivity extends AppCompatActivity {
         }
         filteredCompanies.clear();
         filteredCompanies.addAll(filterCompaniesSet);
+        adapter.notifyDataSetChanged();
     }
 
     /**
@@ -293,6 +316,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onTypeClick(int position, boolean isChecked) {
                         types[position].check(isChecked);
+                        filter(searchView.getQuery().toString());
                         /*
                         if (isChecked) {
                             companies.iterator().forEachRemaining(x -> {
@@ -314,6 +338,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onCategoryClick(int position, boolean isChecked) {
                         categories[position].check(isChecked);
+                        filter(searchView.getQuery().toString());
                         /*
                         if (isChecked) {
                             companies.iterator().forEachRemaining(x -> {
@@ -338,6 +363,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onRestrictionClick(int position, boolean isChecked) {
                         restrictions[position].check(isChecked);
+                        filter(searchView.getQuery().toString());
                     }
 
                     @Override
