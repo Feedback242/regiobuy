@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseFirestore database;
 
     public List<Company> companies;
+    public List<Company> preFilteredCompanies;
     public List<Company> filteredCompanies;
     public HashSet<Company> filterCompaniesSet;
 
@@ -46,8 +47,8 @@ public class MainActivity extends AppCompatActivity {
 
     private CheckItem[] categories;
     private CheckItem[] organisations;
-    private CheckItem[] restrictions;
     private CheckItem[] types;
+    private CheckItem[] restrictions;
     private boolean isOpen;
     private boolean isDelivery;
 
@@ -88,9 +89,14 @@ public class MainActivity extends AppCompatActivity {
                     filterCompaniesSet.clear();
                     filter(newText.toLowerCase());
                     adapter.notifyDataSetChanged();
+                } else {
+                    filteredCompanies.clear();
+                    filteredCompanies.addAll(companies);
+                    adapter.notifyDataSetChanged();
                 }
                 return false;
             }
+
 
         });
 
@@ -112,15 +118,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void filter(String s) {
+
         for (Company c : companies) {
-            boolean isDefault = true;
-            for (CheckItem r : restrictions) {
-                if(r.isChecked()){
-                    isDefault = false;
+
+            boolean isDefaultRestrictions = true;
+
+            for (CheckItem t : types) {
+                if(t.isChecked()){
+
                 }
             }
+            for (CheckItem o : organisations) {
+                if(o.isChecked()){
+                }
+            }
+            for (CheckItem cat : categories) {
+                if(cat.isChecked()){
+
+                }
+            }
+            for (CheckItem r : restrictions) {
+                if(r.isChecked()){
+
+                }
+            }
+
             //default search (only company name and city)
-            if(isDefault){
+            if(isDefaultRestrictions){
                 if (c.getName().toLowerCase().contains(s)) {
                     filterCompaniesSet.add(c);
                     Log.d(TAG, "company name: " + c.getName());
@@ -234,7 +258,6 @@ public class MainActivity extends AppCompatActivity {
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO Array aller organizations übergeben
                 BottomSheetFilter settingsDialog = new BottomSheetFilter(MainActivity.this, organisations, categories, types, restrictions);
                 settingsDialog.show(getSupportFragmentManager(), "SETTINGS_SHEET");
                 settingsDialog.setOnItemClickListener(new BottomSheetFilter.OnItemClickListener() {
@@ -249,13 +272,13 @@ public class MainActivity extends AppCompatActivity {
                         if (isChecked) {
                             companies.iterator().forEachRemaining(x -> {
                                 if (x.getTypes().contains(types[position]))
-                                    filteredCompanies.add(x);
-                                else filteredCompanies.remove(x);
+                                    preFilteredCompanies.add(x);
+                                else preFilteredCompanies.remove(x);
                             });
                         } else {
                             companies.iterator().forEachRemaining(x -> {
                                 if (!(x.getTypes().contains(types[position])))
-                                    filteredCompanies.add(x);
+                                    preFilteredCompanies.add(x);
                             });
                         }
                         adapter.notifyDataSetChanged();
@@ -268,14 +291,14 @@ public class MainActivity extends AppCompatActivity {
                             companies.iterator().forEachRemaining(x -> {
                                 x.getProductGroups().iterator().forEachRemaining(a -> {
                                     if(a.getCategory().toString().equals(categories[position].getText()))
-                                    filteredCompanies.add(x);
-                                else filteredCompanies.remove(x);
+                                        preFilteredCompanies.add(x);
+                                else preFilteredCompanies.remove(x);
                             }); });
                         } else {
                             companies.iterator().forEachRemaining(x -> {
                                 x.getProductGroups().iterator().forEachRemaining(a -> {
                                     if(!(a.getCategory().toString().equals(categories[position].getText())))
-                                        filteredCompanies.remove(x);
+                                        preFilteredCompanies.remove(x);
                         });
                     });
                         }
