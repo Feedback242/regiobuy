@@ -14,6 +14,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Arrays;
 import java.util.List;
 
 import de.uni_marburg.sp21.data_structure.Category;
@@ -21,6 +22,7 @@ import de.uni_marburg.sp21.data_structure.Company;
 import de.uni_marburg.sp21.data_structure.Message;
 import de.uni_marburg.sp21.data_structure.Organization;
 import de.uni_marburg.sp21.data_structure.ProductGroup;
+import de.uni_marburg.sp21.data_structure.Organization;
 import de.uni_marburg.sp21.data_structure.ShopType;
 import de.uni_marburg.sp21.filter.BottomSheetFilter;
 import de.uni_marburg.sp21.filter.CheckItem;
@@ -61,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         filterButton = findViewById(R.id.filterButton);
         buildRecyclerView();
         buildFilter();
+        Button button = findViewById(R.id.testButton);
 
         categories = Category.createCheckItemArray();
         types = ShopType.createCheckItemArray();
@@ -83,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return false;
             }
+
         });
 
     }
@@ -199,8 +203,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
+    /**
+     * builds the Filter BottomSheetFragment, when clicked on the filterButton
+     */
     private void buildFilter(){
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -216,11 +221,41 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onTypeClick(int position, boolean isChecked) {
-                        types[position].check(isChecked);
+                        if (isChecked) {
+                            types[position].check();
+                            companies.iterator().forEachRemaining(x -> {
+                                if (x.getTypes().contains(types[position]))
+                                    filteredCompanies.add(x);
+                                else filteredCompanies.remove(x);
+                            });
+                        } else {
+                            types[position].unCheck();
+                            companies.iterator().forEachRemaining(x -> {
+                                if (!(x.getTypes().contains(types[position])))
+                                    filteredCompanies.add(x);
+                            });
+                        }
                     }
 
                     @Override
                     public void onCategoryClick(int position, boolean isChecked) {
+                        if (isChecked) {
+                            categories[position].check();
+                            companies.iterator().forEachRemaining(x -> {
+                                x.getProductGroups().iterator().forEachRemaining(a -> {
+                                    if(a.getCategory().toString().equals(categories[position].getText()))
+                                    filteredCompanies.add(x);
+                                else filteredCompanies.remove(x);
+                            }); });
+                        } else {
+                            categories[position].unCheck();
+                            companies.iterator().forEachRemaining(x -> {
+                                x.getProductGroups().iterator().forEachRemaining(a -> {
+                                    if(!(a.getCategory().toString().equals(categories[position].getText())))
+                                        filteredCompanies.remove(x);
+                        });
+                    });
+                        }
                         categories[position].check(isChecked);
                     }
 
@@ -258,6 +293,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * builds the main RecyclerView
+     */
     private void buildRecyclerView(){
         recyclerView = findViewById(R.id.recyclerView);
         adapter = new CompanyAdapter(filteredCompanies);

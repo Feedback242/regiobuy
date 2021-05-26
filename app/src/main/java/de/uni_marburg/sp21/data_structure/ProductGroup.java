@@ -23,6 +23,10 @@ public class ProductGroup implements Serializable {
         this.seasons = seasons;
     }
 
+    public Category getCategory() {
+        return category;
+    }
+
     public ProductGroup(Category category, Double producer) {
         this.category = category;
         this.producer = producer;
