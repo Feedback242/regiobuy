@@ -26,9 +26,9 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
     private List<Company> companies;
 
 
-    public CompanyAdapter(HashSet<Company> companies) {
+    public CompanyAdapter(List<Company> companies) {
 
-        this.companies = new ArrayList<>(companies);
+        this.companies = companies;
     }
 
     @NonNull

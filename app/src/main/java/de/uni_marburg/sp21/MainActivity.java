@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -33,7 +34,8 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseFirestore database;
 
     public List<Company> companies;
-    public HashSet<Company> filteredCompanies;
+    public List<Company> filteredCompanies;
+    public HashSet<Company> filterCompaniesSet;
 
     private CompanyAdapter adapter;
     private RecyclerView recyclerView;
@@ -58,7 +60,8 @@ public class MainActivity extends AppCompatActivity {
 
         database = FirebaseFirestore.getInstance();
         companies = DataBaseManager.getCompanyList(database, MainActivity.this);
-        filteredCompanies = new HashSet<>(companies);
+        filteredCompanies = new ArrayList<>(companies);
+        filterCompaniesSet = new HashSet<>(companies);
 
         filterButton = findViewById(R.id.filterButton);
         buildRecyclerView();
@@ -81,7 +84,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 if (!(newText == null || newText.length()== 0 )){
-                    filter(newText);
+                    Log.d(TAG, "-");
+                    filteredCompanies.clear();
+                    filterCompaniesSet.clear();
+                    filter(newText.toLowerCase());
+                    adapter.notifyDataSetChanged();
                 }
                 return false;
             }
@@ -106,27 +113,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void filter(String s) {
-        filteredCompanies.clear();
         for (Company c : companies) {
             for (CheckItem r : restrictions) {
                 if (r.isChecked()) {
                     //company name
                     if (restrictions[0].getText().equals(r.getText())) {
-                        if (c.getName().contains(s)) {
-                            filteredCompanies.add(c);
+                        if (c.getName().toLowerCase().contains(s)) {
+                            filterCompaniesSet.add(c);
+                            Log.d(TAG, "company name: " + c.getName());
                         }
                     }
                     //name owner
                     else if (restrictions[1].getText().equals(r.getText())) {
                         if (c.getOwner().contains(s)) {
-                            filteredCompanies.add(c);
+                            filterCompaniesSet.add(c);
                         }
                     }
                     //type
                     else if (restrictions[2].getText().equals(r.getText())) {
                         for (ShopType shopType : ShopType.values()){
                             if (shopType.toString().contains(s)) {
-                                filteredCompanies.add(c);
+                                filterCompaniesSet.add(c);
+                                Log.d(TAG, "type: " + c.getName());
                                 break;
                             }
                         }
@@ -134,25 +142,25 @@ public class MainActivity extends AppCompatActivity {
                     //adress
                     else if (restrictions[3].getText().equals(r.getText())) {
                         if (c.getAddress().getCity().contains(s)) {
-                            filteredCompanies.add(c);
+                            filterCompaniesSet.add(c);
                         }
                         if (c.getAddress().getStreet().contains(s)) {
-                            filteredCompanies.add(c);
+                            filterCompaniesSet.add(c);
                         }
                         if (c.getAddress().getZip().contains(s)) {
-                            filteredCompanies.add(c);
+                            filterCompaniesSet.add(c);
                         }
                     }
                     //description companie
                     else if (restrictions[4].getText().equals(r.getText())) {
                         if (c.getDescription().contains(s)) {
-                            filteredCompanies.add(c);
+                            filterCompaniesSet.add(c);
                         }
                     }
                     //description products
                     else if (restrictions[5].getText().equals(r.getText())) {
                         if (c.getProductsDescription().contains(s)) {
-                            filteredCompanies.add(c);
+                            filterCompaniesSet.add(c);
                         }
                     }
                     //product tags
@@ -162,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
                         for (ProductGroup p : productGroups){
                             for(String tag : p.getProductTags()){
                                 if (tag.contains(s)) {
-                                    filteredCompanies.add(c);
+                                    filterCompaniesSet.add(c);
                                     isAdded = true;
                                     break;
                                 }
@@ -173,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
                     //opening hours comments
                     else if (restrictions[7].getText().equals(r.getText())) {
                         if (c.getOpeningHoursComments().contains(s)) {
-                            filteredCompanies.add(c);
+                            filterCompaniesSet.add(c);
                         }
                     }
                     //organisation names
@@ -181,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
                         List<Organization> orgs = c.getOrganizations();
                         for (Organization o : orgs){
                             if (o.getName().contains(s)) {
-                                filteredCompanies.add(c);
+                                filterCompaniesSet.add(c);
                                 break;
                             }
                         }
@@ -191,15 +199,15 @@ public class MainActivity extends AppCompatActivity {
                         List<Message> messages = c.getMessages();
                         for (Message m : messages){
                             if (m.getContent().contains(s)) {
-                                filteredCompanies.add(c);
+                                filterCompaniesSet.add(c);
                                 break;
                             }
                         }
                     }
                 }
             }
-            adapter.notifyDataSetChanged();
         }
+        filteredCompanies = new ArrayList<>(filterCompaniesSet);
     }
 
     /**
