@@ -16,8 +16,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -90,10 +92,10 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
         adapterTypes = new FilterAdapter(TYPES);
         adapterOrganisations = new FilterAdapter(ORGANISATIONS);
 
-        RecyclerView.LayoutManager layoutManagerCategory = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
-        RecyclerView.LayoutManager layoutManagerTypes = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
-        RecyclerView.LayoutManager layoutManagerOrganisations = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
-        RecyclerView.LayoutManager linearLayoutManagerRestrictions = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+        RecyclerView.LayoutManager layoutManagerCategory = new StaggeredGridLayoutManager(2, LinearLayoutManager.HORIZONTAL);
+        RecyclerView.LayoutManager layoutManagerTypes = new StaggeredGridLayoutManager(2, LinearLayoutManager.HORIZONTAL);
+        RecyclerView.LayoutManager layoutManagerOrganisations = new StaggeredGridLayoutManager(2, LinearLayoutManager.HORIZONTAL);
+        RecyclerView.LayoutManager linearLayoutManagerRestrictions = new StaggeredGridLayoutManager(2, LinearLayoutManager.HORIZONTAL);
 
         recyclerViewCategories.setLayoutManager(layoutManagerCategory);
         recyclerViewTypes.setLayoutManager(layoutManagerTypes);
