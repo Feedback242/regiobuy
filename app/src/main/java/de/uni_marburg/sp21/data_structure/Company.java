@@ -1,7 +1,11 @@
 package de.uni_marburg.sp21.data_structure;
 
+import android.util.Log;
+
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +20,7 @@ public class Company implements Serializable {
     private String url;
     private ArrayList<ShopType> shopTypes;
     private String owner;
-    private Map<String, ArrayList<String>> openingHours;
+    private Map<String,Map<String,String>> openingHours;
     private boolean deliveryService;
     private List<Organization> organizations;
     private String openingHoursComments;
@@ -30,6 +34,7 @@ public class Company implements Serializable {
         this.name = name;
         this.address = address;
         this.geoHash = geoHash;
+
     }
 
 
@@ -78,10 +83,40 @@ public class Company implements Serializable {
         return messages;
     }
 
-    public Map<String, ArrayList<String>> getOpeningHours() {
+    public Map<String, Map<String, String>> getOpeningHours() {
         return openingHours;
     }
-    
+
+    public boolean isDeliveryService() {
+        return deliveryService;
+    }
+
+    public boolean isOpened(){
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_WEEK);
+        long timeInMillis = calendar.getTimeInMillis();
+        switch (day){
+            case Calendar.MONDAY :
+            case Calendar.TUESDAY :
+            case Calendar.WEDNESDAY :
+            case Calendar.THURSDAY :
+            case Calendar.FRIDAY :
+            case Calendar.SATURDAY :
+            case Calendar.SUNDAY :
+        }
+        //TODO
+        return false;
+    }
+
+    private boolean isOpenedAt(long timeInMillis){
+        //TODO
+        return false;
+    }
+
+    public boolean isOpened(Date date){
+        //TODO
+        return false;
+    }
 
     public void setName(String name) {
         this.name = name;
@@ -119,7 +154,7 @@ public class Company implements Serializable {
         this.owner = owner;
     }
 
-    public void setOpeningHours(Map openingHours) {
+    public void setOpeningHours(Map<String,Map<String,String>> openingHours) {
         this.openingHours = openingHours;
     }
 
