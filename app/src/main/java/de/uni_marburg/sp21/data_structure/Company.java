@@ -1,7 +1,14 @@
 package de.uni_marburg.sp21.data_structure;
 
+import android.content.Context;
 import android.util.Log;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -12,6 +19,8 @@ import java.util.Map;
 import java.util.Random;
 
 public class Company implements Serializable {
+
+    private final static String COMPANY_FILENAME = "Company.ser";
     private final String ID;
     private String name;
     private Address address;
@@ -38,7 +47,31 @@ public class Company implements Serializable {
 
     }
 
+    public static void save(Company company, Context context){
+        File path = context.getExternalFilesDir(null);
+        File file = new File(path, COMPANY_FILENAME);
 
+        try{
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file));
+            out.writeObject(company);
+            out.close();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public static Company load(Context context) {
+        File path = context.getExternalFilesDir(null);
+        File file = new File(path, COMPANY_FILENAME);
+        Company company = null;
+        try {
+            ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
+            company = (Company) in.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return company;
+    }
 
     public Company(String ID) {
         this.ID = ID;

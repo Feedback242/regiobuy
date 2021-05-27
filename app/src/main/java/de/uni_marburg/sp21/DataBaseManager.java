@@ -175,13 +175,13 @@ public class DataBaseManager {
     private static List<Company> load(Context context) {
         File path = context.getExternalFilesDir(null);
         File file = new File(path, COMPANIES_FILENAME);
-        List<Company> groceryLists = new ArrayList<>();
+        List<Company> companies = new ArrayList<>();
         try {
             ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
-            groceryLists = (List<Company>) in.readObject();
+            companies = (List<Company>) in.readObject();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-        return groceryLists;
+        return companies;
     }
 }

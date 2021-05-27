@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import de.uni_marburg.sp21.data_structure.Address;
 import de.uni_marburg.sp21.data_structure.Company;
 import de.uni_marburg.sp21.data_structure.Organization;
 import de.uni_marburg.sp21.data_structure.ProductGroup;
@@ -31,6 +33,8 @@ public class CompanyActivity extends AppCompatActivity {
     private TextView productGroupsText;
     private TextView productGroupsDescriptionText;
     private TextView deliveryText;
+    private TextView addressText;
+    private TextView openingHoursDescriptionText;
 
     private ImageView mainIcon;
     private ImageView deliveryIcon;
@@ -39,11 +43,9 @@ public class CompanyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_company);
-        Intent intent = getIntent();
-        //todo somehow company is null
-        company = (Company) intent.getSerializableExtra(MainActivity.INTENT_TAG);
+        company = Company.load(CompanyActivity.this);
         initializeViews();
-       // setViewValues();
+        setViewValues();
     }
 
     private void initializeViews() {
@@ -61,40 +63,50 @@ public class CompanyActivity extends AppCompatActivity {
         organisationsText = findViewById(R.id.companyOrganisations);
         productGroupsText = findViewById(R.id.companyProductGroups);
         productGroupsDescriptionText = findViewById(R.id.companyProductGroupsDescription);
+        openingHoursDescriptionText = findViewById(R.id.companyOpeningHoursDescription);
         deliveryText = findViewById(R.id.companyDeliveryText);
-
+        addressText = findViewById(R.id.companyAdress);
         mainIcon = findViewById(R.id.companyImage);
         deliveryIcon = findViewById(R.id.companyDeliveryIcon);
     }
 
     private void setViewValues(){
-        nameText.setText(company.getName());
+        nameText.setText(company.getName() + ", " + company.getOwner());
         descriptionText.setText(company.getDescription());
         mailText.setText(company.getMail());
         urlText.setText(company.getUrl());
+        openingHoursDescriptionText.setText(company.getOpeningHoursComments());
+        productGroupsDescriptionText.setText(company.getProductsDescription());
+
+        Address address = company.getAddress();
+        addressText.setText(address.getZip() + " " + address.getCity() + " " +address.getStreet());
 
         String orgs = "";
         for(Organization o : company.getOrganizations()){
-            orgs += o.getName() + ",";
+            orgs += o.getName() + ", ";
         }
-        orgs.substring(0,orgs.length() - 1);
+        if(!orgs.isEmpty()){
+            orgs = orgs.substring(0,orgs.length() - 2);
+        }
         organisationsText.setText(orgs);
 
         String prods = "";
         for(ProductGroup p : company.getProductGroups()){
-            prods += p.getCategory().toString() + ",";
+            prods += p.getCategory().toString() + ", ";
         }
-        prods.substring(0,prods.length() - 1);
+        if(!prods.isEmpty()){
+            prods = prods.substring(0,prods.length() - 2);
+        }
         productGroupsText.setText(prods);
-
-        productGroupsDescriptionText.setText(company.getProductsDescription());
 
         if(company.isDeliveryService()){
             deliveryText.setText("Dieses Unternehmen liefert!");
-            //todo set tint
+            deliveryText.setTextColor(ContextCompat.getColor(CompanyActivity.this, R.color.green_delivery));
+            deliveryIcon.setColorFilter(ContextCompat.getColor(CompanyActivity.this, R.color.green_delivery), android.graphics.PorterDuff.Mode.SRC_IN);
         } else {
             deliveryText.setText("Dieses Unternehmen liefert leider nicht!");
-            //todo set tint
+            deliveryText.setTextColor(ContextCompat.getColor(CompanyActivity.this, R.color.red_delivery));
+            deliveryIcon.setColorFilter(ContextCompat.getColor(CompanyActivity.this, R.color.red_delivery), android.graphics.PorterDuff.Mode.SRC_IN);
         }
         mainIcon.setImageResource(company.getImageResource());
     }

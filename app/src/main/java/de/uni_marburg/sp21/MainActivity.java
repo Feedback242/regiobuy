@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCompanyClick(int pos) {
                 Intent intent = new Intent(context, CompanyActivity.class);
-                intent.putExtra("", filteredCompanies.get(pos));
+                Company.save(filteredCompanies.get(pos), context);
                 startActivity(intent);
             }
         });
