@@ -13,6 +13,7 @@ import android.widget.SearchView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -22,6 +23,7 @@ import de.uni_marburg.sp21.data_structure.Category;
 import de.uni_marburg.sp21.data_structure.Company;
 import de.uni_marburg.sp21.data_structure.Organization;
 import de.uni_marburg.sp21.data_structure.ShopType;
+import de.uni_marburg.sp21.data_structure.TimeInterval;
 import de.uni_marburg.sp21.filter.BottomSheetFilter;
 import de.uni_marburg.sp21.filter.CheckItem;
 import de.uni_marburg.sp21.filter.Filter;
@@ -114,16 +116,26 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onTimeStartChanged(String time) {
 
+                        System.out.println(time);
+
+                        String[] hourAndMinutes = time.split(":");
+                        TimeInterval.setStart(new Time(Integer.parseInt(hourAndMinutes[0]), Integer.parseInt(hourAndMinutes[1]), 0));
+                    //    filterAndUpdateRecyclerview();
                     }
 
                     @Override
                     public void onTimeEndChanged(String time) {
-
+                        System.out.println(time);
+                        String[] hourAndMinutes = time.split(":");
+                        TimeInterval.setEnd(new Time(Integer.parseInt(hourAndMinutes[0]), Integer.parseInt(hourAndMinutes[1]), 0));
+                       // filterAndUpdateRecyclerview();
                     }
 
                     @Override
                     public void onTimeDateChanged(String time) {
-
+                        System.out.println(time);
+                        TimeInterval.setDate(time);
+                        filterAndUpdateRecyclerview();
                     }
 
                     @Override

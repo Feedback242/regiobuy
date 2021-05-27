@@ -2,6 +2,7 @@ package de.uni_marburg.sp21.filter;
 
 import android.util.Log;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -11,6 +12,7 @@ import de.uni_marburg.sp21.data_structure.Message;
 import de.uni_marburg.sp21.data_structure.Organization;
 import de.uni_marburg.sp21.data_structure.ProductGroup;
 import de.uni_marburg.sp21.data_structure.ShopType;
+import de.uni_marburg.sp21.data_structure.TimeInterval;
 import de.uni_marburg.sp21.filter.CheckItem;
 
 public class Filter {
@@ -20,7 +22,21 @@ public class Filter {
         HashSet<Company> filterCompaniesSet = new HashSet<>();
 
         for (Company c : companies) {
+            System.out.println(c.getOpeningHours().values());
 
+            //time
+            if(TimeInterval.getStart() != null && TimeInterval.getEnd() !=null && TimeInterval.getDate() != null){
+
+                Time companyStartTime = Time.valueOf(c.getOpeningHours().get(TimeInterval.getDate()).get("start"));
+                Time companyEndTime = Time.valueOf(c.getOpeningHours().get(TimeInterval.getDate()).get("end"));
+                java.sql.Time selectedStartTime = TimeInterval.getStart();
+                Time selectedEndTime = TimeInterval.getEnd();
+                if( companyStartTime.compareTo(selectedStartTime) < 0){
+                    continue;
+                }else if(companyEndTime.compareTo(selectedEndTime) < 0 ) {
+                    continue;
+                }
+            }
             //isOpen
             if(isOpen){
 
