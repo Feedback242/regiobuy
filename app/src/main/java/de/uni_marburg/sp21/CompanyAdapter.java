@@ -67,12 +67,17 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
             image = itemView.findViewById(R.id.image);
             description = itemView.findViewById(R.id.description);
             location = itemView.findViewById(R.id.location);
-            if (listener != null) {
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION) {
-                    listener.onCompanyClick(position);
-                }
-            }
+           itemView.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                   if (listener != null) {
+                       int position = getAdapterPosition();
+                       if (position != RecyclerView.NO_POSITION) {
+                           listener.onCompanyClick(position);
+                       }
+                   }
+               }
+           });
         }
 
     }

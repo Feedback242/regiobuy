@@ -36,5 +36,14 @@
         <item name="android:background">@drawable/layout_round_top_edes</item>
     </style>
 
+    <style name="Theme.RegioBuy.NoActionBar.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.RegioBuy.NoActionBar.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.RegioBuy.NoActionBar.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
 
 </resources>

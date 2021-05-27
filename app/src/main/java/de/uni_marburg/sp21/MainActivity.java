@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -48,10 +50,15 @@ public class MainActivity extends AppCompatActivity {
     private boolean isOpen;
     private boolean isDelivery;
 
+    private Context context;
+
+    public static final String INTENT_TAG = "clicked_company";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        context = MainActivity.this;
 
         initializeViews();
         getData();
@@ -195,7 +202,9 @@ public class MainActivity extends AppCompatActivity {
         adapter.setListener(new CompanyAdapter.OnItemClickListener() {
             @Override
             public void onCompanyClick(int pos) {
-                //TODO start company activity
+                Intent intent = new Intent(context, CompanyActivity.class);
+                intent.putExtra("", filteredCompanies.get(pos));
+                startActivity(intent);
             }
         });
     }
