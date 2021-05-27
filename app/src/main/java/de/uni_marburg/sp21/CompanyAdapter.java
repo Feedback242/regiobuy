@@ -3,23 +3,16 @@ package de.uni_marburg.sp21;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 
 import de.uni_marburg.sp21.data_structure.Company;
 import de.uni_marburg.sp21.data_structure.ShopType;
-import de.uni_marburg.sp21.filter.BottomSheetFilter;
-import de.uni_marburg.sp21.filter.CheckItem;
 
 public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHolder> {
 
@@ -44,9 +37,7 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
         holder.name.setText(currentCompany.getName());
         holder.description.setText(currentCompany.getDescription());
         holder.location.setText(currentCompany.getAddress().getZip() + " " + currentCompany.getAddress().getCity());
-        List<ShopType> shopTypes = currentCompany.getTypes();
-        ShopType randomTypeFromList = shopTypes.get(new Random().nextInt(shopTypes.size()));
-        holder.image.setImageResource(randomTypeFromList.toDrawableID());
+        holder.image.setImageResource(currentCompany.getImageResource());
     }
 
     @Override

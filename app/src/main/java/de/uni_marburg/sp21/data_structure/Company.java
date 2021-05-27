@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class Company implements Serializable {
     private final String ID;
@@ -89,6 +90,20 @@ public class Company implements Serializable {
 
     public boolean isDeliveryService() {
         return deliveryService;
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public int getImageResource(){
+        List<ShopType> shopTypes = getTypes();
+        ShopType randomTypeFromList = shopTypes.get(new Random().nextInt(shopTypes.size()));
+        return randomTypeFromList.toDrawableID();
     }
 
     public boolean isOpened(){
