@@ -129,7 +129,7 @@ public class DataBaseManager {
                                 }
                                 //openingHours
                                 if(document.get("openingHours") != null) {
-                                    Map<String,Map<String,String>> openingHoursMap = (Map<String,Map<String,String>>) documentMap.get("openingHours");
+                                    Map<String,Map<String,ArrayList<Map<String, String>>>> openingHoursMap = (Map<String,Map<String,ArrayList<Map<String, String>>>>) documentMap.get("openingHours");
                                     company.setOpeningHours(openingHoursMap);
                                 }
                                 //types

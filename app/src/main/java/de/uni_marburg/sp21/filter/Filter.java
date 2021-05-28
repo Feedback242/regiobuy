@@ -26,7 +26,7 @@ public class Filter {
         for (Company c : companies) {
             System.out.println(c.getOpeningHours().values());
 
-            //time
+           /* //time
             if(TimeInterval.getStart() != null && TimeInterval.getEnd() !=null && TimeInterval.getDate() != null){
 
                 Time companyStartTime = Time.valueOf(c.getOpeningHours().get(TimeInterval.getDate()).get("start"));
@@ -39,6 +39,8 @@ public class Filter {
                     continue;
                 }
             }
+
+            */
             //isOpen
             if(isOpen){
 

@@ -9,6 +9,9 @@ import androidx.core.content.ContextCompat;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 import de.uni_marburg.sp21.data_structure.Address;
 import de.uni_marburg.sp21.data_structure.Company;
 import de.uni_marburg.sp21.data_structure.Organization;
@@ -18,17 +21,12 @@ public class CompanyActivity extends AppCompatActivity {
 
     private Company company;
 
+    private final String[] WEEKDAYS = new String[]{"monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"};
     private TextView nameText;
     private TextView descriptionText;
     private TextView mailText;
     private TextView urlText;
-    private TextView mondayText;
-    private TextView tuesdayText;
-    private TextView wednesdayText;
-    private TextView thursdayText;
-    private TextView fridayText;
-    private TextView saturdayText;
-    private TextView sundayText;
+    private TextView[] weekdaysText = new TextView[7];
     private TextView organisationsText;
     private TextView productGroupsText;
     private TextView productGroupsDescriptionText;
@@ -53,13 +51,13 @@ public class CompanyActivity extends AppCompatActivity {
         descriptionText = findViewById(R.id.companyDescription);
         mailText = findViewById(R.id.companyMail);
         urlText = findViewById(R.id.companyURL);
-        mondayText = findViewById(R.id.companyMonday);
-        tuesdayText = findViewById(R.id.companyTuesday);
-        wednesdayText = findViewById(R.id.companyWednesday);
-        thursdayText = findViewById(R.id.companyThursday);
-        fridayText = findViewById(R.id.companyFriday);
-        saturdayText = findViewById(R.id.companySaturday);
-        sundayText = findViewById(R.id.companySunday);
+        weekdaysText[0] = findViewById(R.id.companyMonday);
+        weekdaysText[1] = findViewById(R.id.companyTuesday);
+        weekdaysText[2] = findViewById(R.id.companyWednesday);
+        weekdaysText[3] = findViewById(R.id.companyThursday);
+        weekdaysText[4] = findViewById(R.id.companyFriday);
+        weekdaysText[5] = findViewById(R.id.companySaturday);
+        weekdaysText[6] = findViewById(R.id.companySunday);
         organisationsText = findViewById(R.id.companyOrganisations);
         productGroupsText = findViewById(R.id.companyProductGroups);
         productGroupsDescriptionText = findViewById(R.id.companyProductGroupsDescription);
@@ -109,5 +107,22 @@ public class CompanyActivity extends AppCompatActivity {
             deliveryIcon.setColorFilter(ContextCompat.getColor(CompanyActivity.this, R.color.red_delivery), android.graphics.PorterDuff.Mode.SRC_IN);
         }
         mainIcon.setImageResource(company.getImageResource());
+
+        Map<String,Map<String, ArrayList<Map<String, String>>>> openingHours = company.getOpeningHours();
+        for(int i = 0; i < WEEKDAYS.length; i++){
+            String openingHoursAtDay = "";
+            ArrayList<Map<String, String>> list = (ArrayList<Map<String, String>>) openingHours.get(WEEKDAYS[i]);
+            if(list != null){
+                for(Map<String, String> m : list){
+                    openingHoursAtDay += m.get("start") + " - " + m.get("end") + "    ";
+                }
+                if(!openingHoursAtDay.isEmpty()){
+                    openingHoursAtDay = openingHoursAtDay.substring(0, openingHoursAtDay.length()-4);
+                }
+            } else {
+                openingHoursAtDay = "Geschlossen";
+            }
+            weekdaysText[i].setText(openingHoursAtDay);
+        }
     }
 }

@@ -30,7 +30,7 @@ public class Company implements Serializable {
     private String url;
     private ArrayList<ShopType> shopTypes;
     private String owner;
-    private Map<String,Map<String,String>> openingHours;
+    private Map<String,Map<String,ArrayList<Map<String, String>>>> openingHours;
     private boolean deliveryService;
     private List<Organization> organizations;
     private String openingHoursComments;
@@ -117,7 +117,7 @@ public class Company implements Serializable {
         return messages;
     }
 
-    public Map<String, Map<String, String>> getOpeningHours() {
+    public Map<String,Map<String,ArrayList<Map<String, String>>>> getOpeningHours() {
         return openingHours;
     }
 
@@ -202,7 +202,7 @@ public class Company implements Serializable {
         this.owner = owner;
     }
 
-    public void setOpeningHours(Map<String,Map<String,String>> openingHours) {
+    public void setOpeningHours(Map<String, Map<String, ArrayList<Map<String, String>>>> openingHours) {
         this.openingHours = openingHours;
     }
 
