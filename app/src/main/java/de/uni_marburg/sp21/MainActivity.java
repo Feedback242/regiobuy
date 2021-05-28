@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BottomSheetFilter settingsDialog = new BottomSheetFilter(MainActivity.this, organisations, categories, types, restrictions);
+                BottomSheetFilter settingsDialog = new BottomSheetFilter(MainActivity.this, organisations, categories, types, restrictions, isDelivery, isOpen);
                 settingsDialog.show(getSupportFragmentManager(), "SETTINGS_SHEET");
                 settingsDialog.setOnItemClickListener(new BottomSheetFilter.OnItemClickListener() {
                     @Override
@@ -167,10 +167,10 @@ public class MainActivity extends AppCompatActivity {
         categories = Category.createCheckItemArray(context);
         types = ShopType.createCheckItemArray(context);
         organisations = getOrganisations();
-        restrictions = new CheckItem[]{new CheckItem(getResources().getString(R.string.name_company)), new CheckItem(getResources().getString(R.string.name_owner)), new CheckItem(getResources().getString(R.string.shop_types)),
+        restrictions = new CheckItem[]{new CheckItem(getResources().getString(R.string.name_company)), new CheckItem(getResources().getString(R.string.name_owner)), new CheckItem(getResources().getString(R.string.shop_types_without_colon)),
                 new CheckItem(getResources().getString(R.string.address)), new CheckItem(getResources().getString(R.string.description_company)), new CheckItem(getResources().getString(R.string.description_products)),
                 new CheckItem(getResources().getString(R.string.product_tags)), new CheckItem(getResources().getString(R.string.opening_hours_comment)), new CheckItem(getResources().getString(R.string.name_organisation)),
-                new CheckItem(getResources().getString(R.string.name_company))};
+                new CheckItem(getResources().getString(R.string.messages_company))};
         startTime = null;
         endTime = null;
         weekday = "";

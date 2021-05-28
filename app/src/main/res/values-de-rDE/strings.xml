@@ -8,6 +8,7 @@
     <string name="product_categories">Produkt-Kategorien:</string>
     <string name="closed">Geschlossen!</string>
     <string name="not_available">Nicht Verfügbar.</string>
+    <string name="shop_types_without_colon">Betriebsarten</string>
     <string name="shop_types">Betriebsarten:</string>
     <string name="search_in">Suche in:</string>
     <string name="start">Start</string>
@@ -41,4 +42,11 @@
     <string name="description_company">Beschreibung Betrieb</string>
     <string name="product_tags">Schlagworte Produktgruppen</string>
     <string name="name_organisation">Name Organisation</string>
+    <string name="monday">Montag</string>
+    <string name="tuesday">Dienstag</string>
+    <string name="wednesday">Mittwoch</string>
+    <string name="thursday">Donnerstag</string>
+    <string name="friday">Freitag</string>
+    <string name="saturday">Samstag</string>
+    <string name="sunday">Sonntag</string>
 </resources>

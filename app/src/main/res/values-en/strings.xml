@@ -6,7 +6,8 @@
     <string name="product_categories">Product groups:</string>
     <string name="organisations">Organizations:</string>
     <string name="closed">Closed!</string>
-    <string name="not_available">Not avaiable.</string>
+    <string name="not_available">Not available.</string>
+    <string name="shop_types_without_colon">Shop types</string>
     <string name="shop_types">Shop-Types:</string>
     <string name="search_in">Search in:</string>
     <string name="start">Start</string>
@@ -31,7 +32,7 @@
     <string name="shop">Shop</string>
     <string name="restaurant">Restaurant</string>
     <string name="mart">Mart</string>
-    <string name="name_company">Name of Company</string>
+    <string name="name_company">Name of company</string>
     <string name="description_products">Product description</string>
     <string name="opening_hours_comment">Opening hours comment</string>
     <string name="messages_company">Messages of company</string>
@@ -40,4 +41,12 @@
     <string name="description_company">Company description</string>
     <string name="product_tags">Product group tags</string>
     <string name="name_organisation">Name of organisations</string>
+    <string name="app_name">RegioBuy</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
 </resources>

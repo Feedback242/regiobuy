@@ -73,12 +73,14 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
     private boolean isCheckedOpen;
     private boolean isCheckedDelivery;
 
-    public BottomSheetFilter(Context context, final CheckItem[] ORGANIZATIONS, final CheckItem[] CATEGORIES, final CheckItem[] TYPES, final CheckItem[] RESTRICTIONS){
+    public BottomSheetFilter(Context context, final CheckItem[] ORGANIZATIONS, final CheckItem[] CATEGORIES, final CheckItem[] TYPES, final CheckItem[] RESTRICTIONS, boolean isDelivery, boolean isOpen){
         this.context = context;
         this.ORGANISATIONS = ORGANIZATIONS;
         this.TYPES = TYPES;
         this.CATEGORIES = CATEGORIES;
         this.RESTRICTIONS = RESTRICTIONS;
+        isCheckedOpen = isOpen;
+        isCheckedDelivery = isDelivery;
     }
 
     private void buildRecyclerView(int recyclerViewID, RecyclerView recyclerView, FilterAdapter adapter, CheckItem[] checkItems){
@@ -232,8 +234,17 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
         isOpened = itemView.findViewById(R.id.isOpened);
         deliveryCheckbox = itemView.findViewById(R.id.deliveryCheckbox);
         openedCheckbox = itemView.findViewById(R.id.openedCheckbox);
-        isCheckedDelivery = false;
-        isCheckedOpen = false;
+
+        if (isCheckedDelivery){
+            deliveryCheckbox.setImageResource(R.drawable.ic_baseline_radio_button_checked_24);
+        }else {
+            deliveryCheckbox.setImageResource(R.drawable.ic_baseline_radio_button_unchecked_24);
+        }
+        if (isCheckedOpen){
+            openedCheckbox.setImageResource(R.drawable.ic_baseline_radio_button_checked_24);
+        }else {
+            openedCheckbox.setImageResource(R.drawable.ic_baseline_radio_button_unchecked_24);
+        }
 
         isDelivery.setOnClickListener(new View.OnClickListener() {
             @Override
