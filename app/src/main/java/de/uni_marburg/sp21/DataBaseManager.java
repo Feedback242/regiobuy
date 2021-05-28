@@ -58,38 +58,56 @@ public class DataBaseManager {
                                 //name
                                 if(documentMap.get("name") != null){
                                     company.setName(documentMap.get("name").toString());
+                                } else {
+                                    company.setName("");
                                 }
                                 //description
                                 if(documentMap.get("description") != null){
                                     company.setDescription(documentMap.get("description").toString());
+                                } else {
+                                    company.setDescription("");
                                 }
                                 //mail
                                 if(documentMap.get("mail") != null){
                                     company.setMail(documentMap.get("mail").toString());
+                                } else {
+                                    company.setMail("");
                                 }
                                 //url
                                 if(documentMap.get("url") != null){
                                     company.setUrl(documentMap.get("url").toString());
+                                } else {
+                                    company.setUrl("");
                                 }
                                 //owner
                                 if(documentMap.get("owner") != null){
                                     company.setOwner(documentMap.get("owner").toString());
+                                } else {
+                                    company.setOwner("");
                                 }
                                 //deliveryService
                                 if(documentMap.get("deliveryService") != null){
                                     company.setDeliveryService(Boolean.parseBoolean(documentMap.get("deliveryService").toString()));
+                                } else {
+                                    company.setDeliveryService(false);
                                 }
                                 //openingHoursComment
                                 if(documentMap.get("openingHoursComments") != null){
                                     company.setOpeningHoursComments(documentMap.get("openingHoursComments").toString());
+                                } else {
+                                    company.setOpeningHoursComments("");
                                 }
                                 //productsDescription
                                 if(documentMap.get("productsDescription") != null){
                                     company.setProductsDescription(documentMap.get("productsDescription").toString());
+                                } else {
+                                    company.setProductsDescription("");
                                 }
                                 //geoHash
                                 if(documentMap.get("geoHash") != null){
                                     company.setGeoHash(documentMap.get("geoHash").toString());
+                                } else {
+                                    company.setGeoHash("");
                                 }
                                 //productGroups
                                 if(document.get("productGroups") != null) {
@@ -129,7 +147,7 @@ public class DataBaseManager {
                                 }
                                 //openingHours
                                 if(document.get("openingHours") != null) {
-                                    Map<String,Map<String,ArrayList<Map<String, String>>>> openingHoursMap = (Map<String,Map<String,ArrayList<Map<String, String>>>>) documentMap.get("openingHours");
+                                    Map<String,ArrayList<Map<String, String>>> openingHoursMap = (Map<String,ArrayList<Map<String, String>>>) documentMap.get("openingHours");
                                     company.setOpeningHours(openingHoursMap);
                                 }
                                 //types

@@ -3,23 +3,25 @@ package de.uni_marburg.sp21.filter;
 import android.content.Context;
 import android.util.Log;
 
-import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
+import de.uni_marburg.sp21.CompanyActivity;
+import de.uni_marburg.sp21.MainActivity;
 import de.uni_marburg.sp21.data_structure.Category;
 import de.uni_marburg.sp21.data_structure.Company;
 import de.uni_marburg.sp21.data_structure.Message;
 import de.uni_marburg.sp21.data_structure.Organization;
 import de.uni_marburg.sp21.data_structure.ProductGroup;
 import de.uni_marburg.sp21.data_structure.ShopType;
-import de.uni_marburg.sp21.data_structure.TimeInterval;
-import de.uni_marburg.sp21.filter.CheckItem;
 
 public class Filter {
 
-    public static List<Company> filter(String s, List<Company> companies, CheckItem[] types, CheckItem[] organisations, CheckItem[] categories, CheckItem[] restrictions, boolean isDelivery, boolean isOpen, Context context) {
+    public static List<Company> filter(String s, List<Company> companies, CheckItem[] types, CheckItem[] organisations, CheckItem[] categories, CheckItem[] restrictions, boolean isDelivery, boolean isOpen, Context context, String weekday, Date startTime, Date endTime) {
         //HashSets doesn't insert duplicates
         s = s.toLowerCase();
         HashSet<Company> filterCompaniesSet = new HashSet<>();
@@ -27,24 +29,42 @@ public class Filter {
         for (Company c : companies) {
             System.out.println(c.getOpeningHours().values());
 
-           /* //time
-            if(TimeInterval.getStart() != null && TimeInterval.getEnd() !=null && TimeInterval.getDate() != null){
+            //TODO timepicker
 
-                Time companyStartTime = Time.valueOf(c.getOpeningHours().get(TimeInterval.getDate()).get("start"));
-                Time companyEndTime = Time.valueOf(c.getOpeningHours().get(TimeInterval.getDate()).get("end"));
-                java.sql.Time selectedStartTime = TimeInterval.getStart();
-                Time selectedEndTime = TimeInterval.getEnd();
-                if( companyStartTime.compareTo(selectedStartTime) < 0){
-                    continue;
-                }else if(companyEndTime.compareTo(selectedEndTime) < 0 ) {
-                    continue;
-                }
-            }
-
-            */
             //isOpen
             if(isOpen){
+                Calendar calendar = Calendar.getInstance();
+                Date currentTime = calendar.getTime();
+                int day = calendar.get(Calendar.DAY_OF_WEEK);
+                String dayName = "";
 
+                switch (day){
+                    case Calendar.MONDAY: dayName = CompanyActivity.WEEKDAYS[0];
+                        break;
+                    case Calendar.TUESDAY: dayName = CompanyActivity.WEEKDAYS[1];
+                        break;
+                    case Calendar.WEDNESDAY: dayName = CompanyActivity.WEEKDAYS[2];
+                        break;
+                    case Calendar.THURSDAY: dayName = CompanyActivity.WEEKDAYS[3];
+                        break;
+                    case Calendar.FRIDAY: dayName = CompanyActivity.WEEKDAYS[4];
+                        break;
+                    case Calendar.SATURDAY: dayName = CompanyActivity.WEEKDAYS[5];
+                        break;
+                    case Calendar.SUNDAY: dayName = CompanyActivity.WEEKDAYS[6];
+                        break;
+                }
+               ArrayList<Map<String, String>> openingList = c.getOpeningHours().get(dayName);
+                boolean isCurrentlyOpen = false;
+                for(Map<String, String> m : openingList){
+                    Date start = MainActivity.convertToDate(m.get("start"));
+                    Date end = MainActivity.convertToDate(m.get("end"));
+                    isCurrentlyOpen = isCurrentlyOpen || (currentTime.after(start) && currentTime.before(end));
+                }
+
+                if(!isCurrentlyOpen){
+                    continue;
+                }
             }
 
             //delivery

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,7 +23,7 @@ public class CompanyActivity extends AppCompatActivity {
 
     private Company company;
 
-    private final String[] WEEKDAYS = new String[]{"monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"};
+    public static final String[] WEEKDAYS = new String[]{"monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"};
     private TextView nameText;
     private TextView descriptionText;
     private TextView mailText;
@@ -37,6 +38,15 @@ public class CompanyActivity extends AppCompatActivity {
 
     private ImageView mainIcon;
     private ImageView deliveryIcon;
+
+    private ImageView mailIcon;
+    private ImageView urlIcon;
+
+    private ImageView organisationsIcon;
+    private TextView organisationTitle;
+
+    private ImageView productCategoriesIcon;
+    private TextView productCategoriesTitle;
 
     private Context context;
 
@@ -68,21 +78,40 @@ public class CompanyActivity extends AppCompatActivity {
         openingHoursDescriptionText = findViewById(R.id.companyOpeningHoursDescription);
         deliveryText = findViewById(R.id.companyDeliveryText);
         addressText = findViewById(R.id.companyAdress);
+
         mainIcon = findViewById(R.id.companyImage);
         deliveryIcon = findViewById(R.id.companyDeliveryIcon);
+
+        urlIcon = findViewById(R.id.urlIcon);
+        mailIcon = findViewById(R.id.mailIcon);
+        productCategoriesIcon = findViewById(R.id.productGroupIcon);
+        organisationsIcon = findViewById(R.id.organisationIcon);
+        organisationTitle = findViewById(R.id.organisationsTitle);
+        productCategoriesTitle = findViewById(R.id.productGroupsTitle);
     }
 
     private void setViewValues(){
-        nameText.setText(company.getName() + ", " + company.getOwner());
-        descriptionText.setText(company.getDescription());
-        mailText.setText(company.getMail());
-        urlText.setText(company.getUrl());
-        openingHoursDescriptionText.setText(company.getOpeningHoursComments());
-        productGroupsDescriptionText.setText(company.getProductsDescription());
-
+        //name and owner
+        String owner = company.getOwner();
+        if(owner.isEmpty()){
+            nameText.setText(company.getName());
+        } else {
+            nameText.setText(company.getName() + ", " + company.getOwner());
+        }
+        //description
+        removeViewWhenEmpty(descriptionText, company.getDescription());
+        //mail
+        removeViewWhenEmpty(mailIcon ,mailText, company.getMail());
+        //url
+        removeViewWhenEmpty(urlIcon ,urlText, company.getUrl());
+        //openingHoursComment
+        removeViewWhenEmpty(openingHoursDescriptionText, company.getOpeningHoursComments());
+        //productCategoriesComment
+        removeViewWhenEmpty(productGroupsDescriptionText, company.getProductsDescription());
+        //address
         Address address = company.getAddress();
         addressText.setText(address.getZip() + " " + address.getCity() + " " +address.getStreet());
-
+        //organisations
         String orgs = "";
         for(Organization o : company.getOrganizations()){
             orgs += o.getName() + ", ";
@@ -90,8 +119,8 @@ public class CompanyActivity extends AppCompatActivity {
         if(!orgs.isEmpty()){
             orgs = orgs.substring(0,orgs.length() - 2);
         }
-        organisationsText.setText(orgs);
-
+        removeViewWhenEmpty(organisationTitle, organisationsIcon, organisationsText, orgs);
+        //product categories
         String prods = "";
         for(ProductGroup p : company.getProductGroups()){
             prods += p.getCategory().toString(context) + ", ";
@@ -99,8 +128,8 @@ public class CompanyActivity extends AppCompatActivity {
         if(!prods.isEmpty()){
             prods = prods.substring(0,prods.length() - 2);
         }
-        productGroupsText.setText(prods);
-
+        removeViewWhenEmpty(productCategoriesTitle, productCategoriesIcon, productGroupsText, prods);
+        //delivery service
         if(company.isDeliveryService()){
             deliveryText.setText(getResources().getString(R.string.delivery_true));
             deliveryText.setTextColor(ContextCompat.getColor(CompanyActivity.this, R.color.green_delivery));
@@ -111,14 +140,14 @@ public class CompanyActivity extends AppCompatActivity {
             deliveryIcon.setColorFilter(ContextCompat.getColor(CompanyActivity.this, R.color.red_delivery), android.graphics.PorterDuff.Mode.SRC_IN);
         }
         mainIcon.setImageResource(company.getImageResource());
-
-        Map<String,Map<String, ArrayList<Map<String, String>>>> openingHours = company.getOpeningHours();
+        //opening hours
+        Map<String,ArrayList<Map<String, String>>> openingHours = company.getOpeningHours();
         for(int i = 0; i < WEEKDAYS.length; i++){
             String openingHoursAtDay = "";
             ArrayList<Map<String, String>> list = (ArrayList<Map<String, String>>) openingHours.get(WEEKDAYS[i]);
             if(list != null){
                 for(Map<String, String> m : list){
-                    openingHoursAtDay += m.get(getResources().getString(R.string.start)) + " - " + m.get(getResources().getString(R.string.end)) + "    ";
+                    openingHoursAtDay += m.get("start") + " - " + m.get("end") + "    ";
                 }
                 if(!openingHoursAtDay.isEmpty()){
                     openingHoursAtDay = openingHoursAtDay.substring(0, openingHoursAtDay.length()-4);
@@ -127,6 +156,33 @@ public class CompanyActivity extends AppCompatActivity {
                 openingHoursAtDay = getResources().getString(R.string.closed);
             }
             weekdaysText[i].setText(openingHoursAtDay);
+        }
+    }
+
+    private void removeViewWhenEmpty(TextView textView, String s){
+        if(s.isEmpty()){
+            textView.setVisibility(View.GONE);
+        } else {
+            textView.setText(s);
+        }
+    }
+
+    private void removeViewWhenEmpty(ImageView imageView, TextView textView, String s){
+        if(s.isEmpty()){
+            textView.setVisibility(View.GONE);
+            imageView.setVisibility(View.GONE);
+        } else {
+            textView.setText(s);
+        }
+    }
+
+    private void removeViewWhenEmpty(TextView title, ImageView icon, TextView textView, String s){
+        if(s.isEmpty()){
+            textView.setVisibility(View.GONE);
+            icon.setVisibility(View.GONE);
+            title.setVisibility(View.GONE);
+        } else {
+            textView.setText(s);
         }
     }
 }

@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,16 +16,21 @@ import android.widget.SearchView;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.sql.Time;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 
 import de.uni_marburg.sp21.data_structure.Category;
 import de.uni_marburg.sp21.data_structure.Company;
 import de.uni_marburg.sp21.data_structure.Organization;
 import de.uni_marburg.sp21.data_structure.ShopType;
-import de.uni_marburg.sp21.data_structure.TimeInterval;
 import de.uni_marburg.sp21.filter.BottomSheetFilter;
 import de.uni_marburg.sp21.filter.CheckItem;
 import de.uni_marburg.sp21.filter.Filter;
@@ -51,6 +58,9 @@ public class MainActivity extends AppCompatActivity {
     private CheckItem[] restrictions;
     private boolean isOpen;
     private boolean isDelivery;
+    private Date startTime;
+    private Date endTime;
+    private String weekday;
 
     private Context context;
 
@@ -61,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = MainActivity.this;
+        setSystemLanguage();
 
         initializeViews();
         getData();
@@ -77,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void filterAndUpdateRecyclerview(){
         filteredCompanies.clear();
-        filteredCompanies.addAll(Filter.filter(searchView.getQuery().toString(), companies, types, organisations, categories, restrictions, isDelivery, isOpen, context));
+        filteredCompanies.addAll(Filter.filter(searchView.getQuery().toString(), companies, types, organisations, categories, restrictions, isDelivery, isOpen, context, weekday, startTime, endTime));
         sortFilteredCompanies();
         adapter.notifyDataSetChanged();
     }
@@ -115,27 +126,19 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onTimeStartChanged(String time) {
-
-                        System.out.println(time);
-
-                        String[] hourAndMinutes = time.split(":");
-                        TimeInterval.setStart(new Time(Integer.parseInt(hourAndMinutes[0]), Integer.parseInt(hourAndMinutes[1]), 0));
-                    //    filterAndUpdateRecyclerview();
+                        startTime = convertToDate(time);
+                        filterAndUpdateRecyclerview();
                     }
 
                     @Override
                     public void onTimeEndChanged(String time) {
-                        System.out.println(time);
-                        String[] hourAndMinutes = time.split(":");
-                        TimeInterval.setEnd(new Time(Integer.parseInt(hourAndMinutes[0]), Integer.parseInt(hourAndMinutes[1]), 0));
-                       // filterAndUpdateRecyclerview();
+                        endTime = convertToDate(time);
+                        filterAndUpdateRecyclerview();
                     }
 
                     @Override
-                    public void onTimeDateChanged(String time) {
-                        System.out.println(time);
-                        TimeInterval.setDate(time);
-                        filterAndUpdateRecyclerview();
+                    public void onTimeDateChanged(String day) {
+                        weekday = day;
                     }
 
                     @Override
@@ -167,6 +170,9 @@ public class MainActivity extends AppCompatActivity {
                 new CheckItem(getResources().getString(R.string.address)), new CheckItem(getResources().getString(R.string.description_company)), new CheckItem(getResources().getString(R.string.description_products)),
                 new CheckItem(getResources().getString(R.string.product_tags)), new CheckItem(getResources().getString(R.string.opening_hours_comment)), new CheckItem(getResources().getString(R.string.name_organisation)),
                 new CheckItem(getResources().getString(R.string.name_company))};
+        startTime = null;
+        endTime = null;
+        weekday = "";
     }
 
     private void initializeViews(){
@@ -219,5 +225,27 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private void setSystemLanguage(){
+        String languageCode = Locale.getDefault().getDisplayLanguage();
+        Resources res = getResources();
+        Configuration conf = res.getConfiguration();
+        conf.setLocale(new Locale(languageCode.toLowerCase()));
+    }
+    public static Date convertToDate(String time){
+        Calendar calendar = Calendar.getInstance();
+        Date date = calendar.getTime();
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+        try {
+            Date setTime = format.parse(time);
+            calendar.setTime(setTime);
+            calendar.set(date.getYear() + 1900, date.getMonth(), date.getDate());
+            Date result = calendar.getTime();
+            return result;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

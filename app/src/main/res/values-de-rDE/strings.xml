@@ -41,11 +41,4 @@
     <string name="description_company">Beschreibung Betrieb</string>
     <string name="product_tags">Schlagworte Produktgruppen</string>
     <string name="name_organisation">Name Organisation</string>
-    <string name="abbreviation_sunday">SO</string>
-    <string name="abbreviation_monday">MO</string>
-    <string name="abbreviation_tuesday">DI</string>
-    <string name="abbreviation_wednesday">MI</string>
-    <string name="abbreviation_thursday">DO</string>
-    <string name="abbreviation_friday">FR</string>
-    <string name="abbreviation_saturday">SA</string>
 </resources>

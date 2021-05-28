@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             app:layout_constraintBottom_toBottomOf="@+id/searchView"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/settingsButton"
             app:layout_constraintTop_toTopOf="@+id/searchView"
             app:srcCompat="@drawable/ic_baseline_filter_alt_24" />
 
@@ -35,6 +35,16 @@
             app:layout_constraintTop_toTopOf="parent">
 
         </SearchView>
+
+        <ImageView
+            android:id="@+id/settingsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/filterButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/filterButton"
+            app:srcCompat="@drawable/ic_baseline_settings_24" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView

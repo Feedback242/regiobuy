@@ -23,16 +23,16 @@
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/companyProductGroupsDescription"
-            app:layout_constraintTop_toBottomOf="@+id/textView28" />
+            app:layout_constraintTop_toBottomOf="@+id/productGroupsTitle" />
 
         <TextView
-            android:id="@+id/textView28"
+            android:id="@+id/productGroupsTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="@string/product_categories"
-            app:layout_constraintStart_toEndOf="@+id/imageView9"
-            app:layout_constraintTop_toTopOf="@+id/imageView9" />
+            app:layout_constraintStart_toEndOf="@+id/productGroupIcon"
+            app:layout_constraintTop_toTopOf="@+id/productGroupIcon" />
 
         <LinearLayout
             android:id="@+id/linearLayout3"
@@ -263,7 +263,7 @@
             app:srcCompat="@drawable/ic_baseline_delivery_dining_24" />
 
         <ImageView
-            android:id="@+id/imageView6"
+            android:id="@+id/mailIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -273,12 +273,12 @@
             app:srcCompat="@drawable/ic_baseline_email_24" />
 
         <ImageView
-            android:id="@+id/imageView7"
+            android:id="@+id/urlIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="@+id/imageView6"
-            app:layout_constraintStart_toStartOf="@+id/imageView6"
+            app:layout_constraintEnd_toEndOf="@+id/mailIcon"
+            app:layout_constraintStart_toStartOf="@+id/mailIcon"
             app:layout_constraintTop_toBottomOf="@+id/companyMail"
             app:srcCompat="@drawable/ic_baseline_link_24" />
 
@@ -292,8 +292,8 @@
             android:text="info@test-company.de"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/imageView6"
-            app:layout_constraintTop_toTopOf="@+id/imageView6" />
+            app:layout_constraintStart_toEndOf="@+id/mailIcon"
+            app:layout_constraintTop_toTopOf="@+id/mailIcon" />
 
         <TextView
             android:id="@+id/companyURL"
@@ -305,11 +305,11 @@
             android:text="www.test-company.de"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/imageView7"
-            app:layout_constraintTop_toTopOf="@+id/imageView7" />
+            app:layout_constraintStart_toEndOf="@+id/urlIcon"
+            app:layout_constraintTop_toTopOf="@+id/urlIcon" />
 
         <ImageView
-            android:id="@+id/imageView8"
+            android:id="@+id/organisationIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -319,13 +319,13 @@
             app:srcCompat="@drawable/ic_baseline_eco_24" />
 
         <TextView
-            android:id="@+id/textView24"
+            android:id="@+id/organisationsTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="@string/organisations"
-            app:layout_constraintStart_toEndOf="@+id/imageView8"
-            app:layout_constraintTop_toTopOf="@+id/imageView8" />
+            app:layout_constraintStart_toEndOf="@+id/organisationIcon"
+            app:layout_constraintTop_toTopOf="@+id/organisationIcon" />
 
         <TextView
             android:id="@+id/textView27"
@@ -345,8 +345,8 @@
             android:text="Diese organisation hat einen langen Namen, Diese organisation hat einen langen Namen"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/textView24"
-            app:layout_constraintTop_toBottomOf="@+id/textView24" />
+            app:layout_constraintStart_toStartOf="@+id/organisationsTitle"
+            app:layout_constraintTop_toBottomOf="@+id/organisationsTitle" />
 
         <TextView
             android:id="@+id/companyProductGroupsDescription"
@@ -354,11 +354,13 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:text="Description Description Description Description Description Description Description Description "
             android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/textView28"
+            app:layout_constraintStart_toStartOf="@+id/productGroupsTitle"
             app:layout_constraintTop_toBottomOf="@+id/companyProductGroups" />
 
         <TextView
@@ -375,12 +377,12 @@
             app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 
         <ImageView
-            android:id="@+id/imageView9"
+            android:id="@+id/productGroupIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="@+id/imageView8"
-            app:layout_constraintStart_toStartOf="@+id/imageView8"
+            app:layout_constraintEnd_toEndOf="@+id/organisationIcon"
+            app:layout_constraintStart_toStartOf="@+id/organisationIcon"
             app:layout_constraintTop_toBottomOf="@+id/companyOrganisations"
             app:srcCompat="@drawable/ic_baseline_local_grocery_store_24" />
 

@@ -1,7 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">RegioBuy</string>
-    <string name="title_activity_compan" translatable="false">RegioBuy</string>
-
     <string name="delivery_false">This company doesn\'t deliver!</string>
     <string name="delivery_true">This company delivers!</string>
     <string name="opening_times">Opening hours:</string>
