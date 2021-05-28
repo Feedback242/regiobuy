@@ -10,7 +10,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Suchen in"
+        android:text="@string/search_in"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="@+id/textView2"
         app:layout_constraintStart_toStartOf="@+id/textView2"
@@ -82,7 +82,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="8dp"
-                        android:text="Aktuell Geöffnet"
+                        android:text="@string/is_opened"
                         android:textColor="?android:attr/textColor"
                         app:layout_constraintBottom_toBottomOf="@+id/openedCheckbox"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -125,7 +125,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="8dp"
-                        android:text="Lieferdienst"
+                        android:text="@string/delivery"
                         android:textColor="?android:attr/textColor"
                         app:layout_constraintBottom_toBottomOf="@+id/deliveryCheckbox"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -175,7 +175,7 @@
                 android:id="@+id/textView8"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Start"
+                android:text="@string/start"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -219,7 +219,7 @@
                 android:id="@+id/Star"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tag"
+                android:text="@string/end"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -272,14 +272,14 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:textSize="15sp"
         android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:text="Produkt Kategorien"
+        android:text="@string/product_categories"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -297,12 +297,12 @@
     </androidx.recyclerview.widget.RecyclerView>
 
     <TextView
-        android:textSize="15sp"
         android:id="@+id/textView3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Betriebsarten"
+        android:text="@string/shop_types"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="@+id/textView2"
         app:layout_constraintStart_toStartOf="@+id/textView2"
         app:layout_constraintTop_toBottomOf="@+id/categoryRV" />
@@ -319,12 +319,12 @@
     </androidx.recyclerview.widget.RecyclerView>
 
     <TextView
-        android:textSize="15sp"
         android:id="@+id/textView4"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Organisationen"
+        android:text="@string/organisations"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="@+id/textView2"
         app:layout_constraintStart_toStartOf="@+id/textView2"
         app:layout_constraintTop_toBottomOf="@+id/typesRV" />

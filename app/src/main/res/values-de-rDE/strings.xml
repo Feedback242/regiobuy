@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">RegioBuy</string>
+    <string name="delivery_true">Dieses Unternehmen Liefert!</string>
+    <string name="delivery_false">Dieses Unternehmen Liefert leider nicht.</string>
+    <string name="opening_times">Öffnungszeiten:</string>
+    <string name="organisations">Organisationen:</string>
+    <string name="product_categories">Produkt-Kategorien:</string>
+    <string name="closed">Geschlossen!</string>
+    <string name="not_available">Nicht Verfügbar.</string>
+    <string name="shop_types">Betriebsarten:</string>
+    <string name="search_in">Suche in:</string>
+    <string name="start">Start</string>
+    <string name="end">Ende</string>
+    <string name="day">Tag</string>
+    <string name="is_opened">Aktuell Geöffnet</string>
+    <string name="delivery">Lieferdienst</string>
+    <string name="eggs">Eier</string>
+    <string name="meat">Fleisch</string>
+    <string name="milk">Milch</string>
+    <string name="honey">Honig</string>
+    <string name="pasta">Pasta</string>
+    <string name="fruits">Obst</string>
+    <string name="cereals">Getreide</string>
+    <string name="beverages">Getränke</string>
+    <string name="vegetables">Gemüse</string>
+    <string name="baked_goods">Backwaren</string>
+    <string name="meat_products">Fleischprodukte</string>
+    <string name="milk_products">Milchprodukte</string>
+    <string name="hotel">Hotel</string>
+    <string name="producer">Direktproduzent</string>
+    <string name="shop">Geschäft</string>
+    <string name="restaurant">Restaurant</string>
+    <string name="mart">Markt</string>
+    <string name="name_company">Name Betrieb</string>
+    <string name="description_products">Produktbeschreibung</string>
+    <string name="opening_hours_comment">Öffnungszeit Anmerkung</string>
+    <string name="messages_company">Nachrichten des Betriebes</string>
+    <string name="name_owner">Name Besitzer</string>
+    <string name="address">Address</string>
+    <string name="description_company">Beschreibung Betrieb</string>
+    <string name="product_tags">Schlagworte Produktgruppen</string>
+    <string name="name_organisation">Name Organisation</string>
+    <string name="abbreviation_sunday">SO</string>
+    <string name="abbreviation_monday">MO</string>
+    <string name="abbreviation_tuesday">DI</string>
+    <string name="abbreviation_wednesday">MI</string>
+    <string name="abbreviation_thursday">DO</string>
+    <string name="abbreviation_friday">FR</string>
+    <string name="abbreviation_saturday">SA</string>
+</resources>

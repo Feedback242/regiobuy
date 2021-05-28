@@ -1,12 +1,52 @@
 <resources>
     <string name="app_name">RegioBuy</string>
-    <string name="title_activity_compan">MainActivity</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
+    <string name="title_activity_compan" translatable="false">RegioBuy</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="delivery_false">This company doesn\'t deliver!</string>
+    <string name="delivery_true">This company delivers!</string>
+    <string name="opening_times">Opening hours:</string>
+    <string name="product_categories">Product groups:</string>
+    <string name="organisations">Organizations:</string>
+    <string name="closed">Closed!</string>
+    <string name="not_available">Not avaiable.</string>
+    <string name="shop_types">Shop-Types:</string>
+    <string name="search_in">Search in:</string>
+    <string name="start">Start</string>
+    <string name="end">End</string>
+    <string name="day">Day</string>
+    <string name="is_opened">Is open</string>
+    <string name="delivery">Delivery service</string>
+    <string name="eggs">Eggs</string>
+    <string name="meat">Meat</string>
+    <string name="milk">Milk</string>
+    <string name="honey">Honey</string>
+    <string name="pasta">Pasta</string>
+    <string name="fruits">Fruits</string>
+    <string name="cereals">Cereals</string>
+    <string name="beverages">Beverages</string>
+    <string name="vegetables">Vegetables</string>
+    <string name="baked_goods">Baked goods</string>
+    <string name="meat_products">Meat products</string>
+    <string name="milk_products">Milk products</string>
+    <string name="hotel">Hotel</string>
+    <string name="producer">Producer</string>
+    <string name="shop">Shop</string>
+    <string name="restaurant">Restaurant</string>
+    <string name="mart">Mart</string>
+    <string name="name_company">Name of Company</string>
+    <string name="description_products">Product description</string>
+    <string name="opening_hours_comment">Opening hours comment</string>
+    <string name="messages_company">Messages of company</string>
+    <string name="name_owner">Name of owner</string>
+    <string name="address">Address</string>
+    <string name="description_company">Company description</string>
+    <string name="product_tags">Product group tags</string>
+    <string name="name_organisation">Name of organisations</string>
+    <string name="abbreviation_sunday">SUN</string>
+    <string name="abbreviation_monday">MON</string>
+    <string name="abbreviation_tuesday">TUE</string>
+    <string name="abbreviation_wednesday">WED</string>
+    <string name="abbreviation_thursday">THU</string>
+    <string name="abbreviation_friday">FRI</string>
+    <string name="abbreviation_saturday">SAT</string>
 </resources>

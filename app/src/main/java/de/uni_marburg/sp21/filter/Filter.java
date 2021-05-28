@@ -1,5 +1,6 @@
 package de.uni_marburg.sp21.filter;
 
+import android.content.Context;
 import android.util.Log;
 
 import java.sql.Time;
@@ -18,7 +19,7 @@ import de.uni_marburg.sp21.filter.CheckItem;
 
 public class Filter {
 
-    public static List<Company> filter(String s, List<Company> companies, CheckItem[] types, CheckItem[] organisations, CheckItem[] categories, CheckItem[] restrictions, boolean isDelivery, boolean isOpen) {
+    public static List<Company> filter(String s, List<Company> companies, CheckItem[] types, CheckItem[] organisations, CheckItem[] categories, CheckItem[] restrictions, boolean isDelivery, boolean isOpen, Context context) {
         //HashSets doesn't insert duplicates
         s = s.toLowerCase();
         HashSet<Company> filterCompaniesSet = new HashSet<>();
@@ -65,7 +66,7 @@ public class Filter {
                     boolean hasType = false;
                     if(type.isChecked()) {
                         for (ShopType companyTypes : shopTypes) {
-                            if (companyTypes.toString().equals(type.getText())) {
+                            if (companyTypes.toString(context).equals(type.getText())) {
                                 hasType = true;
                                 break;
                             }
@@ -124,7 +125,7 @@ public class Filter {
                     boolean hasCategory = false;
                     if (category.isChecked()) {
                         for (Category companyCategory : companyCategories) {
-                            if (companyCategory.toString().equals(category.getText())) {
+                            if (companyCategory.toString(context).equals(category.getText())) {
                                 hasCategory = true;
                                 break;
                             }
@@ -172,7 +173,7 @@ public class Filter {
                         //type
                         else if (restrictions[2].getText().equals(r.getText())) {
                             for (ShopType shopType : ShopType.values()) {
-                                if (shopType.toString().toLowerCase().contains(s)) {
+                                if (shopType.toString(context).toLowerCase().contains(s)) {
                                     filterCompaniesSet.add(c);
                                     break;
                                 }

@@ -1,9 +1,13 @@
 package de.uni_marburg.sp21.data_structure;
 
+import android.content.Context;
+import android.content.res.Resources;
+
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
 
+import de.uni_marburg.sp21.R;
 import de.uni_marburg.sp21.filter.CheckItem;
 
 public enum Category implements Serializable {
@@ -21,30 +25,29 @@ public enum Category implements Serializable {
     PASTA;
 
 
-    public static CheckItem[] createCheckItemArray(){
+    public static CheckItem[] createCheckItemArray(Context context){
      CheckItem[] checkItem = new CheckItem[Category.values().length];
      for (int i = 0; i < checkItem.length; i++){
-         checkItem[i] = new CheckItem(Category.values()[i].toString());
+         checkItem[i] = new CheckItem(Category.values()[i].toString(context));
      }
      return checkItem;
     }
 
-    @NonNull
-    @Override
-    public String toString() {
+    public String toString(Context context) {
+        Resources res = context.getResources();
         switch (this){
-            case EGGS: return "Eier";
-            case MEAT: return "Fleisch";
-            case MILK: return "Milch";
-            case HONEY: return "Honig";
-            case PASTA: return "Pasta";
-            case FRUITS: return "Obst";
-            case CEREALS: return "Getreide";
-            case BEVERAGES: return "Getränke";
-            case VEGETABLES: return "Gemüse";
-            case BAKED_GOODS: return "Backwaren";
-            case MEAT_PRODUCTS: return "Fleischprodukte";
-            case MILK_PRODUCTS: return "Milchprodukte";
+            case EGGS: return res.getString(R.string.eggs);
+            case MEAT: return res.getString(R.string.meat);
+            case MILK: return res.getString(R.string.milk);
+            case HONEY: return res.getString(R.string.honey);
+            case PASTA: return res.getString(R.string.pasta);
+            case FRUITS: return res.getString(R.string.fruits);
+            case CEREALS: return res.getString(R.string.cereals);
+            case BEVERAGES: return res.getString(R.string.beverages);
+            case VEGETABLES: return res.getString(R.string.vegetables);
+            case BAKED_GOODS: return res.getString(R.string.baked_goods);
+            case MEAT_PRODUCTS: return res.getString(R.string.meat_products);
+            case MILK_PRODUCTS: return res.getString(R.string.milk_products);
             default: return "";
         }
     }

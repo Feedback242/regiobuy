@@ -1,5 +1,8 @@
 package de.uni_marburg.sp21.data_structure;
 
+import android.content.Context;
+import android.content.res.Resources;
+
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
@@ -21,28 +24,27 @@ public enum ShopType implements Serializable {
     private final int[] SHOP_DRAWABLE_IDS = new int[]{R.drawable.shop0, R.drawable.shop1};
     private final int[] PRODUCER_DRAWABLE_IDS = new int[]{R.drawable.producer0, R.drawable.producer1};
 
-    public static CheckItem[] createCheckItemArray() {
+    public static CheckItem[] createCheckItemArray(Context context) {
         CheckItem[] checkItem = new CheckItem[ShopType.values().length];
         for (int i = 0; i < checkItem.length; i++) {
-            checkItem[i] = new CheckItem(ShopType.values()[i].toString());
+            checkItem[i] = new CheckItem(ShopType.values()[i].toString(context));
         }
         return checkItem;
     }
 
-    @NonNull
-    @Override
-    public String toString() {
+    public String toString(Context context) {
+        Resources res = context.getResources();
         switch (this) {
             case MART:
-                return "Markt";
+                return res.getString(R.string.mart);
             case SHOP:
-                return "Geschäft";
+                return res.getString(R.string.shop);
             case HOTEL:
-                return "Hotel";
+                return res.getString(R.string.hotel);
             case PRODUCER:
-                return "Direktproduzent";
+                return res.getString(R.string.producer);
             case RESTAURANT:
-                return "Restaurant";
+                return res.getString(R.string.restaurant);
             default:
                 return "";
         }

@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void filterAndUpdateRecyclerview(){
         filteredCompanies.clear();
-        filteredCompanies.addAll(Filter.filter(searchView.getQuery().toString(), companies, types, organisations, categories, restrictions, isDelivery, isOpen));
+        filteredCompanies.addAll(Filter.filter(searchView.getQuery().toString(), companies, types, organisations, categories, restrictions, isDelivery, isOpen, context));
         sortFilteredCompanies();
         adapter.notifyDataSetChanged();
     }
@@ -160,13 +160,13 @@ public class MainActivity extends AppCompatActivity {
         filteredCompanies = new ArrayList<>();
         filteredCompanies.addAll(companies);
 
-        categories = Category.createCheckItemArray();
-        types = ShopType.createCheckItemArray();
+        categories = Category.createCheckItemArray(context);
+        types = ShopType.createCheckItemArray(context);
         organisations = getOrganisations();
-        restrictions = new CheckItem[]{new CheckItem("Name Betrieb"), new CheckItem("Name Besitzer"), new CheckItem("Arten Betrieb"),
-                new CheckItem("Adresse"), new CheckItem("Beschreibung Betrieb"), new CheckItem("Beschreibung Produkte"),
-                new CheckItem("Schlagworte Produktgruppen"), new CheckItem("Öffnungseit Anmerkung"), new CheckItem("Name Organisation"),
-                new CheckItem("Nachrichten des Betriebes")};
+        restrictions = new CheckItem[]{new CheckItem(getResources().getString(R.string.name_company)), new CheckItem(getResources().getString(R.string.name_owner)), new CheckItem(getResources().getString(R.string.shop_types)),
+                new CheckItem(getResources().getString(R.string.address)), new CheckItem(getResources().getString(R.string.description_company)), new CheckItem(getResources().getString(R.string.description_products)),
+                new CheckItem(getResources().getString(R.string.product_tags)), new CheckItem(getResources().getString(R.string.opening_hours_comment)), new CheckItem(getResources().getString(R.string.name_organisation)),
+                new CheckItem(getResources().getString(R.string.name_company))};
     }
 
     private void initializeViews(){

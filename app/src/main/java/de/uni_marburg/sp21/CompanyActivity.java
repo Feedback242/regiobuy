@@ -1,5 +1,6 @@
 package de.uni_marburg.sp21;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -37,10 +38,13 @@ public class CompanyActivity extends AppCompatActivity {
     private ImageView mainIcon;
     private ImageView deliveryIcon;
 
+    private Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_company);
+        context = CompanyActivity.this;
         company = Company.load(CompanyActivity.this);
         initializeViews();
         setViewValues();
@@ -90,7 +94,7 @@ public class CompanyActivity extends AppCompatActivity {
 
         String prods = "";
         for(ProductGroup p : company.getProductGroups()){
-            prods += p.getCategory().toString() + ", ";
+            prods += p.getCategory().toString(context) + ", ";
         }
         if(!prods.isEmpty()){
             prods = prods.substring(0,prods.length() - 2);
@@ -98,11 +102,11 @@ public class CompanyActivity extends AppCompatActivity {
         productGroupsText.setText(prods);
 
         if(company.isDeliveryService()){
-            deliveryText.setText("Dieses Unternehmen liefert!");
+            deliveryText.setText(getResources().getString(R.string.delivery_true));
             deliveryText.setTextColor(ContextCompat.getColor(CompanyActivity.this, R.color.green_delivery));
             deliveryIcon.setColorFilter(ContextCompat.getColor(CompanyActivity.this, R.color.green_delivery), android.graphics.PorterDuff.Mode.SRC_IN);
         } else {
-            deliveryText.setText("Dieses Unternehmen liefert leider nicht!");
+            deliveryText.setText(getResources().getString(R.string.delivery_false));
             deliveryText.setTextColor(ContextCompat.getColor(CompanyActivity.this, R.color.red_delivery));
             deliveryIcon.setColorFilter(ContextCompat.getColor(CompanyActivity.this, R.color.red_delivery), android.graphics.PorterDuff.Mode.SRC_IN);
         }
@@ -114,13 +118,13 @@ public class CompanyActivity extends AppCompatActivity {
             ArrayList<Map<String, String>> list = (ArrayList<Map<String, String>>) openingHours.get(WEEKDAYS[i]);
             if(list != null){
                 for(Map<String, String> m : list){
-                    openingHoursAtDay += m.get("start") + " - " + m.get("end") + "    ";
+                    openingHoursAtDay += m.get(getResources().getString(R.string.start)) + " - " + m.get(getResources().getString(R.string.end)) + "    ";
                 }
                 if(!openingHoursAtDay.isEmpty()){
                     openingHoursAtDay = openingHoursAtDay.substring(0, openingHoursAtDay.length()-4);
                 }
             } else {
-                openingHoursAtDay = "Geschlossen";
+                openingHoursAtDay = getResources().getString(R.string.closed);
             }
             weekdaysText[i].setText(openingHoursAtDay);
         }
