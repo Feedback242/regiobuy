@@ -3,6 +3,9 @@ package de.uni_marburg.sp21.filter;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.type.DateTime;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -25,11 +28,36 @@ public class Filter {
         //HashSets doesn't insert duplicates
         s = s.toLowerCase();
         HashSet<Company> filterCompaniesSet = new HashSet<>();
+        // multiple search
+        String[] splitString = s.split(" ");
+        boolean multiple;
+        String rest = "";
+        if (multiple = (splitString.length > 1)){
+            rest = s.substring(s.indexOf(" ") + 1);
+            s = splitString[0];
+        }
 
         for (Company c : companies) {
-            System.out.println(c.getOpeningHours().values());
+            Log.d("REGIO", c.getOpeningHours().values().toString());
 
             //TODO timepicker
+            if(weekday != null && startTime != null && endTime != null){
+                for(Map<String, String> time : c.getOpeningHours().get(weekday)){
+                    Date chosenStart =  new Date(time.get("start")) ;
+                    Date chosenEnd =  new Date(time.get("end")) ;
+                    if (chosenStart.after(startTime)){
+                        if(chosenEnd.before(endTime)){
+
+                        }else {
+                            continue;
+                        }
+                    }else {
+                        continue;
+                    }
+
+                }
+
+            }
 
             //isOpen
             if(isOpen){
@@ -54,7 +82,7 @@ public class Filter {
                     case Calendar.SUNDAY: dayName = CompanyActivity.WEEKDAYS[6];
                         break;
                 }
-               ArrayList<Map<String, String>> openingList = c.getOpeningHours().get(dayName);
+                ArrayList<Map<String, String>> openingList = c.getOpeningHours().get(dayName);
                 boolean isCurrentlyOpen = false;
                 for(Map<String, String> m : openingList){
                     Date start = MainActivity.convertToDate(m.get("start"));
@@ -94,7 +122,7 @@ public class Filter {
                         hasAllTypes = hasAllTypes && hasType;
                     }
                 }
-            if (!hasAllTypes) {
+                if (!hasAllTypes) {
                     continue;
                 }
             }
@@ -167,6 +195,7 @@ public class Filter {
                 }
             }
 
+
             //default search (only company name and city)
             if(isDefaultRestrictions){
                 if (c.getName().toLowerCase().contains(s)) {
@@ -175,6 +204,7 @@ public class Filter {
                 if (c.getAddress().getCity().toLowerCase().contains(s)) {
                     filterCompaniesSet.add(c);
                 }
+
             } else {
                 for (CheckItem r : restrictions) {
                     if (r.isChecked()) {
@@ -267,6 +297,10 @@ public class Filter {
                     }
                 }
             }
+        }
+        // multiple Search
+        if (multiple){
+            filterCompaniesSet.addAll(filter(rest, companies, types, organisations, categories, restrictions, isDelivery, isOpen, context, weekday, startTime, endTime));
         }
         List<Company> filteredCompanies = new ArrayList<>();
         filteredCompanies.addAll(filterCompaniesSet);

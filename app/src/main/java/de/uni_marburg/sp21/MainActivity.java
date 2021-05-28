@@ -139,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onTimeDateChanged(String day) {
                         weekday = day;
+                        filterAndUpdateRecyclerview();
                     }
 
                     @Override
