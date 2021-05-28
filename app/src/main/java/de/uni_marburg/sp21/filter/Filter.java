@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import de.uni_marburg.sp21.data_structure.Category;
 import de.uni_marburg.sp21.data_structure.Company;
 import de.uni_marburg.sp21.data_structure.Message;
 import de.uni_marburg.sp21.data_structure.Organization;
@@ -19,6 +20,7 @@ public class Filter {
 
     public static List<Company> filter(String s, List<Company> companies, CheckItem[] types, CheckItem[] organisations, CheckItem[] categories, CheckItem[] restrictions, boolean isDelivery, boolean isOpen) {
         //HashSets doesn't insert duplicates
+        s = s.toLowerCase();
         HashSet<Company> filterCompaniesSet = new HashSet<>();
 
         for (Company c : companies) {
@@ -47,7 +49,7 @@ public class Filter {
                 continue;
             }
 
-            //type
+            //types (the company must have every type)
             boolean isDefaultType = true;
             for (CheckItem check : types) {
                 if(check.isChecked()){
@@ -55,21 +57,26 @@ public class Filter {
                 }
             }
             if(!isDefaultType) {
-                boolean hasType = false;
+                boolean hasAllTypes = true;
                 List<ShopType> shopTypes = c.getTypes();
-                for (ShopType companyTypes : shopTypes) {
-                    for (CheckItem type : types) {
-                        if (type.isChecked() && companyTypes.toString().equals(type.getText())) {
-                            hasType = true;
+                for (CheckItem type : types) {
+                    boolean hasType = false;
+                    if(type.isChecked()) {
+                        for (ShopType companyTypes : shopTypes) {
+                            if (companyTypes.toString().equals(type.getText())) {
+                                hasType = true;
+                                break;
+                            }
                         }
+                        hasAllTypes = hasAllTypes && hasType;
                     }
                 }
-                if (!hasType) {
+            if (!hasAllTypes) {
                     continue;
                 }
             }
 
-            //organisation
+            //organisation (the company must have every organisation)
             boolean isDefaultOrganisation = true;
             for (CheckItem check : organisations) {
                 if(check.isChecked()){
@@ -77,43 +84,59 @@ public class Filter {
                 }
             }
             if(!isDefaultOrganisation) {
-                boolean hasOrganisation = false;
+                boolean hasAllOrganisations = true;
                 List<Organization> companyOrganisations = c.getOrganizations();
-                for (Organization companyOrganisation : companyOrganisations) {
-                    for (CheckItem organisation : organisations) {
-                        if (organisation.isChecked() && companyOrganisation.getName().equals(organisation.getText())) {
-                            hasOrganisation = true;
+                for (CheckItem organisation : organisations) {
+                    boolean hasOrganisation = false;
+                    if(organisation.isChecked()) {
+                        for (Organization companyOrganisation : companyOrganisations) {
+                            if (companyOrganisation.getName().equals(organisation.getText())) {
+                                hasOrganisation = true;
+                                break;
+                            }
                         }
+                        hasAllOrganisations = hasAllOrganisations && hasOrganisation;
                     }
                 }
-                if (!hasOrganisation) {
+                if (!hasAllOrganisations) {
                     continue;
                 }
             }
 
-            //category
+            //category (the company must have every category)
             boolean isDefaultCategory = true;
             for (CheckItem check : categories) {
-                if(check.isChecked()){
+                if (check.isChecked()) {
                     isDefaultCategory = false;
                 }
             }
-            if(!isDefaultCategory) {
-                boolean hasCategory = false;
+            if (!isDefaultCategory) {
+                boolean hasAllCategories = true;
                 List<ProductGroup> companyProductGroups = c.getProductGroups();
+                List<Category> companyCategories = new ArrayList<>();
                 for (ProductGroup p : companyProductGroups) {
-                    for (CheckItem cat : categories) {
-                        if (cat.isChecked() && cat.getText().equals(p.getCategory().toString())) {
-                            hasCategory = true;
+                    companyCategories.add(p.getCategory());
+                }
+
+                for (CheckItem category : categories) {
+                    boolean hasCategory = false;
+                    if (category.isChecked()) {
+                        for (Category companyCategory : companyCategories) {
+                            if (companyCategory.toString().equals(category.getText())) {
+                                hasCategory = true;
+                                break;
+                            }
                         }
+                        hasAllCategories = hasAllCategories && hasCategory;
                     }
                 }
-                if (!hasCategory) {
+                if (!hasAllCategories) {
                     continue;
                 }
             }
 
-            //restrictions
+
+            //restrictions (search in all restrictions)
             boolean isDefaultRestrictions = true;
             for (CheckItem r : restrictions) {
                 if(r.isChecked()){
