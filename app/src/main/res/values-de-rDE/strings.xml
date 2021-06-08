@@ -38,7 +38,7 @@
     <string name="opening_hours_comment">Öffnungszeit Anmerkung</string>
     <string name="messages_company">Nachrichten des Betriebes</string>
     <string name="name_owner">Name Besitzer</string>
-    <string name="address">Address</string>
+    <string name="address">Adresse</string>
     <string name="description_company">Beschreibung Betrieb</string>
     <string name="product_tags">Schlagworte Produktgruppen</string>
     <string name="name_organisation">Name Organisation</string>
@@ -49,4 +49,5 @@
     <string name="friday">Freitag</string>
     <string name="saturday">Samstag</string>
     <string name="sunday">Sonntag</string>
+    <string name="weekday">Wochentag</string>
 </resources>
