@@ -28,6 +28,7 @@ public class Filter {
         //HashSets doesn't insert duplicates
         s = s.toLowerCase();
         HashSet<Company> filterCompaniesSet = new HashSet<>();
+
         // multiple search
         String[] splitString = s.split(" ");
         boolean multiple;

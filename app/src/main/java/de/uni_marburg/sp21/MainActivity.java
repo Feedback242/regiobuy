@@ -158,6 +158,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
+
     private void getData(){
         database = FirebaseFirestore.getInstance();
         companies = DataBaseManager.getCompanyList(database, MainActivity.this);
@@ -226,6 +228,10 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    public Context getContext() {
+        return context;
     }
 
     private void setSystemLanguage(){
