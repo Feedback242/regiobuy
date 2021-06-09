@@ -177,7 +177,7 @@ public class DataBaseManager {
         return companies;
     }
 
-    private static void save(List<Company> companies, Context context){
+    public static void save(List<Company> companies, Context context){
         File path = context.getExternalFilesDir(null);
         File file = new File(path, COMPANIES_FILENAME);
 
@@ -190,7 +190,7 @@ public class DataBaseManager {
         }
     }
 
-    private static List<Company> load(Context context) {
+    public static List<Company> load(Context context) {
         File path = context.getExternalFilesDir(null);
         File file = new File(path, COMPANIES_FILENAME);
         List<Company> companies = new ArrayList<>();
