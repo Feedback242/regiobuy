@@ -26,6 +26,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.TimeZone;
 
 import de.uni_marburg.sp21.MainActivity;
@@ -60,10 +61,15 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
     private ImageView timePickerStart;
     private ImageView timePickerEnd;
     private ImageView timePickerDate;
+    private ImageView resetPicker;
 
     private TextView startTime;
     private TextView endTime;
     private TextView dateTime;
+
+    private Date startTimeDate;
+    private Date endTimeDate;
+    private String weekday;
 
     private View isDelivery;
     private View isOpened;
@@ -73,7 +79,7 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
     private boolean isCheckedOpen;
     private boolean isCheckedDelivery;
 
-    public BottomSheetFilter(Context context, final CheckItem[] ORGANIZATIONS, final CheckItem[] CATEGORIES, final CheckItem[] TYPES, final CheckItem[] RESTRICTIONS, boolean isDelivery, boolean isOpen){
+    public BottomSheetFilter(Context context, final CheckItem[] ORGANIZATIONS, final CheckItem[] CATEGORIES, final CheckItem[] TYPES, final CheckItem[] RESTRICTIONS, boolean isDelivery, boolean isOpen, String weekday, Date startTimeDate, Date endTimeDate){
         this.context = context;
         this.ORGANISATIONS = ORGANIZATIONS;
         this.TYPES = TYPES;
@@ -81,6 +87,9 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
         this.RESTRICTIONS = RESTRICTIONS;
         isCheckedOpen = isOpen;
         isCheckedDelivery = isDelivery;
+        this.weekday = weekday;
+        this.startTimeDate = startTimeDate;
+        this.endTimeDate = endTimeDate;
     }
 
     private void buildRecyclerView(int recyclerViewID, RecyclerView recyclerView, FilterAdapter adapter, CheckItem[] checkItems){
@@ -156,7 +165,26 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
         });
     }
 
+    private void initializeTimeTextViews(){
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+        if(startTimeDate != null){
+            String start = format.format(startTimeDate);
+            startTime.setText(start);
+        }else {
+            startTime.setText("");
+        }
+        if(endTimeDate != null){
+            String end = format.format(startTimeDate);
+            endTime.setText(end);
+        } else {
+            endTime.setText("");
+        }
+            dateTime.setText(weekday);
+    }
+
     private void buildTimePicker(){
+        //initialize
+        resetPicker  = itemView.findViewById(R.id.resetTimePicker);
         timePickerStart = itemView.findViewById(R.id.timePickerStart);
         timePickerEnd = itemView.findViewById(R.id.timePickerEnd);
         timePickerDate = itemView.findViewById(R.id.timePickerDate);
@@ -165,6 +193,19 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
         endTime = itemView.findViewById(R.id.endTime);
         dateTime = itemView.findViewById(R.id.dateTime);
 
+        initializeTimeTextViews();
+
+        //onClicks and TimePickers
+        resetPicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(listener != null){
+                    listener.onResetTimePickerClick();
+                    initializeTimeTextViews();
+                }
+
+            }
+        });
         timePickerStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -189,6 +230,7 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
             @Override
             public void onClick(View v) {
                 if(listener != null){
+                    SimpleDateFormat format = new SimpleDateFormat("HH:mm");
                     Calendar calendar = Calendar.getInstance();
                     int hours = calendar.get(Calendar.HOUR_OF_DAY);
                     int mins = calendar.get(Calendar.MINUTE);
@@ -348,5 +390,6 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
         void onTimeDateChanged(String time);
         void onDeliveryClick(boolean isDelivery);
         void onOpenedClick(boolean isOpen);
+        void onResetTimePickerClick();
     }
 }

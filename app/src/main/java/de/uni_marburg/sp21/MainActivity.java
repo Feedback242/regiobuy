@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BottomSheetFilter settingsDialog = new BottomSheetFilter(MainActivity.this, organisations, categories, types, restrictions, isDelivery, isOpen);
+                BottomSheetFilter settingsDialog = new BottomSheetFilter(MainActivity.this, organisations, categories, types, restrictions, isDelivery, isOpen, weekday, startTime, endTime);
                 settingsDialog.show(getSupportFragmentManager(), "SETTINGS_SHEET");
                 settingsDialog.setOnItemClickListener(new BottomSheetFilter.OnItemClickListener() {
                     @Override
@@ -153,6 +153,12 @@ public class MainActivity extends AppCompatActivity {
                         isOpen = isO;
                         filterAndUpdateRecyclerview();
                     }
+
+                    @Override
+                    public void onResetTimePickerClick() {
+                        initializeTimePickerValues();
+                        filterAndUpdateRecyclerview();
+                    }
                 });
             }
         });
@@ -173,11 +179,14 @@ public class MainActivity extends AppCompatActivity {
                 new CheckItem(getResources().getString(R.string.address)), new CheckItem(getResources().getString(R.string.description_company)), new CheckItem(getResources().getString(R.string.description_products)),
                 new CheckItem(getResources().getString(R.string.product_tags)), new CheckItem(getResources().getString(R.string.opening_hours_comment)), new CheckItem(getResources().getString(R.string.name_organisation)),
                 new CheckItem(getResources().getString(R.string.messages_company))};
+        initializeTimePickerValues();
+    }
+
+    private void initializeTimePickerValues(){
         startTime = null;
         endTime = null;
         weekday = "";
     }
-
     private void initializeViews(){
         searchView = findViewById(R.id.searchView);
         filterButton = findViewById(R.id.filterButton);
@@ -240,6 +249,7 @@ public class MainActivity extends AppCompatActivity {
         Configuration conf = res.getConfiguration();
         conf.setLocale(new Locale(languageCode.toLowerCase()));
     }
+
     public static Date convertToDate(String time){
         Calendar calendar = Calendar.getInstance();
         Date date = calendar.getTime();
