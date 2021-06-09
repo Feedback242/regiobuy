@@ -201,6 +201,9 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
             public void onClick(View v) {
                 if(listener != null){
                     listener.onResetTimePickerClick();
+                    endTimeDate = null;
+                    startTimeDate = null;
+                    weekday = "";
                     initializeTimeTextViews();
                 }
 
