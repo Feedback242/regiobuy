@@ -164,8 +164,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
-
     private void getData(){
         database = FirebaseFirestore.getInstance();
         companies = DataBaseManager.getCompanyList(database, MainActivity.this);
@@ -187,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
         endTime = null;
         weekday = "";
     }
+
     private void initializeViews(){
         searchView = findViewById(R.id.searchView);
         filterButton = findViewById(R.id.filterButton);

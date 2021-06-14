@@ -27,7 +27,8 @@ import de.uni_marburg.sp21.data_structure.ShopType;
 public class Filter {
 
     /**
-     * @param s the searchTherm
+     *
+     * @param searchString the string that has been entered by the user
      * @param companies the initial List of Companies that has been downloaded from the database
      * @param types Array of CheckItems for the types.
      * @param organisations Array of CheckItems for the Organisations.
@@ -39,38 +40,40 @@ public class Filter {
      * @param weekday weekday string from Calend
      * @param startTime
      * @param endTime
-     * @return a filtered list of companies.
      */
-    public static List<Company> filter(String s, List<Company> companies, CheckItem[] types, CheckItem[] organisations, CheckItem[] categories, CheckItem[] restrictions, boolean isDelivery, boolean isOpen, Context context, String weekday, Date startTime, Date endTime) {
+    public static List<Company> filter(String searchString, List<Company> companies, CheckItem[] types, CheckItem[] organisations, CheckItem[] categories, CheckItem[] restrictions, boolean isDelivery, boolean isOpen, Context context, String weekday, Date startTime, Date endTime) {
         //the search is not case sensitive
-        s = s.toLowerCase();
+        searchString = searchString.toLowerCase();
 
         //HashSets doesn't insert duplicates
         HashSet<Company> filterCompaniesSet = new HashSet<>();
 
         //multiple search
-        String[] splitString = s.split(" ");
-        boolean multiple;
-        String rest = "";
-        if (multiple = (splitString.length > 1)){
-            rest = s.substring(s.indexOf(" ") + 1);
-            s = splitString[0];
-        }
-        for (Company c : companies) {
-            if(isCompanyFulfillingAllFilters(c, types, organisations, categories, isDelivery, isOpen, context, weekday, startTime, endTime)){
-                //search in that company
-                if(isDefaultSearch(restrictions)){
-                    //default search (only company name and city)
-                    defaultSearch(s, c, filterCompaniesSet);
-                } else {
-                    //restrictions (search in all restrictions)
-                    searchWithRestrictions(s, restrictions, c, filterCompaniesSet, context);
+        String[] searchTherms = searchString.split("\"");
+        for (Company company : companies) {
+            // is true when searchString = term1 && term2 && term3 ... = true
+            boolean isFulfillingAllTherms = true;
+            for (String searchTherm : searchTherms) {
+                String[] therm = searchTherm.split(" ");
+                // is true when Therm = keyword1 || keyword2 || keyword3 ... = true
+                boolean isFulFillingTherm = false;
+                for (String keyWord : therm) {
+                    if (isCompanyFulfillingAllFilters(company, types, organisations, categories, isDelivery, isOpen, context, weekday, startTime, endTime)) {
+                        //search in that company
+                        if (isDefaultSearch(restrictions)) {
+                            //default search (only company name and city)
+                            isFulFillingTherm = isFulFillingTherm || defaultSearch(keyWord, company);
+                        } else {
+                            //restrictions (search in all restrictions)
+                            isFulFillingTherm = isFulFillingTherm || searchWithRestrictions(keyWord, restrictions, company, context);
+                        }
+                    }
                 }
+                isFulfillingAllTherms = isFulfillingAllTherms && isFulFillingTherm;
             }
-        }
-        // multiple Search recursion
-        if (multiple){
-            filterCompaniesSet.addAll(filter(rest, companies, types, organisations, categories, restrictions, isDelivery, isOpen, context, weekday, startTime, endTime));
+            if(isFulfillingAllTherms){
+                filterCompaniesSet.add(company);
+            }
         }
         List<Company> filteredCompanies = new ArrayList<>();
         filteredCompanies.addAll(filterCompaniesSet);
@@ -281,73 +284,68 @@ public class Filter {
     }
 
 
-    private static void searchWithRestrictions(String searchString, CheckItem[] restrictions, Company company, HashSet<Company> filterCompaniesSet, Context context) {
+    private static boolean searchWithRestrictions(String searchString, CheckItem[] restrictions, Company company, Context context) {
         for (CheckItem r : restrictions) {
             if (r.isChecked()) {
                 //company name
                 if (restrictions[0].getText().equals(r.getText())) {
                     if (company.getName().toLowerCase().contains(searchString)) {
-                        filterCompaniesSet.add(company);
+                        return true;
                     }
                 }
                 //name owner
                 else if (restrictions[1].getText().equals(r.getText())) {
                     if (company.getOwner().toLowerCase().contains(searchString)) {
-                        filterCompaniesSet.add(company);
+                        return true;
                     }
                 }
                 //type
                 else if (restrictions[2].getText().equals(r.getText())) {
                     for (ShopType shopType : ShopType.values()) {
                         if (shopType.toString(context).toLowerCase().contains(searchString)) {
-                            filterCompaniesSet.add(company);
-                            break;
+                            return true;
                         }
                     }
                 }
-                //adress
+                //address
                 else if (restrictions[3].getText().equals(r.getText())) {
                     if (company.getAddress().getCity().toLowerCase().contains(searchString)) {
-                        filterCompaniesSet.add(company);
+                        return true;
                     }
                     if (company.getAddress().getStreet().toLowerCase().contains(searchString)) {
-                        filterCompaniesSet.add(company);
+                        return true;
                     }
                     if (company.getAddress().getZip().toLowerCase().contains(searchString)) {
-                        filterCompaniesSet.add(company);
+                        return true;
                     }
                 }
-                //description companie
+                //description company
                 else if (restrictions[4].getText().equals(r.getText())) {
                     if (company.getDescription().toLowerCase().contains(searchString)) {
-                        filterCompaniesSet.add(company);
+                        return true;
                     }
                 }
                 //description products
                 else if (restrictions[5].getText().equals(r.getText())) {
                     if (company.getProductsDescription().toLowerCase().contains(searchString)) {
-                        filterCompaniesSet.add(company);
+                        return true;
                     }
                 }
                 //product tags
                 else if (restrictions[6].getText().equals(r.getText())) {
                     List<ProductGroup> productGroups = company.getProductGroups();
-                    boolean isAdded = false;
                     for (ProductGroup p : productGroups) {
                         for (String tag : p.getProductTags()) {
                             if (tag.toLowerCase().contains(searchString)) {
-                                filterCompaniesSet.add(company);
-                                isAdded = true;
-                                break;
+                                return true;
                             }
                         }
-                        if (isAdded) break;
                     }
                 }
                 //opening hours comments
                 else if (restrictions[7].getText().equals(r.getText())) {
                     if (company.getOpeningHoursComments().toLowerCase().contains(searchString)) {
-                        filterCompaniesSet.add(company);
+                        return true;
                     }
                 }
                 //organisation names
@@ -355,8 +353,7 @@ public class Filter {
                     List<Organization> orgs = company.getOrganizations();
                     for (Organization o : orgs) {
                         if (o.getName().toLowerCase().contains(searchString)) {
-                            filterCompaniesSet.add(company);
-                            break;
+                            return true;
                         }
                     }
                 }
@@ -365,22 +362,23 @@ public class Filter {
                     List<Message> messages = company.getMessages();
                     for (Message m : messages) {
                         if (m.getContent().toLowerCase().contains(searchString)) {
-                            filterCompaniesSet.add(company);
-                            break;
+                            return true;
                         }
                     }
                 }
             }
         }
+        return false;
     }
 
-    private static void defaultSearch(String searchString, Company company, HashSet<Company> filterCompaniesSet){
+    private static boolean defaultSearch(String searchString, Company company){
         if (company.getName().toLowerCase().contains(searchString)) {
-            filterCompaniesSet.add(company);
+            return true;
         }
         if (company.getAddress().getCity().toLowerCase().contains(searchString)) {
-            filterCompaniesSet.add(company);
+            return true;
         }
+        return false;
     }
 
     private static String currentWeekdayString(){
