@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.sql.DatabaseMetaData;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import de.uni_marburg.sp21.DataBaseManager;
 import de.uni_marburg.sp21.MyApplication;
 import de.uni_marburg.sp21.R;
 import de.uni_marburg.sp21.TimeConverter;
@@ -130,19 +132,19 @@ public class Company implements Serializable {
             int size = imagePaths.size();
             int r = random.nextInt(size);
 
-            StorageReference pathReference = FirebaseStorage.getInstance().getReference(imagePaths.get(r));
+            DataBaseManager.setImageFromPath(imagePaths.get(r), imageView);
 
-            GlideApp.with(MyApplication.getAppContext())
-                    .load(pathReference)
-                    .apply(new RequestOptions().override(200,200))
-                    .error(R.drawable.ic_baseline_image_not_supported_24)
-                    .into(imageView);
         }else {
             imageView.setImageResource(R.drawable.ic_baseline_image_not_supported_24);
         }
     }
 
     //------------------ GET / SET -------------------
+
+
+    public List<String> getImagePaths() {
+        return imagePaths;
+    }
 
     public void setImagePaths(List<String> imagePaths) {
         this.imagePaths = imagePaths;

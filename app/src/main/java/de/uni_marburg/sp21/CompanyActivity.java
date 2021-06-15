@@ -1,9 +1,13 @@
 package de.uni_marburg.sp21;
 
-import android.content.Context;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,6 +20,7 @@ import de.uni_marburg.sp21.company_data_structure.ProductGroup;
 
 public class CompanyActivity extends AppCompatActivity {
 
+    private final int LAYOUT_COLUMNS = 3;
     private Company company;
 
     private TextView nameText;
@@ -42,16 +47,43 @@ public class CompanyActivity extends AppCompatActivity {
     private ImageView productCategoriesIcon;
     private TextView productCategoriesTitle;
 
-    private Context context;
+    //RecyclerView PictureGallery
+    private PictureGalleryAdapter galleryAdapter;
+    private RecyclerView galleryRecyclerview;
+    private RecyclerView.LayoutManager  galleryLayoutManager;
+
+    //RecyclerView Messages
+    private MessageAdapter messageAdapter;
+    private RecyclerView messageRecyclerView;
+    private RecyclerView.LayoutManager messageLayoutManager;
+
+    private ConstraintLayout constraintLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_company);
-        context = CompanyActivity.this;
         company = Company.load();
         initializeViews();
         setViewValues();
+        buildRecyclerViews();
+        constraintLayout = findViewById(R.id.cl);
+    }
+
+
+    private void buildRecyclerViews(){
+        messageRecyclerView = findViewById(R.id.rvMessages);
+        messageAdapter = new MessageAdapter(company.getMessages());
+        messageLayoutManager = new LinearLayoutManager(CompanyActivity.this);
+        messageRecyclerView.setLayoutManager(messageLayoutManager);
+        messageRecyclerView.setAdapter(messageAdapter);
+
+        galleryRecyclerview = findViewById(R.id.rvPictures);
+        galleryAdapter = new PictureGalleryAdapter(company.getImagePaths());
+        galleryLayoutManager = new StaggeredGridLayoutManager(LAYOUT_COLUMNS, StaggeredGridLayoutManager.VERTICAL);
+        galleryRecyclerview.setLayoutManager(galleryLayoutManager);
+        galleryRecyclerview.setAdapter(galleryAdapter);
     }
 
     private void initializeViews() {
@@ -160,6 +192,14 @@ public class CompanyActivity extends AppCompatActivity {
         } else {
             textView.setText(s);
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //updating the recyclerView, so the pictures aren't THAT badly lined up
+        //TODO better implementation to fix that all images are on the right side
+        galleryAdapter.notifyDataSetChanged();
     }
 
     private void removeViewWhenEmpty(ImageView imageView, TextView textView, String s){

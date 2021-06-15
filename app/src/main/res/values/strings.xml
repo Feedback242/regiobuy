@@ -5,7 +5,7 @@
     <string name="delivery_false">This company doesn\'t deliver!</string>
     <string name="delivery_true">This company delivers!</string>
     <string name="opening_times">Opening hours:</string>
-    <string name="product_categories">Product groups</string>
+    <string name="product_categories">Product groups:</string>
     <string name="organisations">Organizations:</string>
     <string name="closed">Closed!</string>
     <string name="not_available">Not available.</string>
@@ -51,4 +51,6 @@
     <string name="saturday">Saturday</string>
     <string name="sunday">Sunday</string>
     <string name="weekday">Weekday</string>
+    <string name="messages">Messages:</string>
+    <string name="pictures">Pictures:</string>
 </resources>

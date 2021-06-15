@@ -19,6 +19,11 @@ public class Message implements Serializable {
 
     //------------------ GET / SET -------------------
 
+
+    public String getDate() {
+        return date;
+    }
+
     public String getContent() {
         return content;
     }

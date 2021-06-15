@@ -2,13 +2,19 @@ package de.uni_marburg.sp21;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -26,11 +32,21 @@ import de.uni_marburg.sp21.company_data_structure.Message;
 import de.uni_marburg.sp21.company_data_structure.Organization;
 import de.uni_marburg.sp21.company_data_structure.ProductGroup;
 import de.uni_marburg.sp21.company_data_structure.Season;
+import de.uni_marburg.sp21.glide.GlideApp;
 
 public class DataBaseManager {
 
     private static final String COMPANIES_FILENAME = "RegioBuy.ser";
 
+    public static void setImageFromPath(String path, ImageView imageView){
+        StorageReference pathReference = FirebaseStorage.getInstance().getReference(path);
+
+        GlideApp.with(MyApplication.getAppContext())
+                .load(pathReference)
+                .apply(new RequestOptions().override(200,200))
+                .error(R.drawable.ic_baseline_image_not_supported_24)
+                .into(imageView);
+    }
     /**
      * @param db the Firebase Database
      * @return returns a List of Companies parsed from the Firebase Database

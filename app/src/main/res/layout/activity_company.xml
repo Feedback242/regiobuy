@@ -6,10 +6,46 @@
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/productGroupsTitle3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/pictures"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView6"
+            app:layout_constraintStart_toEndOf="@+id/imageView6"
+            app:layout_constraintTop_toTopOf="@+id/imageView6"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvPictures"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/imageView6"
+            app:layout_constraintTop_toBottomOf="@+id/imageView6" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvMessages"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/imageView5"
+            app:layout_constraintTop_toBottomOf="@+id/imageView5" />
 
         <ScrollView
+            android:id="@+id/scrollView2"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
@@ -17,13 +53,13 @@
             android:id="@+id/companyProductGroups"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:text="Diese organisation hat einen langen Namen, Diese organisation hat einen langen Namen"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/companyProductGroupsDescription"
-            app:layout_constraintTop_toBottomOf="@+id/productGroupsTitle" />
+            app:layout_constraintStart_toStartOf="@+id/productGroupIcon"
+            app:layout_constraintTop_toBottomOf="@+id/productGroupIcon" />
 
         <TextView
             android:id="@+id/productGroupsTitle"
@@ -34,17 +70,28 @@
             app:layout_constraintStart_toEndOf="@+id/productGroupIcon"
             app:layout_constraintTop_toTopOf="@+id/productGroupIcon" />
 
+        <TextView
+            android:id="@+id/productGroupsTitle2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/messages"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView5"
+            app:layout_constraintStart_toEndOf="@+id/imageView5"
+            app:layout_constraintTop_toTopOf="@+id/imageView5"
+            app:layout_constraintVertical_bias="0.0" />
+
         <LinearLayout
             android:id="@+id/linearLayout3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/textView27"
-            app:layout_constraintTop_toBottomOf="@+id/textView27">
+            app:layout_constraintStart_toStartOf="@+id/imageView4"
+            app:layout_constraintTop_toBottomOf="@+id/imageView4">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -340,28 +387,28 @@
             android:id="@+id/companyOrganisations"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:text="Diese organisation hat einen langen Namen, Diese organisation hat einen langen Namen"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/organisationsTitle"
-            app:layout_constraintTop_toBottomOf="@+id/organisationsTitle" />
+            app:layout_constraintStart_toStartOf="@+id/organisationIcon"
+            app:layout_constraintTop_toBottomOf="@+id/organisationIcon" />
 
         <TextView
             android:id="@+id/companyProductGroupsDescription"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:text="Description Description Description Description Description Description Description Description "
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/companyProductGroups"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/productGroupsTitle"
-            app:layout_constraintTop_toBottomOf="@+id/companyProductGroups" />
+            app:layout_constraintStart_toStartOf="@+id/companyProductGroups"
+            app:layout_constraintTop_toBottomOf="@+id/companyProductGroups"
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/companyOpeningHoursDescription"
@@ -385,6 +432,27 @@
             app:layout_constraintStart_toStartOf="@+id/organisationIcon"
             app:layout_constraintTop_toBottomOf="@+id/companyOrganisations"
             app:srcCompat="@drawable/ic_baseline_local_grocery_store_24" />
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="@+id/productGroupIcon"
+            app:layout_constraintStart_toStartOf="@+id/productGroupIcon"
+            app:layout_constraintTop_toBottomOf="@+id/companyProductGroupsDescription"
+            app:srcCompat="@drawable/ic_baseline_new_releases_24" />
+
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="@+id/imageView5"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/imageView5"
+            app:layout_constraintTop_toBottomOf="@+id/rvMessages"
+            app:srcCompat="@drawable/ic_baseline_image_24" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

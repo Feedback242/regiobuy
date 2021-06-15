@@ -50,4 +50,6 @@
     <string name="saturday">Saturday</string>
     <string name="sunday">Sunday</string>
     <string name="weekday">Weekday</string>
+    <string name="messages">Messages:</string>
+    <string name="pictures">Pictures:</string>
 </resources>
