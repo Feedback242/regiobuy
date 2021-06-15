@@ -3,6 +3,8 @@ package de.uni_marburg.sp21.company_data_structure;
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -123,6 +125,7 @@ public class Company implements Serializable {
      */
     public void setImageToImageView(ImageView imageView){
         if(!imagePaths.isEmpty()) {
+
             Random random = new Random();
             int size = imagePaths.size();
             int r = random.nextInt(size);
@@ -131,6 +134,7 @@ public class Company implements Serializable {
 
             GlideApp.with(MyApplication.getAppContext())
                     .load(pathReference)
+                    .apply(new RequestOptions().override(200,200))
                     .error(R.drawable.ic_baseline_image_not_supported_24)
                     .into(imageView);
         }else {

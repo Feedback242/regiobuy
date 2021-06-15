@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = MyApplication.getAppContext();
+
         setSystemLanguage();
 
         pickedTime = new PickedTime();
