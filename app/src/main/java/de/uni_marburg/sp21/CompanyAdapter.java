@@ -1,26 +1,30 @@
 package de.uni_marburg.sp21;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.List;
-
-import de.uni_marburg.sp21.data_structure.Company;
-import de.uni_marburg.sp21.data_structure.ShopType;
+import de.uni_marburg.sp21.company_data_structure.Company;
 
 public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHolder> {
 
     private List<Company> companies;
     private OnItemClickListener listener;
+    private Context context;
 
+    /**
+     * Constructor
+     * @param companies the Companies that should be displayed by the Adapter
+     */
     public CompanyAdapter(List<Company> companies) {
         this.companies = companies;
+        context = MyApplication.getAppContext();
     }
 
     @NonNull
@@ -37,7 +41,20 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
         holder.name.setText(currentCompany.getName());
         holder.description.setText(currentCompany.getDescription());
         holder.location.setText(currentCompany.getAddress().getZip() + " " + currentCompany.getAddress().getCity());
-        holder.image.setImageResource(currentCompany.getImageResource());
+
+        currentCompany.setImageToImageView(holder.image);
+
+        if(currentCompany.isDeliveryService()){
+            holder.delivery.setColorFilter(ContextCompat.getColor(context, R.color.green_delivery), android.graphics.PorterDuff.Mode.SRC_IN);
+        } else {
+            holder.delivery.setColorFilter(ContextCompat.getColor(context, R.color.red_delivery), android.graphics.PorterDuff.Mode.SRC_IN);
+        }
+
+        if(currentCompany.isOpen()){
+            holder.open.setColorFilter(ContextCompat.getColor(context, R.color.green_delivery), android.graphics.PorterDuff.Mode.SRC_IN);
+        } else {
+            holder.open.setColorFilter(ContextCompat.getColor(context, R.color.red_delivery), android.graphics.PorterDuff.Mode.SRC_IN);
+        }
     }
 
     @Override
@@ -46,9 +63,10 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
     }
 
     static public class ViewHolder extends RecyclerView.ViewHolder {
-
         TextView name;
         ImageView image;
+        ImageView delivery;
+        ImageView open;
         TextView description;
         TextView location;
 
@@ -58,6 +76,9 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
             image = itemView.findViewById(R.id.image);
             description = itemView.findViewById(R.id.description);
             location = itemView.findViewById(R.id.location);
+            delivery = itemView.findViewById(R.id.delivery);
+            open = itemView.findViewById(R.id.open);
+
            itemView.setOnClickListener(new View.OnClickListener() {
                @Override
                public void onClick(View v) {
@@ -73,9 +94,14 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
 
     }
 
+    /**
+     * Sets the Listener that passes Values, for onClicks and so on, to the Class where The Adapter gets Initiated
+     * @param listener You have to Implement all Methods from the Listener Interface and they will pass the Values to your Class
+     */
     public void setListener(OnItemClickListener listener) {
         this.listener = listener;
     }
+
     public interface OnItemClickListener{
         void onCompanyClick(int pos);
     }

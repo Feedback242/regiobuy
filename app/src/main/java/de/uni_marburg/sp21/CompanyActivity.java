@@ -1,29 +1,23 @@
 package de.uni_marburg.sp21;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 import java.util.Map;
-
-import de.uni_marburg.sp21.data_structure.Address;
-import de.uni_marburg.sp21.data_structure.Company;
-import de.uni_marburg.sp21.data_structure.Organization;
-import de.uni_marburg.sp21.data_structure.ProductGroup;
+import de.uni_marburg.sp21.company_data_structure.Address;
+import de.uni_marburg.sp21.company_data_structure.Company;
+import de.uni_marburg.sp21.company_data_structure.Organization;
+import de.uni_marburg.sp21.company_data_structure.ProductGroup;
 
 public class CompanyActivity extends AppCompatActivity {
 
     private Company company;
 
-    public static final String[] WEEKDAYS = new String[]{"monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"};
     private TextView nameText;
     private TextView descriptionText;
     private TextView mailText;
@@ -55,7 +49,7 @@ public class CompanyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_company);
         context = CompanyActivity.this;
-        company = Company.load(CompanyActivity.this);
+        company = Company.load();
         initializeViews();
         setViewValues();
     }
@@ -123,7 +117,7 @@ public class CompanyActivity extends AppCompatActivity {
         //product categories
         String prods = "";
         for(ProductGroup p : company.getProductGroups()){
-            prods += p.getCategory().toString(context) + ", ";
+            prods += p.getCategory().toString() + ", ";
         }
         if(!prods.isEmpty()){
             prods = prods.substring(0,prods.length() - 2);
@@ -139,12 +133,13 @@ public class CompanyActivity extends AppCompatActivity {
             deliveryText.setTextColor(ContextCompat.getColor(CompanyActivity.this, R.color.red_delivery));
             deliveryIcon.setColorFilter(ContextCompat.getColor(CompanyActivity.this, R.color.red_delivery), android.graphics.PorterDuff.Mode.SRC_IN);
         }
-        mainIcon.setImageResource(company.getImageResource());
+        //image
+        company.setImageToImageView(mainIcon);
         //opening hours
         Map<String,ArrayList<Map<String, String>>> openingHours = company.getOpeningHours();
-        for(int i = 0; i < WEEKDAYS.length; i++){
+        for(int i = 0; i < TimeConverter.WEEKDAYS.length; i++){
             String openingHoursAtDay = "";
-            ArrayList<Map<String, String>> list = (ArrayList<Map<String, String>>) openingHours.get(WEEKDAYS[i]);
+            ArrayList<Map<String, String>> list = (ArrayList<Map<String, String>>) openingHours.get(TimeConverter.WEEKDAYS[i]);
             if(list != null){
                 for(Map<String, String> m : list){
                     openingHoursAtDay += m.get("start") + " - " + m.get("end") + "    ";

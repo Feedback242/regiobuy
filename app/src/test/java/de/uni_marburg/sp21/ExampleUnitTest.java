@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-import de.uni_marburg.sp21.data_structure.Company;
+import de.uni_marburg.sp21.company_data_structure.Company;
 import de.uni_marburg.sp21.filter.CheckItem;
 import de.uni_marburg.sp21.filter.Filter;
 

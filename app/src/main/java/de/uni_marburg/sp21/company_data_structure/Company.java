@@ -1,7 +1,11 @@
-package de.uni_marburg.sp21.data_structure;
+package de.uni_marburg.sp21.company_data_structure;
 
-import android.content.Context;
-import android.util.Log;
+import android.graphics.drawable.Drawable;
+import android.widget.ImageView;
+
+import com.bumptech.glide.request.RequestOptions;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,10 +17,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import de.uni_marburg.sp21.MyApplication;
+import de.uni_marburg.sp21.R;
+import de.uni_marburg.sp21.TimeConverter;
+import de.uni_marburg.sp21.glide.GlideApp;
 
 public class Company implements Serializable {
 
@@ -28,7 +36,7 @@ public class Company implements Serializable {
     private String description;
     private String mail;
     private String url;
-    private ArrayList<ShopType> shopTypes;
+    private List<ShopType> shopTypes;
     private String owner;
     private Map<String,ArrayList<Map<String, String>>> openingHours;
     private boolean deliveryService;
@@ -38,7 +46,15 @@ public class Company implements Serializable {
     private List<ProductGroup> productGroups;
     private String productsDescription;
     private String geoHash;
+    private List<String> imagePaths;
 
+    /**
+     * Constructor
+     * @param name the Name of the Company
+     * @param ID the ID of the Company
+     * @param address the Address of the Company
+     * @param geoHash the geoHash String of the Company
+     */
     public Company(String name, final String ID, Address address, String geoHash){
         this.ID = ID;
         this.name = name;
@@ -47,8 +63,12 @@ public class Company implements Serializable {
 
     }
 
-    public static void save(Company company, Context context){
-        File path = context.getExternalFilesDir(null);
+    /**
+     * Saves a Company Object to pass it to another Activity with load()
+     * @param company the Company Object that has to be saved
+     */
+    public static void save(Company company){
+        File path = MyApplication.getAppContext().getExternalFilesDir(null);
         File file = new File(path, COMPANY_FILENAME);
 
         try{
@@ -60,8 +80,12 @@ public class Company implements Serializable {
         }
     }
 
-    public static Company load(Context context) {
-        File path = context.getExternalFilesDir(null);
+    /**
+     * Loads a Company Object, that has been saved with save() before to pass it between Activities.
+     * @return the Company Object that has been saved
+     */
+    public static Company load() {
+        File path = MyApplication.getAppContext().getExternalFilesDir(null);
         File file = new File(path, COMPANY_FILENAME);
         Company company = null;
         try {
@@ -71,6 +95,53 @@ public class Company implements Serializable {
             e.printStackTrace();
         }
         return company;
+    }
+
+    /**
+     * @return true if company is open
+     */
+    public boolean isOpen(){
+        Calendar calendar = Calendar.getInstance();
+        Date currentTime = calendar.getTime();
+        String dayName = TimeConverter.currentWeekdayString();
+        ArrayList<Map<String, String>> openingList = getOpeningHours().get(dayName);
+        boolean isCurrentlyOpen = false;
+        if(openingList != null){
+            for(Map<String, String> m : openingList){
+                Date start = TimeConverter.convertToDate(m.get("start"));
+                Date end = TimeConverter.convertToDate(m.get("end"));
+
+                isCurrentlyOpen = isCurrentlyOpen || (currentTime.after(start) && currentTime.before(end));
+            }
+        }
+        return isCurrentlyOpen;
+    }
+
+    /**
+     * Sets one of images of the Company to the passed imageView
+     * @param imageView the imageView that should hold one image from the Company
+     */
+    public void setImageToImageView(ImageView imageView){
+        if(!imagePaths.isEmpty()) {
+            Random random = new Random();
+            int size = imagePaths.size();
+            int r = random.nextInt(size);
+
+            StorageReference pathReference = FirebaseStorage.getInstance().getReference(imagePaths.get(r));
+
+            GlideApp.with(MyApplication.getAppContext())
+                    .load(pathReference)
+                    .error(R.drawable.ic_baseline_image_not_supported_24)
+                    .into(imageView);
+        }else {
+            imageView.setImageResource(R.drawable.ic_baseline_image_not_supported_24);
+        }
+    }
+
+    //------------------ GET / SET -------------------
+
+    public void setImagePaths(List<String> imagePaths) {
+        this.imagePaths = imagePaths;
     }
 
     public Company(String ID) {
@@ -133,39 +204,6 @@ public class Company implements Serializable {
         return url;
     }
 
-    public int getImageResource(){
-        List<ShopType> shopTypes = getTypes();
-        ShopType randomTypeFromList = shopTypes.get(new Random().nextInt(shopTypes.size()));
-        return randomTypeFromList.toDrawableID();
-    }
-
-    public boolean isOpened(){
-        Calendar calendar = Calendar.getInstance();
-        int day = calendar.get(Calendar.DAY_OF_WEEK);
-        long timeInMillis = calendar.getTimeInMillis();
-        switch (day){
-            case Calendar.MONDAY :
-            case Calendar.TUESDAY :
-            case Calendar.WEDNESDAY :
-            case Calendar.THURSDAY :
-            case Calendar.FRIDAY :
-            case Calendar.SATURDAY :
-            case Calendar.SUNDAY :
-        }
-        //TODO
-        return false;
-    }
-
-    private boolean isOpenedAt(long timeInMillis){
-        //TODO
-        return false;
-    }
-
-    public boolean isOpened(Date date){
-        //TODO
-        return false;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -191,7 +229,7 @@ public class Company implements Serializable {
     }
 
     public void setTypes(List<String> types) {
-        ArrayList<ShopType> list = new ArrayList<>();
+        List<ShopType> list = new ArrayList<>();
         for(String s : types){
             list.add(ShopType.fromDatabaseString(s));
         }

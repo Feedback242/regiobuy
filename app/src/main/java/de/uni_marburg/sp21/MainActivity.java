@@ -3,7 +3,6 @@ package de.uni_marburg.sp21;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -12,28 +11,20 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SearchView;
-
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.sql.Time;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-
-import de.uni_marburg.sp21.data_structure.Category;
-import de.uni_marburg.sp21.data_structure.Company;
-import de.uni_marburg.sp21.data_structure.Organization;
-import de.uni_marburg.sp21.data_structure.ShopType;
+import de.uni_marburg.sp21.company_data_structure.Category;
+import de.uni_marburg.sp21.company_data_structure.Company;
+import de.uni_marburg.sp21.company_data_structure.Organization;
+import de.uni_marburg.sp21.company_data_structure.ShopType;
 import de.uni_marburg.sp21.filter.BottomSheetFilter;
 import de.uni_marburg.sp21.filter.CheckItem;
 import de.uni_marburg.sp21.filter.Filter;
+import de.uni_marburg.sp21.filter.PickedTime;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -58,9 +49,8 @@ public class MainActivity extends AppCompatActivity {
     private CheckItem[] restrictions;
     private boolean isOpen;
     private boolean isDelivery;
-    private Date startTime;
-    private Date endTime;
-    private String weekday;
+
+    private PickedTime pickedTime;
 
     private Context context;
 
@@ -70,9 +60,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        context = MainActivity.this;
+        context = MyApplication.getAppContext();
         setSystemLanguage();
 
+        pickedTime = new PickedTime();
         initializeViews();
         getData();
 
@@ -88,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void filterAndUpdateRecyclerview(){
         filteredCompanies.clear();
-        filteredCompanies.addAll(Filter.filter(searchView.getQuery().toString(), companies, types, organisations, categories, restrictions, isDelivery, isOpen, context, weekday, startTime, endTime));
+        filteredCompanies.addAll(Filter.filter(searchView.getQuery().toString(), companies, types, organisations, categories, restrictions, isDelivery, isOpen, pickedTime));
         sortFilteredCompanies();
         adapter.notifyDataSetChanged();
     }
@@ -97,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BottomSheetFilter settingsDialog = new BottomSheetFilter(MainActivity.this, organisations, categories, types, restrictions, isDelivery, isOpen, weekday, startTime, endTime);
+                BottomSheetFilter settingsDialog = new BottomSheetFilter(organisations, categories, types, restrictions, isDelivery, isOpen, pickedTime);
                 settingsDialog.show(getSupportFragmentManager(), "SETTINGS_SHEET");
                 settingsDialog.setOnItemClickListener(new BottomSheetFilter.OnItemClickListener() {
                     @Override
@@ -126,19 +117,19 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onTimeStartChanged(String time) {
-                        startTime = convertToDate(time);
+                        pickedTime.setStartTime(TimeConverter.convertToDate(time));
                         filterAndUpdateRecyclerview();
                     }
 
                     @Override
                     public void onTimeEndChanged(String time) {
-                        endTime = convertToDate(time);
+                        pickedTime.setEndTime(TimeConverter.convertToDate(time));
                         filterAndUpdateRecyclerview();
                     }
 
                     @Override
-                    public void onTimeDateChanged(String day) {
-                        weekday = day;
+                    public void onTimeDateChanged(String weekday) {
+                        pickedTime.setWeekday(weekday);
                         filterAndUpdateRecyclerview();
                     }
 
@@ -156,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onResetTimePickerClick() {
-                        initializeTimePickerValues();
+                        resetTimePicker();
                         filterAndUpdateRecyclerview();
                     }
                 });
@@ -166,24 +157,22 @@ public class MainActivity extends AppCompatActivity {
 
     private void getData(){
         database = FirebaseFirestore.getInstance();
-        companies = DataBaseManager.getCompanyList(database, MainActivity.this);
+        companies = DataBaseManager.getCompanyList(database);
         filteredCompanies = new ArrayList<>();
         filteredCompanies.addAll(companies);
 
-        categories = Category.createCheckItemArray(context);
-        types = ShopType.createCheckItemArray(context);
+        categories = Category.createCheckItemArray();
+        types = ShopType.createCheckItemArray();
         organisations = getOrganisations();
         restrictions = new CheckItem[]{new CheckItem(getResources().getString(R.string.name_company)), new CheckItem(getResources().getString(R.string.name_owner)), new CheckItem(getResources().getString(R.string.shop_types_without_colon)),
                 new CheckItem(getResources().getString(R.string.address)), new CheckItem(getResources().getString(R.string.description_company)), new CheckItem(getResources().getString(R.string.description_products)),
                 new CheckItem(getResources().getString(R.string.product_tags)), new CheckItem(getResources().getString(R.string.opening_hours_comment)), new CheckItem(getResources().getString(R.string.name_organisation)),
                 new CheckItem(getResources().getString(R.string.messages_company))};
-        initializeTimePickerValues();
+        resetTimePicker();
     }
 
-    private void initializeTimePickerValues(){
-        startTime = null;
-        endTime = null;
-        weekday = "";
+    private void resetTimePicker(){
+        pickedTime.reset();
     }
 
     private void initializeViews(){
@@ -225,21 +214,17 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         sortFilteredCompanies();
         adapter = new CompanyAdapter(filteredCompanies);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
         adapter.setListener(new CompanyAdapter.OnItemClickListener() {
             @Override
             public void onCompanyClick(int pos) {
                 Intent intent = new Intent(context, CompanyActivity.class);
-                Company.save(filteredCompanies.get(pos), context);
+                Company.save(filteredCompanies.get(pos));
                 startActivity(intent);
             }
         });
-    }
-
-    public Context getContext() {
-        return context;
     }
 
     private void setSystemLanguage(){
@@ -247,21 +232,5 @@ public class MainActivity extends AppCompatActivity {
         Resources res = getResources();
         Configuration conf = res.getConfiguration();
         conf.setLocale(new Locale(languageCode.toLowerCase()));
-    }
-
-    public static Date convertToDate(String time){
-        Calendar calendar = Calendar.getInstance();
-        Date date = calendar.getTime();
-        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
-        try {
-            Date setTime = format.parse(time);
-            calendar.setTime(setTime);
-            calendar.set(date.getYear() + 1900, date.getMonth(), date.getDate());
-            Date result = calendar.getTime();
-            return result;
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 }

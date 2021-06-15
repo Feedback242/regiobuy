@@ -4,7 +4,6 @@ import android.content.Context;
 
 import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -22,12 +21,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.uni_marburg.sp21.data_structure.Address;
-import de.uni_marburg.sp21.data_structure.Category;
-import de.uni_marburg.sp21.data_structure.Company;
-import de.uni_marburg.sp21.data_structure.Message;
-import de.uni_marburg.sp21.data_structure.Organization;
-import de.uni_marburg.sp21.data_structure.ProductGroup;
+import de.uni_marburg.sp21.company_data_structure.Address;
+import de.uni_marburg.sp21.company_data_structure.Category;
+import de.uni_marburg.sp21.company_data_structure.Company;
+import de.uni_marburg.sp21.company_data_structure.Message;
+import de.uni_marburg.sp21.company_data_structure.Organization;
+import de.uni_marburg.sp21.company_data_structure.ProductGroup;
 import de.uni_marburg.sp21.filter.CheckItem;
 import de.uni_marburg.sp21.filter.Filter;
 
@@ -36,7 +35,6 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
 
 /**
  * Instrumented test, which will execute on an Android device.

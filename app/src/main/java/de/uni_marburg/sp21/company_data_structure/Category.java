@@ -1,12 +1,10 @@
-package de.uni_marburg.sp21.data_structure;
+package de.uni_marburg.sp21.company_data_structure;
 
-import android.content.Context;
 import android.content.res.Resources;
-
-import androidx.annotation.NonNull;
 
 import java.io.Serializable;
 
+import de.uni_marburg.sp21.MyApplication;
 import de.uni_marburg.sp21.R;
 import de.uni_marburg.sp21.filter.CheckItem;
 
@@ -25,16 +23,21 @@ public enum Category implements Serializable {
     PASTA;
 
 
-    public static CheckItem[] createCheckItemArray(Context context){
+    /**
+     * Creates a Array of CheckItems from all Categories
+     * @return Array of CheckItems that represent all Categories
+     */
+    public static CheckItem[] createCheckItemArray(){
      CheckItem[] checkItem = new CheckItem[Category.values().length];
      for (int i = 0; i < checkItem.length; i++){
-         checkItem[i] = new CheckItem(Category.values()[i].toString(context));
+         checkItem[i] = new CheckItem(Category.values()[i].toString());
      }
      return checkItem;
     }
 
-    public String toString(Context context) {
-        Resources res = context.getResources();
+    @Override
+    public String toString() {
+        Resources res = MyApplication.getAppContext().getResources();
         switch (this){
             case EGGS: return res.getString(R.string.eggs);
             case MEAT: return res.getString(R.string.meat);
@@ -52,6 +55,11 @@ public enum Category implements Serializable {
         }
     }
 
+    /**
+     * Generates a Category from the String, that has been passed from the Database
+     * @param s the Database-String
+     * @return the Category representation of the Database-String
+     */
     public static Category fromDatabaseString(String s) {
         switch (s) {
             case "vegetables": return VEGETABLES;

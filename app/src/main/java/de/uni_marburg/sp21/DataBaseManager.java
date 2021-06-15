@@ -4,13 +4,11 @@ import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -18,18 +16,16 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import de.uni_marburg.sp21.data_structure.Address;
-import de.uni_marburg.sp21.data_structure.Category;
-import de.uni_marburg.sp21.data_structure.Company;
-import de.uni_marburg.sp21.data_structure.Location;
-import de.uni_marburg.sp21.data_structure.Message;
-import de.uni_marburg.sp21.data_structure.Organization;
-import de.uni_marburg.sp21.data_structure.ProductGroup;
-import de.uni_marburg.sp21.data_structure.Season;
+import de.uni_marburg.sp21.company_data_structure.Address;
+import de.uni_marburg.sp21.company_data_structure.Category;
+import de.uni_marburg.sp21.company_data_structure.Company;
+import de.uni_marburg.sp21.company_data_structure.Location;
+import de.uni_marburg.sp21.company_data_structure.Message;
+import de.uni_marburg.sp21.company_data_structure.Organization;
+import de.uni_marburg.sp21.company_data_structure.ProductGroup;
+import de.uni_marburg.sp21.company_data_structure.Season;
 
 public class DataBaseManager {
 
@@ -37,11 +33,12 @@ public class DataBaseManager {
 
     /**
      * @param db the Firebase Database
-     * @param context the Context of the Activity
      * @return returns a List of Companies parsed from the Firebase Database
      */
-    public static List<Company> getCompanyList(FirebaseFirestore db, Context context) {
-        List<Company> companies = new ArrayList<>();
+    public static List<Company> getCompanyList(FirebaseFirestore db) {
+        long start = System.currentTimeMillis();
+        Log.d(MyApplication.APP_TAG, "Started downloading and assigning companies from database.");
+        List<Company> companies;
 
         db.collection("companies")
                 .get()
@@ -110,7 +107,7 @@ public class DataBaseManager {
                                     company.setGeoHash("");
                                 }
                                 //productGroups
-                                if(document.get("productGroups") != null) {
+                                if(documentMap.get("productGroups") != null) {
                                     List<Map> productGroupList = (ArrayList<Map>) document.get("productGroups");
                                     List<ProductGroup> productGroups = new ArrayList<>();
                                     for (Map m : productGroupList) {
@@ -128,7 +125,7 @@ public class DataBaseManager {
                                     company.setProductGroups(productGroups);
                                 }
                                 //messages
-                                if(document.get("messages") != null) {
+                                if(documentMap.get("messages") != null) {
                                     List<Map> messagesList = (ArrayList<Map>) document.get("messages");
                                     List<Message> messages = new ArrayList<>();
                                     for (Map m : messagesList) {
@@ -137,7 +134,7 @@ public class DataBaseManager {
                                     company.setMessages(messages);
                                 }
                                 //organisations
-                                if(document.get("organizations") != null) {
+                                if(documentMap.get("organizations") != null) {
                                     List<Map> organisationsList = (ArrayList<Map>) documentMap.get("organizations");
                                     List<Organization> organizations = new ArrayList<>();
                                     for (Map m : organisationsList) {
@@ -146,39 +143,45 @@ public class DataBaseManager {
                                     company.setOrganizations(organizations);
                                 }
                                 //openingHours
-                                if(document.get("openingHours") != null) {
+                                if(documentMap.get("openingHours") != null) {
                                     Map<String,ArrayList<Map<String, String>>> openingHoursMap = (Map<String,ArrayList<Map<String, String>>>) documentMap.get("openingHours");
                                     company.setOpeningHours(openingHoursMap);
                                 }
                                 //types
-                                if(document.get("types") != null) {
+                                if(documentMap.get("types") != null) {
                                     List<String> types = (ArrayList<String>) documentMap.get("types");
                                     company.setTypes(types);
                                 }
                                 //location
-                                if(document.get("location") != null) {
+                                if(documentMap.get("location") != null) {
                                     Map<String, Object> locationMap = (Map<String, Object>) documentMap.get("location");
                                     Location location = new Location((Double) locationMap.get("lat"), (Double) locationMap.get("lon"));
                                     company.setLocation(location);
                                 }
                                 //address
-                                if(document.get("address") != null) {
+                                if(documentMap.get("address") != null) {
                                     Map<String, Object> addressMap = (Map<String, Object>) documentMap.get("address");
                                     Address address = new Address(addressMap.get("city").toString(), addressMap.get("street").toString(), addressMap.get("zip").toString());
                                     company.setAddress(address);
                                 }
+                                //imagePaths
+                                if(documentMap.get("imagePaths") != null){
+                                    company.setImagePaths((List<String>) documentMap.get("imagePaths"));
+                                }
                                 temp.add(company);
                             }
                         }
-                        save(temp, context);
+                        save(temp);
                     }
                 });
-        companies = load(context);
+        companies = load();
+        long end = System.currentTimeMillis();
+        Log.d(MyApplication.APP_TAG, "Finished downloading and assigning companies from database. It took " + (float)(end-start)/1000f + " seconds");
         return companies;
     }
 
-    public static void save(List<Company> companies, Context context){
-        File path = context.getExternalFilesDir(null);
+    public static void save(List<Company> companies){
+        File path = MyApplication.getAppContext().getExternalFilesDir(null);
         File file = new File(path, COMPANIES_FILENAME);
 
         try{
@@ -190,8 +193,8 @@ public class DataBaseManager {
         }
     }
 
-    public static List<Company> load(Context context) {
-        File path = context.getExternalFilesDir(null);
+    public static List<Company> load() {
+        File path = MyApplication.getAppContext().getExternalFilesDir(null);
         File file = new File(path, COMPANIES_FILENAME);
         List<Company> companies = new ArrayList<>();
         try {

@@ -14,22 +14,15 @@ import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.TimeZone;
-
-import de.uni_marburg.sp21.MainActivity;
+import de.uni_marburg.sp21.MyApplication;
 import de.uni_marburg.sp21.R;
 
 public class BottomSheetFilter extends BottomSheetDialogFragment {
@@ -67,9 +60,7 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
     private TextView endTime;
     private TextView dateTime;
 
-    private Date startTimeDate;
-    private Date endTimeDate;
-    private String weekday;
+    private PickedTime pickedTime;
 
     private View isDelivery;
     private View isOpened;
@@ -79,17 +70,15 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
     private boolean isCheckedOpen;
     private boolean isCheckedDelivery;
 
-    public BottomSheetFilter(Context context, final CheckItem[] ORGANIZATIONS, final CheckItem[] CATEGORIES, final CheckItem[] TYPES, final CheckItem[] RESTRICTIONS, boolean isDelivery, boolean isOpen, String weekday, Date startTimeDate, Date endTimeDate){
-        this.context = context;
+    public BottomSheetFilter(final CheckItem[] ORGANIZATIONS, final CheckItem[] CATEGORIES, final CheckItem[] TYPES, final CheckItem[] RESTRICTIONS, boolean isDelivery, boolean isOpen, PickedTime pickedTime){
+        this.context = MyApplication.getAppContext();
         this.ORGANISATIONS = ORGANIZATIONS;
         this.TYPES = TYPES;
         this.CATEGORIES = CATEGORIES;
         this.RESTRICTIONS = RESTRICTIONS;
         isCheckedOpen = isOpen;
         isCheckedDelivery = isDelivery;
-        this.weekday = weekday;
-        this.startTimeDate = startTimeDate;
-        this.endTimeDate = endTimeDate;
+        this.pickedTime = pickedTime;
     }
 
     private void buildRecyclerView(int recyclerViewID, RecyclerView recyclerView, FilterAdapter adapter, CheckItem[] checkItems){
@@ -166,6 +155,9 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
     }
 
     private void initializeTimeTextViews(){
+        Date startTimeDate = pickedTime.getStartTime();
+        Date endTimeDate = pickedTime.getEndTime();
+        String  weekday = pickedTime.getWeekday();
         SimpleDateFormat format = new SimpleDateFormat("HH:mm");
         if(startTimeDate != null){
             String start = format.format(startTimeDate);
@@ -201,9 +193,7 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
             public void onClick(View v) {
                 if(listener != null){
                     listener.onResetTimePickerClick();
-                    endTimeDate = null;
-                    startTimeDate = null;
-                    weekday = "";
+                    pickedTime.reset();
                     initializeTimeTextViews();
                 }
 

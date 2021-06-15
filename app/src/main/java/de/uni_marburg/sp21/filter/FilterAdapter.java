@@ -50,6 +50,10 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
         void onItemClick(int position, boolean isChecked);
     }
 
+    /**
+     * Sets the Listener that passes Values, for onClicks and so on, to the Class where The Adapter gets Initiated
+     * @param listener You have to Implement all Methods from the Listener Interface and they will pass the Values to your Class
+     */
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }

@@ -1,7 +1,6 @@
-package de.uni_marburg.sp21.data_structure;
+package de.uni_marburg.sp21.company_data_structure;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ProductGroup implements Serializable {
@@ -10,6 +9,18 @@ public class ProductGroup implements Serializable {
     private Double producer;
     private List<String> productTags;
     private List<Season> seasons;
+
+    /**
+     * Constructor
+     * @param category The Category of the ProductGroup
+     * @param producer The Producer of the ProductGroup represented by a double
+     */
+    public ProductGroup(Category category, Double producer) {
+        this.category = category;
+        this.producer = producer;
+    }
+
+    //------------------ GET / SET -------------------
 
     public void setRawProd(boolean rawProd) {
         this.rawProd = rawProd;
@@ -25,11 +36,6 @@ public class ProductGroup implements Serializable {
 
     public Category getCategory() {
         return category;
-    }
-
-    public ProductGroup(Category category, Double producer) {
-        this.category = category;
-        this.producer = producer;
     }
 
     public List<String> getProductTags() {
