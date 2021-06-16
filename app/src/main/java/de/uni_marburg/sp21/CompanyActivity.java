@@ -13,11 +13,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import de.uni_marburg.sp21.company_data_structure.Address;
 import de.uni_marburg.sp21.company_data_structure.Company;
 import de.uni_marburg.sp21.company_data_structure.Organization;
 import de.uni_marburg.sp21.company_data_structure.ProductGroup;
+import de.uni_marburg.sp21.company_data_structure.ShopType;
 
 public class CompanyActivity extends AppCompatActivity {
 
@@ -35,6 +37,7 @@ public class CompanyActivity extends AppCompatActivity {
     private TextView deliveryText;
     private TextView addressText;
     private TextView openingHoursDescriptionText;
+    private TextView shopTypes;
 
     private ImageView mainIcon;
     private ImageView deliveryIcon;
@@ -89,6 +92,7 @@ public class CompanyActivity extends AppCompatActivity {
 
     private void initializeViews() {
         nameText = findViewById(R.id.companyName);
+        shopTypes = findViewById(R.id.shopTypes);
         descriptionText = findViewById(R.id.companyDescription);
         mailText = findViewById(R.id.companyMail);
         urlText = findViewById(R.id.companyURL);
@@ -127,6 +131,18 @@ public class CompanyActivity extends AppCompatActivity {
         }
         //description
         removeViewWhenEmpty(descriptionText, company.getDescription());
+        //shopTypes
+        String typesString = "";
+        List<ShopType> shopTypesList = company.getTypes();
+        for (ShopType s : shopTypesList){
+            typesString += s.toString() + ", ";
+        }
+        if(!typesString.isEmpty()){
+            typesString = typesString.substring(0,typesString.length() - 2);
+        } else {
+            removeViewWhenEmpty(shopTypes, typesString);
+        }
+        shopTypes.setText(typesString);
         //mail
         removeViewWhenEmpty(mailIcon ,mailText, company.getMail());
         //url

@@ -9,12 +9,13 @@
         android:id="@+id/textView6"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="8dp"
         android:text="@string/search_in"
         android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView8"
         app:layout_constraintEnd_toEndOf="@+id/textView2"
-        app:layout_constraintStart_toStartOf="@+id/textView2"
-        app:layout_constraintTop_toBottomOf="@+id/organisationRV" />
+        app:layout_constraintStart_toEndOf="@+id/imageView8"
+        app:layout_constraintTop_toTopOf="@+id/imageView8" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/restrictionsnRV"
@@ -22,16 +23,15 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="@+id/textView2"
-        app:layout_constraintStart_toStartOf="@+id/textView2"
-        app:layout_constraintTop_toBottomOf="@+id/textView6">
+        app:layout_constraintStart_toStartOf="@+id/imageView8"
+        app:layout_constraintTop_toBottomOf="@+id/imageView8">
 
     </androidx.recyclerview.widget.RecyclerView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:layout_marginBottom="24dp"
         android:layout_weight="1"
         android:gravity="center_vertical"
@@ -39,14 +39,114 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/textView2"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/textView2"
+        app:layout_constraintStart_toStartOf="@+id/restrictionsnRV"
         app:layout_constraintTop_toBottomOf="@+id/restrictionsnRV"
         app:layout_constraintVertical_bias="0.0">
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/start"
+            app:layout_constraintBottom_toTopOf="@+id/timePickerStart"
+            app:layout_constraintEnd_toEndOf="@+id/timePickerStart"
+            app:layout_constraintStart_toStartOf="@+id/timePickerStart"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <ImageView
+            android:id="@+id/timePickerStart"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="8dp"
+            android:layout_weight="0"
+            app:layout_constraintBottom_toTopOf="@+id/endTime"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/timePickerEnd"
+            app:srcCompat="@drawable/ic_baseline_access_time_24" />
+
+        <TextView
+            android:id="@+id/startTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@+id/timePickerStart"
+            app:layout_constraintStart_toStartOf="@+id/timePickerStart"
+            app:layout_constraintTop_toBottomOf="@+id/timePickerStart" />
+
+        <TextView
+            android:id="@+id/Start"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/end"
+            app:layout_constraintBottom_toTopOf="@+id/timePickerEnd"
+            app:layout_constraintEnd_toEndOf="@+id/timePickerEnd"
+            app:layout_constraintStart_toStartOf="@+id/timePickerEnd"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/endTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@+id/timePickerEnd"
+            app:layout_constraintStart_toStartOf="@+id/timePickerEnd"
+            app:layout_constraintTop_toBottomOf="@+id/timePickerEnd" />
+
+        <ImageView
+            android:id="@+id/timePickerEnd"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="16dp"
+            android:layout_weight="0"
+            app:layout_constraintBottom_toBottomOf="@+id/timePickerDate"
+            app:layout_constraintStart_toEndOf="@+id/timePickerStart"
+            app:layout_constraintTop_toTopOf="@+id/timePickerDate"
+            app:srcCompat="@drawable/ic_baseline_access_time_24" />
+
+        <TextView
+            android:id="@+id/Star"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/weekday"
+            app:layout_constraintBottom_toTopOf="@+id/timePickerDate"
+            app:layout_constraintEnd_toEndOf="@+id/timePickerDate"
+            app:layout_constraintStart_toStartOf="@+id/timePickerDate"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <ImageView
+            android:id="@+id/timePickerDate"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="1dp"
+            android:layout_weight="0"
+            app:layout_constraintStart_toEndOf="@+id/timePickerEnd"
+            app:layout_constraintTop_toBottomOf="@+id/Star"
+            app:srcCompat="@drawable/ic_baseline_date_range_24" />
+
+        <TextView
+            android:id="@+id/dateTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@+id/timePickerDate"
+            app:layout_constraintStart_toStartOf="@+id/timePickerDate"
+            app:layout_constraintTop_toBottomOf="@+id/timePickerDate" />
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -147,126 +247,30 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/timePickerStart"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="0"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView8"
-                app:layout_constraintVertical_bias="0.0"
-                app:srcCompat="@drawable/ic_baseline_access_time_24" />
-
-            <TextView
-                android:id="@+id/startTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/timePickerStart" />
-
-            <TextView
-                android:id="@+id/textView8"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/start"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/timePickerStart"
-                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="32dp"
             android:layout_weight="0"
             app:layout_constraintBottom_toBottomOf="@+id/constraintLayout3"
             app:layout_constraintStart_toEndOf="@+id/constraintLayout4"
             app:layout_constraintTop_toTopOf="@+id/constraintLayout3">
 
-            <ImageView
-                android:id="@+id/timePickerDate"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="0"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/Star"
-                app:layout_constraintVertical_bias="0.0"
-                app:srcCompat="@drawable/ic_baseline_date_range_24" />
-
-            <TextView
-                android:id="@+id/dateTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/timePickerDate"
-                app:layout_constraintStart_toStartOf="@+id/timePickerDate"
-                app:layout_constraintTop_toBottomOf="@+id/timePickerDate" />
-
-            <TextView
-                android:id="@+id/Star"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/weekday"
-                app:layout_constraintEnd_toEndOf="@+id/timePickerDate"
-                app:layout_constraintStart_toStartOf="@+id/timePickerDate"
-                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="32dp"
             android:layout_weight="0"
             app:layout_constraintBottom_toBottomOf="@+id/constraintLayout3"
             app:layout_constraintStart_toEndOf="@+id/constraintLayout3"
             app:layout_constraintTop_toTopOf="@+id/constraintLayout3">
 
-            <ImageView
-                android:id="@+id/timePickerEnd"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="0"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/Start"
-                app:layout_constraintVertical_bias="0.0"
-                app:srcCompat="@drawable/ic_baseline_access_time_24" />
-
-            <TextView
-                android:id="@+id/endTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/timePickerEnd" />
-
-            <TextView
-                android:id="@+id/Start"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/end"
-                app:layout_constraintEnd_toEndOf="@+id/timePickerEnd"
-                app:layout_constraintStart_toStartOf="@+id/timePickerEnd"
-                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageView
@@ -275,7 +279,7 @@
             android:layout_height="30dp"
             android:layout_marginStart="16dp"
             app:layout_constraintBottom_toBottomOf="@+id/constraintLayout5"
-            app:layout_constraintStart_toEndOf="@+id/constraintLayout5"
+            app:layout_constraintStart_toEndOf="@+id/timePickerDate"
             app:layout_constraintTop_toTopOf="@+id/constraintLayout5"
             app:srcCompat="@drawable/ic_baseline_settings_backup_restore_24" />
 
@@ -283,16 +287,16 @@
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:text="@string/product_categories"
         android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView10"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/imageView10"
+        app:layout_constraintTop_toTopOf="@+id/imageView10" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/categoryRV"
@@ -301,8 +305,8 @@
         android:layout_marginTop="8dp"
         android:paddingBottom="4dp"
         app:layout_constraintEnd_toEndOf="@+id/textView2"
-        app:layout_constraintStart_toStartOf="@+id/textView2"
-        app:layout_constraintTop_toBottomOf="@+id/textView2">
+        app:layout_constraintStart_toStartOf="@+id/imageView10"
+        app:layout_constraintTop_toBottomOf="@+id/imageView10">
 
     </androidx.recyclerview.widget.RecyclerView>
 
@@ -310,12 +314,13 @@
         android:id="@+id/textView3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="8dp"
         android:text="@string/shop_types"
         android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView9"
         app:layout_constraintEnd_toEndOf="@+id/textView2"
-        app:layout_constraintStart_toStartOf="@+id/textView2"
-        app:layout_constraintTop_toBottomOf="@+id/categoryRV" />
+        app:layout_constraintStart_toEndOf="@+id/imageView9"
+        app:layout_constraintTop_toTopOf="@+id/imageView9" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/typesRV"
@@ -323,8 +328,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="@+id/textView2"
-        app:layout_constraintStart_toStartOf="@+id/textView2"
-        app:layout_constraintTop_toBottomOf="@+id/textView3">
+        app:layout_constraintStart_toStartOf="@+id/imageView9"
+        app:layout_constraintTop_toBottomOf="@+id/imageView9">
 
     </androidx.recyclerview.widget.RecyclerView>
 
@@ -332,12 +337,13 @@
         android:id="@+id/textView4"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="8dp"
         android:text="@string/organisations"
         android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView7"
         app:layout_constraintEnd_toEndOf="@+id/textView2"
-        app:layout_constraintStart_toStartOf="@+id/textView2"
-        app:layout_constraintTop_toBottomOf="@+id/typesRV" />
+        app:layout_constraintStart_toEndOf="@+id/imageView7"
+        app:layout_constraintTop_toTopOf="@+id/imageView7" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/organisationRV"
@@ -345,7 +351,44 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="@+id/textView2"
-        app:layout_constraintStart_toStartOf="@+id/textView2"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintStart_toStartOf="@+id/imageView7"
+        app:layout_constraintTop_toBottomOf="@+id/imageView7" />
+
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="@+id/typesRV"
+        app:layout_constraintTop_toBottomOf="@+id/typesRV"
+        app:srcCompat="@drawable/ic_baseline_eco_24" />
+
+    <ImageView
+        android:id="@+id/imageView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="@+id/organisationRV"
+        app:layout_constraintTop_toBottomOf="@+id/organisationRV"
+        app:srcCompat="@drawable/ic_baseline_search_24" />
+
+    <ImageView
+        android:id="@+id/imageView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="@+id/categoryRV"
+        app:layout_constraintTop_toBottomOf="@+id/categoryRV"
+        app:srcCompat="@drawable/ic_baseline_shopping_basket_24" />
+
+    <ImageView
+        android:id="@+id/imageView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_baseline_local_grocery_store_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
