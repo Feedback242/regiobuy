@@ -4,6 +4,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -81,7 +82,7 @@ public class CompanyActivity extends AppCompatActivity {
 
         galleryRecyclerview = findViewById(R.id.rvPictures);
         galleryAdapter = new PictureGalleryAdapter(company.getImagePaths());
-        galleryLayoutManager = new StaggeredGridLayoutManager(LAYOUT_COLUMNS, StaggeredGridLayoutManager.VERTICAL);
+        galleryLayoutManager = new GridLayoutManager(CompanyActivity.this, LAYOUT_COLUMNS);
         galleryRecyclerview.setLayoutManager(galleryLayoutManager);
         galleryRecyclerview.setAdapter(galleryAdapter);
     }
@@ -192,14 +193,6 @@ public class CompanyActivity extends AppCompatActivity {
         } else {
             textView.setText(s);
         }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        //updating the recyclerView, so the pictures aren't THAT badly lined up
-        //TODO better implementation to fix that all images are on the right side
-        galleryAdapter.notifyDataSetChanged();
     }
 
     private void removeViewWhenEmpty(ImageView imageView, TextView textView, String s){

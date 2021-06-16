@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -292,10 +292,10 @@
             android:id="@+id/imageView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="@+id/imageView3"
             app:layout_constraintStart_toStartOf="@+id/imageView3"
-            app:layout_constraintTop_toBottomOf="@+id/companyURL"
+            app:layout_constraintTop_toBottomOf="@+id/urlIcon"
             app:srcCompat="@drawable/ic_baseline_access_time_24" />
 
         <ImageView
@@ -316,7 +316,7 @@
             android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="@+id/imageView3"
             app:layout_constraintStart_toStartOf="@+id/imageView3"
-            app:layout_constraintTop_toBottomOf="@+id/companyAdress"
+            app:layout_constraintTop_toBottomOf="@+id/imageView3"
             app:srcCompat="@drawable/ic_baseline_email_24" />
 
         <ImageView
@@ -326,7 +326,7 @@
             android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="@+id/mailIcon"
             app:layout_constraintStart_toStartOf="@+id/mailIcon"
-            app:layout_constraintTop_toBottomOf="@+id/companyMail"
+            app:layout_constraintTop_toBottomOf="@+id/mailIcon"
             app:srcCompat="@drawable/ic_baseline_link_24" />
 
         <TextView
@@ -359,7 +359,7 @@
             android:id="@+id/organisationIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="@+id/imageView4"
             app:layout_constraintStart_toStartOf="@+id/imageView4"
             app:layout_constraintTop_toBottomOf="@+id/companyOpeningHoursDescription"

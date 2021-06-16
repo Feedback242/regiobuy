@@ -43,7 +43,7 @@ public class DataBaseManager {
 
         GlideApp.with(MyApplication.getAppContext())
                 .load(pathReference)
-                .apply(new RequestOptions().override(200,200))
+                //.apply(new RequestOptions().override(200,200))
                 .error(R.drawable.ic_baseline_image_not_supported_24)
                 .into(imageView);
     }
