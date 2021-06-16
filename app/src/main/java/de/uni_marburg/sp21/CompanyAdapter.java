@@ -99,6 +99,12 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
                             }else {
                                 favorite.setImageResource(R.drawable.ic_star_unfilled);
                             }
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onFavoriteClick(position);
+                        }
+                    }
 
                     }
 
