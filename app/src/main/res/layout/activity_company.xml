@@ -11,14 +11,14 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/productGroupsTitle3"
+            android:id="@+id/picturesText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="@string/pictures"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView6"
-            app:layout_constraintStart_toEndOf="@+id/imageView6"
-            app:layout_constraintTop_toTopOf="@+id/imageView6"
+            app:layout_constraintBottom_toBottomOf="@+id/picturesIcon"
+            app:layout_constraintStart_toEndOf="@+id/picturesIcon"
+            app:layout_constraintTop_toTopOf="@+id/picturesIcon"
             app:layout_constraintVertical_bias="0.0" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -31,8 +31,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/imageView6"
-            app:layout_constraintTop_toBottomOf="@+id/imageView6" />
+            app:layout_constraintStart_toStartOf="@+id/picturesIcon"
+            app:layout_constraintTop_toBottomOf="@+id/picturesIcon" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvMessages"
@@ -41,8 +41,8 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/imageView5"
-            app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+            app:layout_constraintStart_toStartOf="@+id/messagesIcon"
+            app:layout_constraintTop_toBottomOf="@+id/messagesIcon" />
 
         <ScrollView
             android:id="@+id/scrollView2"
@@ -71,14 +71,14 @@
             app:layout_constraintTop_toTopOf="@+id/productGroupIcon" />
 
         <TextView
-            android:id="@+id/productGroupsTitle2"
+            android:id="@+id/messagesText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="@string/messages"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView5"
-            app:layout_constraintStart_toEndOf="@+id/imageView5"
-            app:layout_constraintTop_toTopOf="@+id/imageView5"
+            app:layout_constraintBottom_toBottomOf="@+id/messagesIcon"
+            app:layout_constraintStart_toEndOf="@+id/messagesIcon"
+            app:layout_constraintTop_toTopOf="@+id/messagesIcon"
             app:layout_constraintVertical_bias="0.0" />
 
         <LinearLayout
@@ -429,7 +429,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="8dp"
-            android:text="TextView"
+            android:text="Description Description Description Description Description Description Description Description "
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -447,7 +447,7 @@
             app:srcCompat="@drawable/ic_baseline_local_grocery_store_24" />
 
         <ImageView
-            android:id="@+id/imageView5"
+            android:id="@+id/messagesIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
@@ -457,13 +457,13 @@
             app:srcCompat="@drawable/ic_baseline_new_releases_24" />
 
         <ImageView
-            android:id="@+id/imageView6"
+            android:id="@+id/picturesIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            app:layout_constraintEnd_toEndOf="@+id/imageView5"
+            app:layout_constraintEnd_toEndOf="@+id/messagesIcon"
             app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/imageView5"
+            app:layout_constraintStart_toStartOf="@+id/messagesIcon"
             app:layout_constraintTop_toBottomOf="@+id/rvMessages"
             app:srcCompat="@drawable/ic_baseline_image_24" />
 

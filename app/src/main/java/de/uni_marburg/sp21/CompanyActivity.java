@@ -38,18 +38,20 @@ public class CompanyActivity extends AppCompatActivity {
     private TextView addressText;
     private TextView openingHoursDescriptionText;
     private TextView shopTypes;
+    private TextView messagesTitle;
+    private TextView picturesTitle;
+    private TextView productCategoriesTitle;
+
 
     private ImageView mainIcon;
+    private ImageView messagesIcon;
+    private ImageView picturesIcon;
     private ImageView deliveryIcon;
-
     private ImageView mailIcon;
     private ImageView urlIcon;
-
     private ImageView organisationsIcon;
     private TextView organisationTitle;
-
     private ImageView productCategoriesIcon;
-    private TextView productCategoriesTitle;
 
     //RecyclerView PictureGallery
     private PictureGalleryAdapter galleryAdapter;
@@ -109,16 +111,18 @@ public class CompanyActivity extends AppCompatActivity {
         openingHoursDescriptionText = findViewById(R.id.companyOpeningHoursDescription);
         deliveryText = findViewById(R.id.companyDeliveryText);
         addressText = findViewById(R.id.companyAdress);
-
         mainIcon = findViewById(R.id.companyImage);
         deliveryIcon = findViewById(R.id.companyDeliveryIcon);
-
         urlIcon = findViewById(R.id.urlIcon);
         mailIcon = findViewById(R.id.mailIcon);
         productCategoriesIcon = findViewById(R.id.productGroupIcon);
         organisationsIcon = findViewById(R.id.organisationIcon);
         organisationTitle = findViewById(R.id.organisationsTitle);
         productCategoriesTitle = findViewById(R.id.productGroupsTitle);
+        messagesTitle = findViewById(R.id.messagesText);
+        picturesTitle = findViewById(R.id.picturesText);
+        picturesIcon = findViewById(R.id.picturesIcon);
+        messagesIcon = findViewById(R.id.messagesIcon);
     }
 
     private void setViewValues(){
@@ -200,6 +204,13 @@ public class CompanyActivity extends AppCompatActivity {
                 openingHoursAtDay = getResources().getString(R.string.closed);
             }
             weekdaysText[i].setText(openingHoursAtDay);
+        }
+        //messages
+        if(company.getMessages().isEmpty()){
+            removeViewWhenEmpty(messagesIcon, messagesTitle, "");
+        }
+        if(company.getImagePaths().isEmpty()){
+            removeViewWhenEmpty(picturesIcon, picturesTitle, "");
         }
     }
 
