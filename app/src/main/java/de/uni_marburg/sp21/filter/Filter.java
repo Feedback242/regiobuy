@@ -39,12 +39,12 @@ public class Filter {
         HashSet<Company> filterCompaniesSet = new HashSet<>();
 
         //multiple search
-        String[] searchTherms = searchString.split("\"");
+        String[] searchTherms = searchString.split("/");
         for (Company company : companies) {
             // is true when searchString = term1 && term2 && term3 ... = true
             boolean isFulfillingAllTherms = true;
             for (String searchTherm : searchTherms) {
-                String[] therm = searchTherm.split(" ");
+                String[] therm = searchTherm.split("/");
                 // is true when Therm = keyword1 || keyword2 || keyword3 ... = true
                 boolean isFulFillingTherm = false;
                 for (String keyWord : therm) {
@@ -308,7 +308,7 @@ public class Filter {
                 else if (restrictions[6].getText().equals(r.getText())) {
                     List<ProductGroup> productGroups = company.getProductGroups();
                     for (ProductGroup p : productGroups) {
-                        for (String tag : p.getProductTags()) {
+                         for (String tag : p.getProductTags()) {
                             if (tag.toLowerCase().contains(searchString)) {
                                 return true;
                             }

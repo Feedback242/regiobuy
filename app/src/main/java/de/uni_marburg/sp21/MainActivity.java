@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseFirestore database;
     public List<Company> companies;
     public List<Company> filteredCompanies;
+    private List<Company> defaultCompany;
 
     //RecyclerView
     private CompanyAdapter adapter;
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
 
     //Views
+    private ImageView favoriteButton;
     private ImageView filterButton;
     private SearchView searchView;
 
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     private Context context;
 
     public static final String INTENT_TAG = "clicked_company";
+    private boolean favoriteIsClicked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void filterAndUpdateRecyclerview(){
         filteredCompanies.clear();
+
         filteredCompanies.addAll(Filter.filter(searchView.getQuery().toString(), companies, types, organisations, categories, restrictions, isDelivery, isOpen, pickedTime));
         sortFilteredCompanies();
         adapter.notifyDataSetChanged();
@@ -154,6 +158,28 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
+
+        favoriteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                favoriteIsClicked = !favoriteIsClicked;
+                if (favoriteIsClicked){
+                    favoriteButton.setImageResource(R.drawable.ic_star_filled);
+                    companies.clear();
+                    for (Company c : defaultCompany){
+                        if(c.isFavorite()){
+                            companies.add(c);
+                            filterAndUpdateRecyclerview();
+                        }
+                    }
+                }else {
+                    favoriteButton.setImageResource(R.drawable.ic_star_unfilled);
+                    companies.addAll(defaultCompany);
+                    filterAndUpdateRecyclerview();
+                }
+            }
+        });
+
     }
 
     private void getData(){
@@ -161,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
         companies = DataBaseManager.getCompanyList(database);
         filteredCompanies = new ArrayList<>();
         filteredCompanies.addAll(companies);
+        defaultCompany = new ArrayList<>(companies);
 
         categories = Category.createCheckItemArray();
         types = ShopType.createCheckItemArray();
@@ -179,6 +206,7 @@ public class MainActivity extends AppCompatActivity {
     private void initializeViews(){
         searchView = findViewById(R.id.searchView);
         filterButton = findViewById(R.id.filterButton);
+        favoriteButton = findViewById(R.id.favorite_button);
     }
 
     private CheckItem[] getOrganisations(){
@@ -224,6 +252,17 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(context, CompanyActivity.class);
                 Company.save(filteredCompanies.get(pos));
                 startActivity(intent);
+            }
+
+            @Override
+            public void onFavoriteClick(int pos) {
+                if(filteredCompanies.get(pos).isFavorite()){
+                    filteredCompanies.get(pos).setFavorite(false);
+                }else {
+                    filteredCompanies.get(pos).setFavorite(true);
+                }
+                System.out.println("" + filteredCompanies.get(pos).isFavorite());
+
             }
         });
     }

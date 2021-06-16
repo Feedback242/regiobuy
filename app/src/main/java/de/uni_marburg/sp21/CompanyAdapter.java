@@ -41,7 +41,14 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
         holder.name.setText(currentCompany.getName());
         holder.description.setText(currentCompany.getDescription());
         holder.location.setText(currentCompany.getAddress().getZip() + " " + currentCompany.getAddress().getCity());
-
+        holder.isFavorite = currentCompany.isFavorite();
+        if (holder.isFavorite){
+            holder.favorite.setImageResource(R.drawable.ic_star_filled);
+            currentCompany.setFavorite(true);
+        }else {
+            holder.favorite.setImageResource(R.drawable.ic_star_unfilled);
+            currentCompany.setFavorite(false);
+        }
         currentCompany.setImageToImageView(holder.image);
 
         if(currentCompany.isDeliveryService()){
@@ -67,8 +74,10 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
         ImageView image;
         ImageView delivery;
         ImageView open;
+        ImageView favorite;
         TextView description;
         TextView location;
+        boolean isFavorite;
 
         public ViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
@@ -78,6 +87,22 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
             location = itemView.findViewById(R.id.location);
             delivery = itemView.findViewById(R.id.delivery);
             open = itemView.findViewById(R.id.open);
+            favorite = itemView.findViewById(R.id.favorite);
+
+            favorite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                            isFavorite = !isFavorite;
+                            if (isFavorite){
+                                favorite.setImageResource(R.drawable.ic_star_filled);
+                            }else {
+                                favorite.setImageResource(R.drawable.ic_star_unfilled);
+                            }
+
+                    }
+
+            });
 
            itemView.setOnClickListener(new View.OnClickListener() {
                @Override
@@ -90,6 +115,8 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
                    }
                }
            });
+
+
         }
 
     }
@@ -104,5 +131,6 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
 
     public interface OnItemClickListener{
         void onCompanyClick(int pos);
+        void onFavoriteClick(int pos);
     }
 }

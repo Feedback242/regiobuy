@@ -51,6 +51,7 @@ public class Company implements Serializable {
     private String productsDescription;
     private String geoHash;
     private List<String> imagePaths;
+    private boolean isFavorite;
 
     /**
      * Constructor
@@ -276,5 +277,13 @@ public class Company implements Serializable {
 
     public void setGeoHash(String geoHash) {
         this.geoHash = geoHash;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
     }
 }
