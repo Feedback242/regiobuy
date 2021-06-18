@@ -170,7 +170,7 @@ public class FilterTest {
 
         // FilterButton and BottomSheetDialog
         onView(withId(R.id.filterButton)).perform(click());
-        onView(withId(R.id.linearLayout)).check(ViewAssertions.matches(isDisplayed()));
+        //onView(withId(R.id.linearLayout)).check(ViewAssertions.matches(isDisplayed()));
 
         onView(withId(R.id.categoryRV)).perform(click());
 
