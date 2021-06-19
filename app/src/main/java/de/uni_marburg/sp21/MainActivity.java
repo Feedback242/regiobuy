@@ -84,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void filterAndUpdateRecyclerview(){
         filteredCompanies.clear();
-
         filteredCompanies.addAll(Filter.filter(searchView.getQuery().toString(), companies, types, organisations, categories, restrictions, isDelivery, isOpen, pickedTime));
         sortFilteredCompanies();
         adapter.notifyDataSetChanged();

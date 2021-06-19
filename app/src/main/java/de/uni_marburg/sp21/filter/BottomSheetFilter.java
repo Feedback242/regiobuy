@@ -290,7 +290,7 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
                 }else {
                     deliveryCheckbox.setImageResource(R.drawable.ic_baseline_radio_button_unchecked_24);
                 }
-                listener.onDeliveryClick(isCheckedOpen);
+                listener.onDeliveryClick(isCheckedDelivery);
             }
         });
 
