@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SearchView;
@@ -164,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 favoriteIsClicked = !favoriteIsClicked;
                 if (favoriteIsClicked){
-                    favoriteButton.setImageResource(R.drawable.ic_star_filled);
+                    favoriteButton.setImageResource(R.drawable.ic_baseline_star_24);
                     companies.clear();
                     for (Company c : defaultCompany){
                         if(c.isFavorite()){
@@ -173,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 }else {
-                    favoriteButton.setImageResource(R.drawable.ic_star_unfilled);
+                    favoriteButton.setImageResource(R.drawable.ic_baseline_star_border_24);
                     companies.addAll(defaultCompany);
                     filterAndUpdateRecyclerview();
                 }
@@ -261,8 +262,7 @@ public class MainActivity extends AppCompatActivity {
                 }else {
                     filteredCompanies.get(pos).setFavorite(true);
                 }
-                System.out.println("" + filteredCompanies.get(pos).isFavorite());
-
+                Log.d(MyApplication.APP_TAG , "" + filteredCompanies.get(pos).isFavorite());
             }
         });
     }
