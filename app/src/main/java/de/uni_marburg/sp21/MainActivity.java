@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BottomSheetFilter settingsDialog = new BottomSheetFilter(organisations, categories, types, restrictions, isDelivery, isOpen, pickedTime);
+                BottomSheetFilter settingsDialog = new BottomSheetFilter(MainActivity.this, organisations, categories, types, restrictions, isDelivery, isOpen, pickedTime);
                 settingsDialog.show(getSupportFragmentManager(), "SETTINGS_SHEET");
                 settingsDialog.setOnItemClickListener(new BottomSheetFilter.OnItemClickListener() {
                     @Override

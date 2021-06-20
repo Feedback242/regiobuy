@@ -70,8 +70,8 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
     private boolean isCheckedOpen;
     private boolean isCheckedDelivery;
 
-    public BottomSheetFilter(final CheckItem[] ORGANIZATIONS, final CheckItem[] CATEGORIES, final CheckItem[] TYPES, final CheckItem[] RESTRICTIONS, boolean isDelivery, boolean isOpen, PickedTime pickedTime){
-        this.context = MyApplication.getAppContext();
+    public BottomSheetFilter(Context context, final CheckItem[] ORGANIZATIONS, final CheckItem[] CATEGORIES, final CheckItem[] TYPES, final CheckItem[] RESTRICTIONS, boolean isDelivery, boolean isOpen, PickedTime pickedTime){
+        this.context = context;
         this.ORGANISATIONS = ORGANIZATIONS;
         this.TYPES = TYPES;
         this.CATEGORIES = CATEGORIES;
@@ -223,7 +223,6 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
             @Override
             public void onClick(View v) {
                 if(listener != null){
-                    SimpleDateFormat format = new SimpleDateFormat("HH:mm");
                     Calendar calendar = Calendar.getInstance();
                     int hours = calendar.get(Calendar.HOUR_OF_DAY);
                     int mins = calendar.get(Calendar.MINUTE);
