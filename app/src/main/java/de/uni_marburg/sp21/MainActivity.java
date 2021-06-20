@@ -25,6 +25,7 @@ import de.uni_marburg.sp21.company_data_structure.ShopType;
 import de.uni_marburg.sp21.filter.BottomSheetFilter;
 import de.uni_marburg.sp21.filter.CheckItem;
 import de.uni_marburg.sp21.filter.Filter;
+import de.uni_marburg.sp21.filter.LocationBottomSheet;
 import de.uni_marburg.sp21.filter.PickedTime;
 
 public class MainActivity extends AppCompatActivity {
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView favoriteButton;
     private ImageView filterButton;
     private SearchView searchView;
+    private ImageView locationButton;
 
     //Filter stuff
     private CheckItem[] categories;
@@ -52,20 +54,18 @@ public class MainActivity extends AppCompatActivity {
     private CheckItem[] restrictions;
     private boolean isOpen;
     private boolean isDelivery;
-
     private PickedTime pickedTime;
+    private boolean favoriteIsClicked;
+    private int radius;
 
     private Context context;
-
-    public static final String INTENT_TAG = "clicked_company";
-    private boolean favoriteIsClicked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        context = MyApplication.getAppContext();
-
+        context = MainActivity.this;
+        radius = 0;
         setSystemLanguage();
 
         pickedTime = new PickedTime();
@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         buildRecyclerView();
         buildFilterView();
         buildSearchView();
+        buildLocationView();
     }
 
 
@@ -180,6 +181,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void buildLocationView(){
+        locationButton = findViewById(R.id.locationSearch);
+        locationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LocationBottomSheet locationBottomSheet = new LocationBottomSheet(radius);
+                locationBottomSheet.show(getSupportFragmentManager(), "SETTINGS_SHEET");
+                locationBottomSheet.setLocationSettingsListener(new LocationBottomSheet.LocationSettingsListener() {
+                    @Override
+                    public void onLocationChange(int rad) {
+                        radius = rad;
+                    }
+                });
+            }
+        });
     }
 
     private void getData(){

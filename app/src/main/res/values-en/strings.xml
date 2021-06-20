@@ -52,4 +52,6 @@
     <string name="weekday">Weekday</string>
     <string name="messages">Messages:</string>
     <string name="pictures">Pictures:</string>
+    <string name="circum_search">Circum Search:</string>
+    <string name="without_radius">Search without Radius</string>
 </resources>

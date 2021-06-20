@@ -81,7 +81,10 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
         this.pickedTime = pickedTime;
     }
 
-    private void buildRecyclerView(int recyclerViewID, RecyclerView recyclerView, FilterAdapter adapter, CheckItem[] checkItems){
+    /**
+     * builds the three RecyclerViews and sets some onClicks
+     */
+    private void buildRecyclerViews(){
         recyclerViewCategories = itemView.findViewById(R.id.categoryRV);
         recyclerViewTypes = itemView.findViewById(R.id.typesRV);
         recyclerViewOrganisations = itemView.findViewById(R.id.organisationRV);
@@ -106,16 +109,6 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
         recyclerViewTypes.setAdapter(adapterTypes);
         recyclerViewOrganisations.setAdapter(adapterOrganisations);
         recyclerViewRestrictions.setAdapter(adapterRestrictions);
-    }
-
-    /**
-     * builds the three RecyclerViews and sets some onClicks
-     */
-    private void buildRecyclerViews(){
-        buildRecyclerView(R.id.restrictionsnRV, recyclerViewRestrictions, adapterRestrictions, RESTRICTIONS);
-        buildRecyclerView(R.id.typesRV, recyclerViewTypes, adapterTypes, TYPES);
-        buildRecyclerView(R.id.organisationRV, recyclerViewOrganisations, adapterOrganisations, ORGANISATIONS);
-        buildRecyclerView(R.id.categoryRV, recyclerViewCategories, adapterCategories, CATEGORIES);
 
         adapterCategories.setOnItemClickListener(new FilterAdapter.OnItemClickListener() {
             @Override
