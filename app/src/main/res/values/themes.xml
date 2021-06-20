@@ -29,7 +29,7 @@
     <style name="CustomBottomSheetDialogTheme" parent="Theme.Design.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/CustomBottomSheetStyle</item>
         <item name="android:textColorPrimary">?attr/colorOnPrimary</item>
-        <item name="android:colorBackgroundFloating">#FFFFFF</item>
+        <item name="android:colorBackgroundFloating">#F3F3F3</item>
     </style>
 
     <style name="CustomBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
