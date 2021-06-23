@@ -3,13 +3,23 @@ package de.uni_marburg.sp21;
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.Log;
+import android.view.View;
 
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.test.espresso.UiController;
+import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.assertion.ViewAssertions;
+import androidx.test.espresso.contrib.DrawerActions;
+import androidx.test.espresso.contrib.DrawerMatchers;
+import androidx.test.espresso.matcher.BoundedMatcher;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -38,13 +48,17 @@ import de.uni_marburg.sp21.filter.PickedTime;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.internal.util.Checks.checkNotNull;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
-
+import androidx.test.espresso.contrib.RecyclerViewActions;
 /**
  * Instrumented test, which will execute on an Android device.
  *
@@ -166,11 +180,58 @@ public class FilterTest {
         assertNotNull(testRes);
     }
     @Test
+    public void favoriteTest(){
+        // mark a company as a favorite
+        onView(withId(R.id.recyclerView)).perform(RecyclerViewActions.actionOnItemAtPosition(0, new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                return null;
+            }
+
+            @Override
+            public String getDescription() {
+                return null;
+            }
+
+            @Override
+            public void perform(UiController uiController, View view) {
+                view.findViewById(R.id.favorite).performClick();
+            }
+        }));
+
+        // clicks the favorite button and shows all favorites company
+        onView(withId(R.id.favorite_button)).perform(click());
+
+        onView(withId(R.id.recyclerView)).check(matches(atPosition(1, hasDescendant(withText("Baganz")))));
+    }
+
+
+    public static Matcher<View> atPosition(final int position,  final Matcher<View> itemMatcher) {
+        checkNotNull(itemMatcher);
+        return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("has item at position " + position + ": ");
+                itemMatcher.describeTo(description);
+            }
+
+            @Override
+            protected boolean matchesSafely(final RecyclerView view) {
+                RecyclerView.ViewHolder viewHolder = view.findViewHolderForAdapterPosition(position);
+                if (viewHolder == null) {
+                    // has no item on such position
+                    return false;
+                }
+                return itemMatcher.matches(viewHolder.itemView);
+            }
+        };
+    }
+    @Test
     public void onViewTest() {
 
         // FilterButton and BottomSheetDialog
         onView(withId(R.id.filterButton)).perform(click());
-        onView(withId(R.id.linearLayout)).check(ViewAssertions.matches(isDisplayed()));
+        onView(withId(R.id.bottom_sheet)).check(matches(isDisplayed()));
 
         onView(withId(R.id.categoryRV)).perform(click());
 
