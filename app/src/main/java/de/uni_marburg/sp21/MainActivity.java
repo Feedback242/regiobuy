@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SearchView;
@@ -24,6 +25,7 @@ import de.uni_marburg.sp21.company_data_structure.ShopType;
 import de.uni_marburg.sp21.filter.BottomSheetFilter;
 import de.uni_marburg.sp21.filter.CheckItem;
 import de.uni_marburg.sp21.filter.Filter;
+import de.uni_marburg.sp21.filter.LocationBottomSheet;
 import de.uni_marburg.sp21.filter.PickedTime;
 
 public class MainActivity extends AppCompatActivity {
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView favoriteButton;
     private ImageView filterButton;
     private SearchView searchView;
+    private ImageView locationButton;
 
     //Filter stuff
     private CheckItem[] categories;
@@ -51,20 +54,18 @@ public class MainActivity extends AppCompatActivity {
     private CheckItem[] restrictions;
     private boolean isOpen;
     private boolean isDelivery;
-
     private PickedTime pickedTime;
+    private boolean favoriteIsClicked;
+    private int radius;
 
     private Context context;
-
-    public static final String INTENT_TAG = "clicked_company";
-    private boolean favoriteIsClicked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        context = MyApplication.getAppContext();
-
+        context = MainActivity.this;
+        radius = 0;
         setSystemLanguage();
 
         pickedTime = new PickedTime();
@@ -74,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         buildRecyclerView();
         buildFilterView();
         buildSearchView();
+        buildLocationView();
     }
 
 
@@ -83,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void filterAndUpdateRecyclerview(){
         filteredCompanies.clear();
-
         filteredCompanies.addAll(Filter.filter(searchView.getQuery().toString(), companies, types, organisations, categories, restrictions, isDelivery, isOpen, pickedTime));
         sortFilteredCompanies();
         adapter.notifyDataSetChanged();
@@ -93,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BottomSheetFilter settingsDialog = new BottomSheetFilter(organisations, categories, types, restrictions, isDelivery, isOpen, pickedTime);
+                BottomSheetFilter settingsDialog = new BottomSheetFilter(MainActivity.this, organisations, categories, types, restrictions, isDelivery, isOpen, pickedTime);
                 settingsDialog.show(getSupportFragmentManager(), "SETTINGS_SHEET");
                 settingsDialog.setOnItemClickListener(new BottomSheetFilter.OnItemClickListener() {
                     @Override
@@ -164,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 favoriteIsClicked = !favoriteIsClicked;
                 if (favoriteIsClicked){
-                    favoriteButton.setImageResource(R.drawable.ic_star_filled);
+                    favoriteButton.setImageResource(R.drawable.ic_baseline_star_24);
                     companies.clear();
                     for (Company c : defaultCompany){
                         if(c.isFavorite()){
@@ -173,13 +174,30 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 }else {
-                    favoriteButton.setImageResource(R.drawable.ic_star_unfilled);
+                    favoriteButton.setImageResource(R.drawable.ic_baseline_star_border_24);
                     companies.addAll(defaultCompany);
                     filterAndUpdateRecyclerview();
                 }
             }
         });
 
+    }
+
+    private void buildLocationView(){
+        locationButton = findViewById(R.id.locationSearch);
+        locationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LocationBottomSheet locationBottomSheet = new LocationBottomSheet(radius);
+                locationBottomSheet.show(getSupportFragmentManager(), "SETTINGS_SHEET");
+                locationBottomSheet.setLocationSettingsListener(new LocationBottomSheet.LocationSettingsListener() {
+                    @Override
+                    public void onLocationChange(int rad) {
+                        radius = rad;
+                    }
+                });
+            }
+        });
     }
 
     private void getData(){
@@ -261,8 +279,7 @@ public class MainActivity extends AppCompatActivity {
                 }else {
                     filteredCompanies.get(pos).setFavorite(true);
                 }
-                System.out.println("" + filteredCompanies.get(pos).isFavorite());
-
+                Log.d(MyApplication.APP_TAG , "" + filteredCompanies.get(pos).isFavorite());
             }
         });
     }

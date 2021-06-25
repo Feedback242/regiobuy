@@ -70,8 +70,8 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
     private boolean isCheckedOpen;
     private boolean isCheckedDelivery;
 
-    public BottomSheetFilter(final CheckItem[] ORGANIZATIONS, final CheckItem[] CATEGORIES, final CheckItem[] TYPES, final CheckItem[] RESTRICTIONS, boolean isDelivery, boolean isOpen, PickedTime pickedTime){
-        this.context = MyApplication.getAppContext();
+    public BottomSheetFilter(Context context, final CheckItem[] ORGANIZATIONS, final CheckItem[] CATEGORIES, final CheckItem[] TYPES, final CheckItem[] RESTRICTIONS, boolean isDelivery, boolean isOpen, PickedTime pickedTime){
+        this.context = context;
         this.ORGANISATIONS = ORGANIZATIONS;
         this.TYPES = TYPES;
         this.CATEGORIES = CATEGORIES;
@@ -81,7 +81,10 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
         this.pickedTime = pickedTime;
     }
 
-    private void buildRecyclerView(int recyclerViewID, RecyclerView recyclerView, FilterAdapter adapter, CheckItem[] checkItems){
+    /**
+     * builds the three RecyclerViews and sets some onClicks
+     */
+    private void buildRecyclerViews(){
         recyclerViewCategories = itemView.findViewById(R.id.categoryRV);
         recyclerViewTypes = itemView.findViewById(R.id.typesRV);
         recyclerViewOrganisations = itemView.findViewById(R.id.organisationRV);
@@ -106,16 +109,6 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
         recyclerViewTypes.setAdapter(adapterTypes);
         recyclerViewOrganisations.setAdapter(adapterOrganisations);
         recyclerViewRestrictions.setAdapter(adapterRestrictions);
-    }
-
-    /**
-     * builds the three RecyclerViews and sets some onClicks
-     */
-    private void buildRecyclerViews(){
-        buildRecyclerView(R.id.restrictionsnRV, recyclerViewRestrictions, adapterRestrictions, RESTRICTIONS);
-        buildRecyclerView(R.id.typesRV, recyclerViewTypes, adapterTypes, TYPES);
-        buildRecyclerView(R.id.organisationRV, recyclerViewOrganisations, adapterOrganisations, ORGANISATIONS);
-        buildRecyclerView(R.id.categoryRV, recyclerViewCategories, adapterCategories, CATEGORIES);
 
         adapterCategories.setOnItemClickListener(new FilterAdapter.OnItemClickListener() {
             @Override
@@ -223,7 +216,6 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
             @Override
             public void onClick(View v) {
                 if(listener != null){
-                    SimpleDateFormat format = new SimpleDateFormat("HH:mm");
                     Calendar calendar = Calendar.getInstance();
                     int hours = calendar.get(Calendar.HOUR_OF_DAY);
                     int mins = calendar.get(Calendar.MINUTE);
@@ -290,7 +282,7 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
                 }else {
                     deliveryCheckbox.setImageResource(R.drawable.ic_baseline_radio_button_unchecked_24);
                 }
-                listener.onDeliveryClick(isCheckedOpen);
+                listener.onDeliveryClick(isCheckedDelivery);
             }
         });
 

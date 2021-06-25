@@ -29,7 +29,7 @@
     <style name="CustomBottomSheetDialogTheme" parent="Theme.Design.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/CustomBottomSheetStyle</item>
         <item name="android:textColorPrimary">?attr/colorOnPrimary</item>
-        <item name="android:colorBackgroundFloating">#FFFFFF</item>
+        <item name="android:colorBackgroundFloating">#F3F3F3</item>
     </style>
 
     <style name="CustomBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
@@ -44,6 +44,19 @@
     <style name="Theme.RegioBuy.NoActionBar.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.RegioBuy.NoActionBar.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Theme.RegioBuy.NoActionBar.Fullscreen" parent="Theme.RegioBuy.NoActionBar">
+        <item name="android:actionBarStyle">
+            @style/Widget.Theme.RegioBuy.NoActionBar.ActionBar.Fullscreen
+        </item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowBackground">@null</item>
+    </style>
+
+    <style name="ThemeOverlay.RegioBuy.FullscreenContainer" parent="">
+        <item name="fullscreenBackgroundColor">@color/light_blue_600</item>
+        <item name="fullscreenTextColor">@color/light_blue_A200</item>
+    </style>
 
 
 </resources>

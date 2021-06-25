@@ -3,13 +3,23 @@ package de.uni_marburg.sp21;
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.Log;
+import android.view.View;
 
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.test.espresso.UiController;
+import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.assertion.ViewAssertions;
+import androidx.test.espresso.contrib.DrawerActions;
+import androidx.test.espresso.contrib.DrawerMatchers;
+import androidx.test.espresso.matcher.BoundedMatcher;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -18,7 +28,9 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.net.URL;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -38,13 +50,18 @@ import de.uni_marburg.sp21.filter.PickedTime;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.internal.util.Checks.checkNotNull;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
-
+import androidx.test.espresso.contrib.RecyclerViewActions;
 /**
  * Instrumented test, which will execute on an Android device.
  *
@@ -166,11 +183,37 @@ public class FilterTest {
         assertNotNull(testRes);
     }
     @Test
+    public void favoriteTest(){
+        // mark a company as a favorite
+        onView(withId(R.id.recyclerView)).perform(RecyclerViewActions.actionOnItemAtPosition(0, new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                return null;
+            }
+
+            @Override
+            public String getDescription() {
+                return null;
+            }
+
+            @Override
+            public void perform(UiController uiController, View view) {
+                view.findViewById(R.id.favorite).performClick();
+            }
+        }));
+
+        // clicks the favorite button and shows all favorites company
+        onView(withId(R.id.favorite_button)).perform(click());
+
+        onView(withId(R.id.recyclerView)).perform(RecyclerViewActions.scrollToPosition(0)).check(matches(isDisplayed()));
+    }
+
+    @Test
     public void onViewTest() {
 
         // FilterButton and BottomSheetDialog
         onView(withId(R.id.filterButton)).perform(click());
-        //onView(withId(R.id.linearLayout)).check(ViewAssertions.matches(isDisplayed()));
+        onView(withId(R.id.bottom_sheet)).check(matches(isDisplayed()));
 
         onView(withId(R.id.categoryRV)).perform(click());
 
@@ -337,8 +380,13 @@ public class FilterTest {
         restrictions[9].check(false);
     }
     @Test
-    public void isOpenFilterTest(){
-        List<Company> isOpn = Filter.filter("", companies, type, organizations, categories, restrictions, false, true, new PickedTime());
+    public void isOpenFilterTest() throws ParseException {
+        PickedTime pickedTime = new PickedTime();
+        pickedTime.setWeekday(TimeConverter.convertToDatabaseWeekday("monday"));
+
+        pickedTime.setStartTime(TimeConverter.convertToDate("10:05"));
+        pickedTime.setEndTime(TimeConverter.convertToDate("11:00"));
+        List<Company> isOpn = Filter.filter("", companies, type, organizations, categories, restrictions, false, true, pickedTime);
         assertEquals(companies, isOpn);
     }
 

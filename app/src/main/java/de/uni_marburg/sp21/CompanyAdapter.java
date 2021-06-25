@@ -43,10 +43,10 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
         holder.location.setText(currentCompany.getAddress().getZip() + " " + currentCompany.getAddress().getCity());
         holder.isFavorite = currentCompany.isFavorite();
         if (holder.isFavorite){
-            holder.favorite.setImageResource(R.drawable.ic_star_filled);
+            holder.favorite.setImageResource(R.drawable.ic_baseline_star_24);
             currentCompany.setFavorite(true);
         }else {
-            holder.favorite.setImageResource(R.drawable.ic_star_unfilled);
+            holder.favorite.setImageResource(R.drawable.ic_baseline_star_border_24);
             currentCompany.setFavorite(false);
         }
         currentCompany.setImageToImageView(holder.image);
@@ -95,9 +95,9 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
 
                             isFavorite = !isFavorite;
                             if (isFavorite){
-                                favorite.setImageResource(R.drawable.ic_star_filled);
+                                favorite.setImageResource(R.drawable.ic_baseline_star_24);
                             }else {
-                                favorite.setImageResource(R.drawable.ic_star_unfilled);
+                                favorite.setImageResource(R.drawable.ic_baseline_star_border_24);
                             }
                     if (listener != null) {
                         int position = getAdapterPosition();
@@ -105,7 +105,6 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
                             listener.onFavoriteClick(position);
                         }
                     }
-
                     }
 
             });
