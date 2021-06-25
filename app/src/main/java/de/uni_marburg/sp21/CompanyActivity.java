@@ -1,5 +1,6 @@
 package de.uni_marburg.sp21;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -7,7 +8,6 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.view.View;
 import android.widget.ImageView;
@@ -20,6 +20,7 @@ import de.uni_marburg.sp21.company_data_structure.Company;
 import de.uni_marburg.sp21.company_data_structure.Organization;
 import de.uni_marburg.sp21.company_data_structure.ProductGroup;
 import de.uni_marburg.sp21.company_data_structure.ShopType;
+import de.uni_marburg.sp21.glide.FullscreenGalleryActivity;
 
 public class CompanyActivity extends AppCompatActivity {
 
@@ -90,6 +91,15 @@ public class CompanyActivity extends AppCompatActivity {
         galleryLayoutManager = new GridLayoutManager(CompanyActivity.this, LAYOUT_COLUMNS);
         galleryRecyclerview.setLayoutManager(galleryLayoutManager);
         galleryRecyclerview.setAdapter(galleryAdapter);
+        galleryAdapter.setListerner(new PictureGalleryAdapter.OnPhotoClickListerner() {
+            @Override
+            public void onPhotoClickListerner(int pos) {
+                FullscreenGalleryActivity.setImagePath(company.getImagePaths());
+                FullscreenGalleryActivity.setPosition(pos);
+                Intent intent = new Intent(getBaseContext(), FullscreenGalleryActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initializeViews() {

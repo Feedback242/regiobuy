@@ -52,6 +52,7 @@ public class Company implements Serializable {
     private String geoHash;
     private List<String> imagePaths;
     private boolean isFavorite;
+    private boolean newMessage;
 
     /**
      * Constructor

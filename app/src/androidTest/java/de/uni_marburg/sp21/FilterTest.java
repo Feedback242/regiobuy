@@ -51,6 +51,7 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.internal.util.Checks.checkNotNull;
@@ -202,7 +203,7 @@ public class FilterTest {
         // clicks the favorite button and shows all favorites company
         onView(withId(R.id.favorite_button)).perform(click());
 
-        onView(withId(R.id.recyclerView)).check(matches(atPosition(1, hasDescendant(withText("Baganz")))));
+        onView(withId(R.id.recyclerView)).check(matches(atPosition(0, withContentDescription("Baganz"))));
     }
 
 
@@ -217,7 +218,7 @@ public class FilterTest {
 
             @Override
             protected boolean matchesSafely(final RecyclerView view) {
-                RecyclerView.ViewHolder viewHolder = view.findViewHolderForAdapterPosition(position);
+                RecyclerView.ViewHolder viewHolder = view.findViewHolderForLayoutPosition(position);
                 if (viewHolder == null) {
                     // has no item on such position
                     return false;
