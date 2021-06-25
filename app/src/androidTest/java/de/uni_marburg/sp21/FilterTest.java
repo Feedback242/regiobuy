@@ -28,7 +28,9 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.net.URL;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -203,30 +205,9 @@ public class FilterTest {
         // clicks the favorite button and shows all favorites company
         onView(withId(R.id.favorite_button)).perform(click());
 
-        onView(withId(R.id.recyclerView)).check(matches(atPosition(0, withContentDescription("Baganz"))));
+        onView(withId(R.id.recyclerView)).perform(RecyclerViewActions.scrollToPosition(0)).check(matches(isDisplayed()));
     }
 
-
-    public static Matcher<View> atPosition(final int position,  final Matcher<View> itemMatcher) {
-        checkNotNull(itemMatcher);
-        return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("has item at position " + position + ": ");
-                itemMatcher.describeTo(description);
-            }
-
-            @Override
-            protected boolean matchesSafely(final RecyclerView view) {
-                RecyclerView.ViewHolder viewHolder = view.findViewHolderForLayoutPosition(position);
-                if (viewHolder == null) {
-                    // has no item on such position
-                    return false;
-                }
-                return itemMatcher.matches(viewHolder.itemView);
-            }
-        };
-    }
     @Test
     public void onViewTest() {
 
@@ -399,8 +380,13 @@ public class FilterTest {
         restrictions[9].check(false);
     }
     @Test
-    public void isOpenFilterTest(){
-        List<Company> isOpn = Filter.filter("", companies, type, organizations, categories, restrictions, false, true, new PickedTime());
+    public void isOpenFilterTest() throws ParseException {
+        PickedTime pickedTime = new PickedTime();
+        pickedTime.setWeekday(TimeConverter.convertToDatabaseWeekday("monday"));
+
+        pickedTime.setStartTime(TimeConverter.convertToDate("10:05"));
+        pickedTime.setEndTime(TimeConverter.convertToDate("11:00"));
+        List<Company> isOpn = Filter.filter("", companies, type, organizations, categories, restrictions, false, true, pickedTime);
         assertEquals(companies, isOpn);
     }
 
