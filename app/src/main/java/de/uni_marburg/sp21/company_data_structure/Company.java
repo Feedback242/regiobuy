@@ -33,6 +33,7 @@ import de.uni_marburg.sp21.glide.GlideApp;
 public class Company implements Serializable {
 
     private final static String COMPANY_FILENAME = "Company.ser";
+
     private final String ID;
     private String name;
     private Address address;
@@ -143,6 +144,14 @@ public class Company implements Serializable {
 
     //------------------ GET / SET -------------------
 
+
+    public String getID() {
+        return ID;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
 
     public List<String> getImagePaths() {
         return imagePaths;
@@ -278,10 +287,6 @@ public class Company implements Serializable {
 
     public void setGeoHash(String geoHash) {
         this.geoHash = geoHash;
-    }
-
-    public void setFavorite(boolean favorite) {
-        isFavorite = favorite;
     }
 
     public boolean isFavorite() {

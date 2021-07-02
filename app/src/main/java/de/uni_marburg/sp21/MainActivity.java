@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Locale;
 import de.uni_marburg.sp21.company_data_structure.Category;
 import de.uni_marburg.sp21.company_data_structure.Company;
+import de.uni_marburg.sp21.company_data_structure.FavoritesManager;
 import de.uni_marburg.sp21.company_data_structure.Message;
 import de.uni_marburg.sp21.company_data_structure.Organization;
 import de.uni_marburg.sp21.company_data_structure.ShopType;
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
 
     //PushMessages
+    private final Date MESSAGES_DATE = new Date(2020 - 1900,5,25,16,18,45);
     private List<Message> messages = new ArrayList<>();
     private MessageAdapter messageAdapter;
     private RecyclerView messageRecyclerView;
@@ -75,9 +77,10 @@ public class MainActivity extends AppCompatActivity {
     private boolean favoriteIsClicked;
     private int radius;
 
-    private Context context;
+    //Favorites
+    private FavoritesManager favoritesManager;
 
-    private final Date MESSAGES_DATE = new Date(2021 - 1900,3,19);
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
         initializeViews();
         getData();
 
+        buildFavorites();
         buildRecyclerView();
         buildFilterView();
         buildSearchView();
@@ -117,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void buildMessageRecyclerView(){
         messageRecyclerView = findViewById(R.id.pushMessagesRecyclerView);
+        removeAllMessages = findViewById(R.id.removeAllMessagesButton);
         for (Company company : companies){
             for(Message message : company.getMessages()){
                 SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
@@ -152,7 +157,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
-        removeAllMessages = findViewById(R.id.removeAllMessagesButton);
         removeAllMessages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -248,7 +252,9 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
+    }
 
+    private void buildFavorites(){
         favoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -269,7 +275,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     private void buildLocationView(){
@@ -292,6 +297,7 @@ public class MainActivity extends AppCompatActivity {
     private void getData(){
         database = FirebaseFirestore.getInstance();
         companies = DataBaseManager.getCompanyList(database);
+        favoritesManager = new FavoritesManager(companies);
         filteredCompanies = new ArrayList<>();
         filteredCompanies.addAll(companies);
         defaultCompany = new ArrayList<>(companies);
@@ -363,11 +369,10 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFavoriteClick(int pos) {
-                if(filteredCompanies.get(pos).isFavorite()){
-                    filteredCompanies.get(pos).setFavorite(false);
-                }else {
-                    filteredCompanies.get(pos).setFavorite(true);
-                }
+                Company currentCompany = filteredCompanies.get(pos);
+                boolean isFav = currentCompany.isFavorite();
+                currentCompany.setFavorite(!isFav);
+                favoritesManager.save(currentCompany);
                 Log.d(MyApplication.APP_TAG , "" + filteredCompanies.get(pos).isFavorite());
             }
         });
