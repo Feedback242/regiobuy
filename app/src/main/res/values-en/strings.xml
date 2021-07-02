@@ -58,4 +58,5 @@
     <string name="filter_your_search">Filter Your Search</string>
     <string name="my_shopping_list">My Shopping List</string>
     <string name="search_in_radius">Search In A Radius</string>
+    <string name="hint_enter_new_post">Tap to enter a new product!</string>
 </resources>

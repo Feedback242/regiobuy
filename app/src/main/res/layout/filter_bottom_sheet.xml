@@ -163,7 +163,7 @@
                 app:cardBackgroundColor="?attr/colorOnSecondary"
                 app:cardCornerRadius="10dp">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -173,25 +173,28 @@
                         android:id="@+id/openedCheckbox"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="0"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/textView19"
+                        app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/ic_baseline_radio_button_unchecked_24" />
 
                     <TextView
+                        android:id="@+id/textView19"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="8dp"
+                        android:ellipsize="end"
+                        android:maxLines="2"
                         android:text="@string/is_opened"
                         android:textColor="?android:attr/textColor"
                         app:layout_constraintBottom_toBottomOf="@+id/openedCheckbox"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="1.0"
-                        app:layout_constraintStart_toEndOf="@+id/openedCheckbox"
                         app:layout_constraintTop_toTopOf="@+id/openedCheckbox" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
 
             </androidx.cardview.widget.CardView>
 
@@ -206,7 +209,7 @@
                 app:cardBackgroundColor="?attr/colorOnSecondary"
                 app:cardCornerRadius="10dp">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -216,25 +219,28 @@
                         android:id="@+id/deliveryCheckbox"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="0"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/textView18"
+                        app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/ic_baseline_radio_button_unchecked_24" />
 
                     <TextView
+                        android:id="@+id/textView18"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="8dp"
+                        android:ellipsize="end"
+                        android:maxLines="2"
                         android:text="@string/delivery"
                         android:textColor="?android:attr/textColor"
                         app:layout_constraintBottom_toBottomOf="@+id/deliveryCheckbox"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="1.0"
-                        app:layout_constraintStart_toEndOf="@+id/deliveryCheckbox"
                         app:layout_constraintTop_toTopOf="@+id/deliveryCheckbox" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
 
             </androidx.cardview.widget.CardView>
         </LinearLayout>
