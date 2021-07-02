@@ -201,16 +201,18 @@ public class DataBaseManager {
         return companies;
     }
 
-    public static void save(List<Company> companies){
-        File path = MyApplication.getAppContext().getExternalFilesDir(null);
-        File file = new File(path, COMPANIES_FILENAME);
+    public static void save(List<Company> companies) {
+        if (!companies.isEmpty()) {
+            File path = MyApplication.getAppContext().getExternalFilesDir(null);
+            File file = new File(path, COMPANIES_FILENAME);
 
-        try{
-            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file));
-            out.writeObject(companies);
-            out.close();
-        } catch (IOException e){
-            e.printStackTrace();
+            try {
+                ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file));
+                out.writeObject(companies);
+                out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

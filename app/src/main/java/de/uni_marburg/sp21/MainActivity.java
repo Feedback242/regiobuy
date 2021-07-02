@@ -122,15 +122,18 @@ public class MainActivity extends AppCompatActivity {
     private void buildMessageRecyclerView(){
         messageRecyclerView = findViewById(R.id.pushMessagesRecyclerView);
         removeAllMessages = findViewById(R.id.removeAllMessagesButton);
-        for (Company company : companies){
-            for(Message message : company.getMessages()){
-                SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-                try {
-                    Date date = inputFormat.parse(message.getDate());
-                    if(date.after(MESSAGES_DATE)){
-                       messages.add(message);
-                    };
-                } catch (ParseException e) {
+        for (Company company : companies) {
+            if (company.isFavorite()) {
+                for (Message message : company.getMessages()) {
+                    SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                    try {
+                        Date date = inputFormat.parse(message.getDate());
+                        if (date.after(MESSAGES_DATE)) {
+                            messages.add(message);
+                        }
+                        ;
+                    } catch (ParseException e) {
+                    }
                 }
             }
         }
