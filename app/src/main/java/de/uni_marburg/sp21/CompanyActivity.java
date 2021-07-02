@@ -15,6 +15,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import de.uni_marburg.sp21.company_data_structure.Address;
 import de.uni_marburg.sp21.company_data_structure.Company;
 import de.uni_marburg.sp21.company_data_structure.Organization;

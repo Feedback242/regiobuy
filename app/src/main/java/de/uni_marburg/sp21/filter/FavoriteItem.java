@@ -1,4 +1,4 @@
-package de.uni_marburg.sp21.company_data_structure;
+package de.uni_marburg.sp21.filter;
 
 import java.io.Serializable;
 

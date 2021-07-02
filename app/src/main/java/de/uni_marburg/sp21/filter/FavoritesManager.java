@@ -1,6 +1,5 @@
-package de.uni_marburg.sp21.company_data_structure;
+package de.uni_marburg.sp21.filter;
 
-import android.os.Debug;
 import android.util.Log;
 
 import java.io.File;
@@ -13,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.uni_marburg.sp21.MyApplication;
+import de.uni_marburg.sp21.company_data_structure.Company;
+import de.uni_marburg.sp21.filter.FavoriteItem;
 
 public class FavoritesManager {
     private static final String FAVORITES_IDS = "fav.ser";

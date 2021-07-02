@@ -327,11 +327,8 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
     @Override
     public void onPause() {
         super.onPause();
-        System.out.println("onPause");
-        onResume();
-
-
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -351,7 +348,6 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        System.out.println("Dester");
     }
 
     /**

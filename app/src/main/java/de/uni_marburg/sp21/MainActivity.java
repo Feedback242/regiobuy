@@ -2,8 +2,6 @@ package de.uni_marburg.sp21;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,7 +12,6 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewManager;
 import android.widget.ImageView;
 import android.widget.SearchView;
 
@@ -29,9 +26,10 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+
 import de.uni_marburg.sp21.company_data_structure.Category;
 import de.uni_marburg.sp21.company_data_structure.Company;
-import de.uni_marburg.sp21.company_data_structure.FavoritesManager;
+import de.uni_marburg.sp21.filter.FavoritesManager;
 import de.uni_marburg.sp21.company_data_structure.Message;
 import de.uni_marburg.sp21.company_data_structure.Organization;
 import de.uni_marburg.sp21.company_data_structure.ShopType;
@@ -80,6 +78,9 @@ public class MainActivity extends AppCompatActivity {
     //Favorites
     private FavoritesManager favoritesManager;
 
+    //ShoppingList
+    private ImageView shoppingList;
+
     private Context context;
 
     @Override
@@ -100,6 +101,18 @@ public class MainActivity extends AppCompatActivity {
         buildSearchView();
         buildLocationView();
         buildMessageRecyclerView();
+        buildShoppingListView();
+    }
+
+    private void buildShoppingListView(){
+        shoppingList = findViewById(R.id.shoppingList);
+        shoppingList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BottomSheetShoppingList shoppingDialog = new BottomSheetShoppingList();
+                shoppingDialog.show(getSupportFragmentManager(), "SHOPPING_SHEET");
+            }
+        });
     }
 
     ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
