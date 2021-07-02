@@ -20,9 +20,12 @@ import de.uni_marburg.sp21.company_data_structure.Message;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
 
+    private final boolean showNames;
+    private OnMessageClickListener listener;
     private List<Message> messages;
-    public MessageAdapter(List<Message> imagePaths){
+    public MessageAdapter(List<Message> imagePaths, boolean showNames){
         this.messages = imagePaths;
+        this.showNames = showNames;
     }
 
     @NonNull
@@ -47,6 +50,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             holder.date.setText(currentMessage.getDate());
         }
         holder.content.setText(currentMessage.getContent());
+        if(showNames){
+            holder.name.setText(currentMessage.getCompanyName() +":");
+        } else {
+            holder.name.setText("");
+        }
+        holder.nameString = currentMessage.getCompanyName();
+
     }
 
     @Override
@@ -57,11 +67,33 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView date;
         TextView content;
+        TextView name;
+        String nameString;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             date = itemView.findViewById(R.id.date);
             content = itemView.findViewById(R.id.content);
+            name = itemView.findViewById(R.id.nameMessages);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onClick(nameString);
+                        }
+                    }
+                }
+            });
         }
+    }
+
+    interface OnMessageClickListener{
+        void onClick(String companyName);
+    }
+
+    public void setOnMessageClickListener(OnMessageClickListener listener) {
+        this.listener = listener;
     }
 }

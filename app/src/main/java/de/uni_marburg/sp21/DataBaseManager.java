@@ -62,6 +62,7 @@ public class DataBaseManager {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         List<Company> temp = new ArrayList<>();
+                        String name = "";
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
@@ -70,7 +71,8 @@ public class DataBaseManager {
 
                                 //name
                                 if(documentMap.get("name") != null){
-                                    company.setName(documentMap.get("name").toString());
+                                    name = documentMap.get("name").toString();
+                                    company.setName(name);
                                 } else {
                                     company.setName("");
                                 }
@@ -145,7 +147,10 @@ public class DataBaseManager {
                                     List<Map> messagesList = (ArrayList<Map>) document.get("messages");
                                     List<Message> messages = new ArrayList<>();
                                     for (Map m : messagesList) {
-                                        messages.add(new Message(m.get("date").toString(), m.get("content").toString()));
+                                        messages.add(new Message(m.get("date").toString(), m.get("content").toString(), name));
+                                        if(name == null){
+                                            System.out.println("null");
+                                        }
                                     }
                                     company.setMessages(messages);
                                 }

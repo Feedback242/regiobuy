@@ -1,6 +1,10 @@
 package de.uni_marburg.sp21;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
@@ -10,16 +14,24 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewManager;
 import android.widget.ImageView;
 import android.widget.SearchView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import de.uni_marburg.sp21.company_data_structure.Category;
 import de.uni_marburg.sp21.company_data_structure.Company;
+import de.uni_marburg.sp21.company_data_structure.Message;
 import de.uni_marburg.sp21.company_data_structure.Organization;
 import de.uni_marburg.sp21.company_data_structure.ShopType;
 import de.uni_marburg.sp21.filter.BottomSheetFilter;
@@ -39,7 +51,12 @@ public class MainActivity extends AppCompatActivity {
     //RecyclerView
     private CompanyAdapter adapter;
     private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager layoutManager;
+
+    //PushMessages
+    private List<Message> messages = new ArrayList<>();
+    private MessageAdapter messageAdapter;
+    private RecyclerView messageRecyclerView;
+    private FloatingActionButton removeAllMessages;
 
     //Views
     private ImageView favoriteButton;
@@ -60,6 +77,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Context context;
 
+    private final Date MESSAGES_DATE = new Date(2021 - 1900,3,19);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,8 +95,78 @@ public class MainActivity extends AppCompatActivity {
         buildFilterView();
         buildSearchView();
         buildLocationView();
+        buildMessageRecyclerView();
     }
 
+    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            int position = viewHolder.getAdapterPosition();
+            messages.remove(position);
+            messageAdapter.notifyItemRemoved(position);
+            if(messages.isEmpty()){
+                removeMessagesViews();
+            }
+        }
+    };
+
+    private void buildMessageRecyclerView(){
+        messageRecyclerView = findViewById(R.id.pushMessagesRecyclerView);
+        for (Company company : companies){
+            for(Message message : company.getMessages()){
+                SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                try {
+                    Date date = inputFormat.parse(message.getDate());
+                    if(date.after(MESSAGES_DATE)){
+                       messages.add(message);
+                    };
+                } catch (ParseException e) {
+                }
+            }
+        }
+        if(messages.isEmpty()){
+            removeMessagesViews();
+        } else {
+            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+            itemTouchHelper.attachToRecyclerView(messageRecyclerView);
+
+            messageAdapter = new MessageAdapter(messages,true);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
+            messageRecyclerView.setLayoutManager(layoutManager);
+            messageRecyclerView.setAdapter(messageAdapter);
+            messageAdapter.setOnMessageClickListener(new MessageAdapter.OnMessageClickListener() {
+                @Override
+                public void onClick(String companyName) {
+                    for(Company company : companies){
+                        if(company.getName() == companyName){
+                            Intent intent = new Intent(context, CompanyActivity.class);
+                            Company.save(company);
+                            startActivity(intent);
+                        }
+                    }
+                }
+            });
+        }
+        removeAllMessages = findViewById(R.id.removeAllMessagesButton);
+        removeAllMessages.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                messages.clear();
+                messageAdapter.notifyDataSetChanged();
+                removeMessagesViews();
+            }
+        });
+    }
+
+    private void removeMessagesViews(){
+        messageRecyclerView.setVisibility(View.GONE);
+        removeAllMessages.setVisibility(View.GONE);
+    }
 
     private void sortFilteredCompanies(){
         Collections.sort(filteredCompanies, (o1, o2) -> o1.getName().compareTo(o2.getName()));

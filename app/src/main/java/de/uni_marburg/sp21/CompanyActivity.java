@@ -81,7 +81,7 @@ public class CompanyActivity extends AppCompatActivity {
 
     private void buildRecyclerViews(){
         messageRecyclerView = findViewById(R.id.rvMessages);
-        messageAdapter = new MessageAdapter(company.getMessages());
+        messageAdapter = new MessageAdapter(company.getMessages(), true);
         messageLayoutManager = new LinearLayoutManager(CompanyActivity.this);
         messageRecyclerView.setLayoutManager(messageLayoutManager);
         messageRecyclerView.setAdapter(messageAdapter);
