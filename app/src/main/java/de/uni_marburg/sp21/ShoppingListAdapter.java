@@ -43,7 +43,11 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         }
         if(!cat.isEmpty()){
             cat = cat.substring(0, cat.length()-2);
+        } else {
+            holder.search.setVisibility(View.GONE);
+            cat = "-";
         }
+
         holder.categories.setText(cat);
         if(holder.isChecked){
             holder.check.setImageResource(R.drawable.ic_baseline_radio_button_checked_24);

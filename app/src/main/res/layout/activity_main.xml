@@ -6,6 +6,81 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout8"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/euphoria"
+            android:text="@string/app_name"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/favorite_button"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/shoppingList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/favorite_button"
+            app:layout_constraintEnd_toStartOf="@+id/locationSearch"
+            app:layout_constraintTop_toTopOf="@+id/favorite_button"
+            app:srcCompat="@drawable/ic_baseline_local_grocery_store_24" />
+
+        <ImageView
+            android:id="@+id/locationSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/shoppingList"
+            app:layout_constraintEnd_toStartOf="@+id/filterButton"
+            app:layout_constraintTop_toTopOf="@+id/shoppingList"
+            app:srcCompat="@drawable/ic_baseline_my_location_24" />
+
+        <ImageView
+            android:id="@+id/filterButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/locationSearch"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/locationSearch"
+            app:srcCompat="@drawable/ic_baseline_filter_alt_24" />
+
+        <ImageView
+            android:id="@+id/favorite_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView16"
+            app:layout_constraintEnd_toStartOf="@+id/shoppingList"
+            app:layout_constraintTop_toTopOf="@+id/textView16"
+            app:srcCompat="@drawable/ic_baseline_star_border_24" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/removeAllMessagesButton"
         android:layout_width="wrap_content"
@@ -20,13 +95,13 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/pushMessagesRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:background="@drawable/background_messages"
         android:elevation="3dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/constraintLayout8" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"
@@ -34,67 +109,25 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/shoppingList"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/filterButton"
-            app:layout_constraintEnd_toStartOf="@+id/locationSearch"
-            app:layout_constraintTop_toTopOf="@+id/filterButton"
-            app:srcCompat="@drawable/ic_baseline_local_grocery_store_24" />
-
-        <ImageView
-            android:id="@+id/filterButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/searchView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/searchView"
-            app:srcCompat="@drawable/ic_baseline_filter_alt_24" />
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout8">
 
         <SearchView
             android:id="@+id/searchView"
             android:layout_width="0dp"
             android:layout_height="47dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toStartOf="@+id/favorite_button"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
         </SearchView>
 
-        <ImageView
-            android:id="@+id/favorite_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/filterButton"
-            app:layout_constraintEnd_toStartOf="@+id/shoppingList"
-            app:layout_constraintTop_toTopOf="@+id/filterButton"
-            app:srcCompat="@drawable/ic_baseline_star_border_24" />
-
-        <ImageView
-            android:id="@+id/locationSearch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/favorite_button"
-            app:layout_constraintEnd_toStartOf="@+id/filterButton"
-            app:layout_constraintTop_toTopOf="@+id/favorite_button"
-            app:srcCompat="@drawable/ic_baseline_my_location_24" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

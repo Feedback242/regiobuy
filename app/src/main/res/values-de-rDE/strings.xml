@@ -55,4 +55,7 @@
     <string name="circum_search">Umkreissuche:</string>
     <string name="without_radius">Suche ohne Radius</string>
     <string name="tap_to_add">Tippe für einen neuen Posten</string>
+    <string name="my_shopping_list">Meine Einkaufsliste</string>
+    <string name="filter_your_search">Grenze Deine Suche Ein</string>
+    <string name="search_in_radius">Suche In Einem Radius</string>
 </resources>

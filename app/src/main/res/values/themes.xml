@@ -3,11 +3,11 @@
     <style name="Theme.RegioBuy" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">#4CAF50</item>
-        <item name="colorPrimaryVariant">#388E3C</item>
+        <item name="colorPrimaryVariant">#4CAF50</item>
         <item name="colorOnPrimary">#1E1E1E</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">#4CAF50</item>
-        <item name="colorSecondaryVariant">#388E3C</item>
+        <item name="colorSecondaryVariant">#4CAF50</item>
         <item name="colorOnSecondary">#F3F3F3</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
