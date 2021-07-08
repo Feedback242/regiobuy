@@ -59,4 +59,5 @@
     <string name="filter_your_search">Grenze Deine Suche Ein</string>
     <string name="search_in_radius">Suche In Einem Radius</string>
     <string name="hint_enter_new_post">Tippe um ein neues Produkt einzugeben!</string>
+    <string name="company_location">Standort des Unternehmens:</string>
 </resources>

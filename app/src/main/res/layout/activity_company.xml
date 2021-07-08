@@ -2,6 +2,7 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -9,6 +10,16 @@
         android:id="@+id/cl"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/mapText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/company_location"
+            app:layout_constraintBottom_toBottomOf="@+id/mapIcon"
+            app:layout_constraintStart_toEndOf="@+id/mapIcon"
+            app:layout_constraintTop_toTopOf="@+id/mapIcon" />
 
         <TextView
             android:id="@+id/picturesText"
@@ -451,9 +462,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            app:layout_constraintEnd_toEndOf="@+id/productGroupIcon"
-            app:layout_constraintStart_toStartOf="@+id/productGroupIcon"
-            app:layout_constraintTop_toBottomOf="@+id/companyProductGroupsDescription"
+            app:layout_constraintEnd_toEndOf="@+id/mapIcon"
+            app:layout_constraintStart_toStartOf="@+id/mapIcon"
+            app:layout_constraintTop_toBottomOf="@+id/mapView"
             app:srcCompat="@drawable/ic_baseline_new_releases_24" />
 
         <ImageView
@@ -466,6 +477,31 @@
             app:layout_constraintStart_toStartOf="@+id/messagesIcon"
             app:layout_constraintTop_toBottomOf="@+id/rvMessages"
             app:srcCompat="@drawable/ic_baseline_image_24" />
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/mapView"
+            android:layout_width="374dp"
+            android:layout_height="255dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:clickable="true"
+            android:clipToPadding="true"
+            android:focusableInTouchMode="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/mapIcon"
+            app:layout_constraintTop_toBottomOf="@+id/mapIcon"
+            tools:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/mapIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            app:layout_constraintEnd_toEndOf="@+id/productGroupIcon"
+            app:layout_constraintStart_toStartOf="@+id/productGroupIcon"
+            app:layout_constraintTop_toBottomOf="@+id/companyProductGroupsDescription"
+            app:srcCompat="@drawable/ic_baseline_map" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

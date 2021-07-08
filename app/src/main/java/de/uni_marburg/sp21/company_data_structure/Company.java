@@ -289,6 +289,10 @@ public class Company implements Serializable {
         this.geoHash = geoHash;
     }
 
+    public Location getLocation() {
+        return location;
+    }
+
     public boolean isFavorite() {
         return isFavorite;
     }
