@@ -10,14 +10,17 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SearchView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -41,10 +44,14 @@ import de.uni_marburg.sp21.filter.PickedTime;
 
 public class MainActivity extends AppCompatActivity {
 
+    //Map
+    ImageView mapIcon;
+    BottomSheetFilter.OnItemClickListener listener;
+    BottomSheetFilter settingsDialog;
     //Database stuff
     private FirebaseFirestore database;
     public List<Company> companies;
-    public List<Company> filteredCompanies;
+    public static List<Company> filteredCompanies;
     private List<Company> defaultCompany;
 
     //RecyclerView
@@ -102,6 +109,95 @@ public class MainActivity extends AppCompatActivity {
         buildLocationView();
         buildMessageRecyclerView();
         buildShoppingListView();
+        buildMap();buildBottomSheet();
+    }
+
+    private void buildMap() {
+        mapIcon = findViewById(R.id.main_map);
+
+        mapIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MapsActivity.setCompanyList(filteredCompanies);
+                MapsActivity.setBottomSheetFilter(settingsDialog);
+                MapsActivity.setPickedTime(pickedTime);
+                Intent intent = new Intent( context, MapsActivity.class);
+                MapsActivity.setCategories(categories);
+                MapsActivity.setOrganisations(organisations);
+                MapsActivity.setTypes(types);
+                intent.putExtra("isOpen",isOpen);
+                intent.putExtra("isDelivery",isDelivery);
+                MapsActivity.setRestrictions( restrictions);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void buildBottomSheet(){
+        pickedTime = new PickedTime();
+        settingsDialog = new BottomSheetFilter(MainActivity.this, organisations, categories, types, restrictions, isDelivery, isOpen, pickedTime);
+
+        settingsDialog.setOnItemClickListener(new BottomSheetFilter.OnItemClickListener() {
+            @Override
+            public void onOrganisationClick(int position, boolean isChecked) {
+                organisations[position].check(isChecked);
+                filterAndUpdateRecyclerview();
+            }
+
+            @Override
+            public void onTypeClick(int position, boolean isChecked) {
+                types[position].check(isChecked);
+                filterAndUpdateRecyclerview();
+            }
+
+            @Override
+            public void onCategoryClick(int position, boolean isChecked) {
+                categories[position].check(isChecked);
+                filterAndUpdateRecyclerview();
+            }
+
+            @Override
+            public void onRestrictionClick(int position, boolean isChecked) {
+                restrictions[position].check(isChecked);
+                filterAndUpdateRecyclerview();
+            }
+
+            @Override
+            public void onTimeStartChanged(String time) {
+                pickedTime.setStartTime(TimeConverter.convertToDate(time));
+                filterAndUpdateRecyclerview();
+            }
+
+            @Override
+            public void onTimeEndChanged(String time) {
+                pickedTime.setEndTime(TimeConverter.convertToDate(time));
+                filterAndUpdateRecyclerview();
+            }
+
+            @Override
+            public void onTimeDateChanged(String weekday) {
+                pickedTime.setWeekday(weekday);
+                filterAndUpdateRecyclerview();
+            }
+
+            @Override
+            public void onDeliveryClick(boolean isD) {
+                isDelivery = isD;
+                filterAndUpdateRecyclerview();
+            }
+
+            @Override
+            public void onOpenedClick(boolean isO) {
+                isOpen = isO;
+                filterAndUpdateRecyclerview();
+            }
+
+            @Override
+            public void onResetTimePickerClick() {
+                resetTimePicker();
+                filterAndUpdateRecyclerview();
+            }
+        });
     }
 
     private void buildShoppingListView(){
@@ -192,80 +288,19 @@ public class MainActivity extends AppCompatActivity {
         Collections.sort(filteredCompanies, (o1, o2) -> o1.getName().compareTo(o2.getName()));
     }
 
-    private void filterAndUpdateRecyclerview(){
+    public void filterAndUpdateRecyclerview(){
         filteredCompanies.clear();
         filteredCompanies.addAll(Filter.filter(searchView.getQuery().toString(), companies, types, organisations, categories, restrictions, isDelivery, isOpen, pickedTime));
         sortFilteredCompanies();
+       MapsActivity.setCompanyList(filteredCompanies);
         adapter.notifyDataSetChanged();
     }
 
-    private void buildFilterView(){
-        filterButton.setOnClickListener(new View.OnClickListener() {
+    public void buildFilterView(){
+        filterButton.setOnClickListener(  new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BottomSheetFilter settingsDialog = new BottomSheetFilter(MainActivity.this, organisations, categories, types, restrictions, isDelivery, isOpen, pickedTime);
                 settingsDialog.show(getSupportFragmentManager(), "SETTINGS_SHEET");
-                settingsDialog.setOnItemClickListener(new BottomSheetFilter.OnItemClickListener() {
-                    @Override
-                    public void onOrganisationClick(int position, boolean isChecked) {
-                        organisations[position].check(isChecked);
-                        filterAndUpdateRecyclerview();
-                    }
-
-                    @Override
-                    public void onTypeClick(int position, boolean isChecked) {
-                        types[position].check(isChecked);
-                        filterAndUpdateRecyclerview();
-                    }
-
-                    @Override
-                    public void onCategoryClick(int position, boolean isChecked) {
-                        categories[position].check(isChecked);
-                        filterAndUpdateRecyclerview();
-                    }
-
-                    @Override
-                    public void onRestrictionClick(int position, boolean isChecked) {
-                        restrictions[position].check(isChecked);
-                        filterAndUpdateRecyclerview();
-                    }
-
-                    @Override
-                    public void onTimeStartChanged(String time) {
-                        pickedTime.setStartTime(TimeConverter.convertToDate(time));
-                        filterAndUpdateRecyclerview();
-                    }
-
-                    @Override
-                    public void onTimeEndChanged(String time) {
-                        pickedTime.setEndTime(TimeConverter.convertToDate(time));
-                        filterAndUpdateRecyclerview();
-                    }
-
-                    @Override
-                    public void onTimeDateChanged(String weekday) {
-                        pickedTime.setWeekday(weekday);
-                        filterAndUpdateRecyclerview();
-                    }
-
-                    @Override
-                    public void onDeliveryClick(boolean isD) {
-                        isDelivery = isD;
-                        filterAndUpdateRecyclerview();
-                    }
-
-                    @Override
-                    public void onOpenedClick(boolean isO) {
-                        isOpen = isO;
-                        filterAndUpdateRecyclerview();
-                    }
-
-                    @Override
-                    public void onResetTimePickerClick() {
-                        resetTimePicker();
-                        filterAndUpdateRecyclerview();
-                    }
-                });
             }
         });
     }
@@ -399,5 +434,16 @@ public class MainActivity extends AppCompatActivity {
         Resources res = getResources();
         Configuration conf = res.getConfiguration();
         conf.setLocale(new Locale(languageCode.toLowerCase()));
+    }
+
+
+    public static void setCompanyList(List<Company> companies) {
+        filteredCompanies = companies;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        filterAndUpdateRecyclerview();
     }
 }

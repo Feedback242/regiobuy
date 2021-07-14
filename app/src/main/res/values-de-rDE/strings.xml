@@ -60,4 +60,6 @@
     <string name="search_in_radius">Suche In Einem Radius</string>
     <string name="hint_enter_new_post">Tippe um ein neues Produkt einzugeben!</string>
     <string name="company_location">Standort des Unternehmens:</string>
+    <string name="favorites">Favoriten</string>
+    <string name="my_location">Mein Standort</string>
 </resources>

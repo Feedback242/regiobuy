@@ -60,4 +60,6 @@
     <string name="search_in_radius">Search In A Radius</string>
     <string name="hint_enter_new_post">Tap to enter a new product!</string>
     <string name="company_location">Company Location:</string>
+    <string name="favorites">Favorites</string>
+    <string name="my_location">My Location</string>
 </resources>

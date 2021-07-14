@@ -1,10 +1,10 @@
 <resources>
 
-    <style name="Widget.Theme.RegioBuy.NoActionBar.ActionBar.Fullscreen" parent="Widget.AppCompat.ActionBar">
+    <style name="Widget.Theme.RegioBuy.NoActionBar.ActionBar.Fullscreen" parent="Base.Theme.AppCompat.Light.DarkActionBar">
         <item name="android:background">@color/black_overlay</item>
     </style>
 
-    <style name="Widget.Theme.RegioBuy.NoActionBar.ButtonBar.Fullscreen" parent="">
+    <style name="Widget.Theme.RegioBuy.NoActionBar.ButtonBar.Fullscreen" parent="Base.Theme.AppCompat.Light.DarkActionBar">
         <item name="android:background">@color/black_overlay</item>
         <item name="android:buttonBarStyle">?android:attr/buttonBarStyle</item>
     </style>

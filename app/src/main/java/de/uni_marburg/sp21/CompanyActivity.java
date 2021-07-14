@@ -100,7 +100,7 @@ public class CompanyActivity extends AppCompatActivity implements OnMapReadyCall
             mapViewBundle = savedInstanceState.getBundle(MAPVIEW_BUNDLE_KEY);
         }
         mapView = (MapView) findViewById(R.id.mapView);
-        mapView.onCreate(mapViewBundle);
+        mapView. onCreate(mapViewBundle);
         mapView.getMapAsync(this);
     }
 
