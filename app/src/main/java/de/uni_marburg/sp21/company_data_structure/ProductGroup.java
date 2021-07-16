@@ -5,8 +5,8 @@ import java.util.List;
 
 public class ProductGroup implements Serializable {
     private Category category;
-    private boolean rawProd;
-    private Double producer;
+    private boolean isRawProduct;
+    private double producer;
     private List<String> productTags;
     private List<Season> seasons;
 
@@ -15,7 +15,7 @@ public class ProductGroup implements Serializable {
      * @param category The Category of the ProductGroup
      * @param producer The Producer of the ProductGroup represented by a double
      */
-    public ProductGroup(Category category, Double producer) {
+    public ProductGroup(Category category, double producer) {
         this.category = category;
         this.producer = producer;
     }
@@ -23,7 +23,7 @@ public class ProductGroup implements Serializable {
     //------------------ GET / SET -------------------
 
     public void setRawProd(boolean rawProd) {
-        this.rawProd = rawProd;
+        this.isRawProduct = rawProd;
     }
 
     public void setProductTags(List<String> productTags) {

@@ -44,7 +44,7 @@ public class Company implements Serializable {
     private List<ShopType> shopTypes;
     private String owner;
     private Map<String,ArrayList<Map<String, String>>> openingHours;
-    private boolean deliveryService;
+    private boolean isDeliveryService;
     private List<Organization> organizations;
     private String openingHoursComments;
     private List<Message> messages;
@@ -53,7 +53,6 @@ public class Company implements Serializable {
     private String geoHash;
     private List<String> imagePaths;
     private boolean isFavorite;
-    private boolean newMessage;
 
     /**
      * Constructor
@@ -210,7 +209,7 @@ public class Company implements Serializable {
     }
 
     public boolean isDeliveryService() {
-        return deliveryService;
+        return isDeliveryService;
     }
 
     public String getMail() {
@@ -262,7 +261,7 @@ public class Company implements Serializable {
     }
 
     public void setDeliveryService(boolean deliveryService) {
-        this.deliveryService = deliveryService;
+        this.isDeliveryService = deliveryService;
     }
 
     public void setOrganizations(List<Organization> organizations) {

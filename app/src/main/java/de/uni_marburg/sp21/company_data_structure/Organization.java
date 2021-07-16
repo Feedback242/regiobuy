@@ -3,7 +3,7 @@ package de.uni_marburg.sp21.company_data_structure;
 import java.io.Serializable;
 
 public class Organization implements Serializable {
-    private final Double ID;
+    private final double ID;
     private String name;
     private String url;
 
@@ -13,7 +13,7 @@ public class Organization implements Serializable {
      * @param name The Name of the Organisation
      * @param url The URL (Website) of the Organisation
      */
-    public Organization(final Double ID, String name, String url) {
+    public Organization(final double ID, String name, String url) {
         this.ID = ID;
         this.name = name;
         this.url = url;
