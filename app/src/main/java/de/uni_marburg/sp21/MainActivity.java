@@ -2,25 +2,44 @@ package de.uni_marburg.sp21;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentContainerView;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.location.Location;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SearchView;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,6 +51,8 @@ import java.util.Locale;
 
 import de.uni_marburg.sp21.company_data_structure.Category;
 import de.uni_marburg.sp21.company_data_structure.Company;
+import de.uni_marburg.sp21.company_data_structure.Restriction;
+
 import de.uni_marburg.sp21.filter.FavoritesManager;
 import de.uni_marburg.sp21.company_data_structure.Message;
 import de.uni_marburg.sp21.company_data_structure.Organization;
@@ -42,12 +63,18 @@ import de.uni_marburg.sp21.filter.Filter;
 import de.uni_marburg.sp21.filter.LocationBottomSheet;
 import de.uni_marburg.sp21.filter.PickedTime;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     //Map
     ImageView mapIcon;
-    BottomSheetFilter.OnItemClickListener listener;
+    ImageView closeIcon;
+    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+    private static final float DEFAULT_ZOOM = 16;
+    private static final String TAG = MainActivity.class.getSimpleName();
     BottomSheetFilter settingsDialog;
+    FusedLocationProviderClient fusedLocationProviderClient;
+    private final LatLng defaultLocation = new LatLng(-33.8523341, 151.2106085);
+
     //Database stuff
     private FirebaseFirestore database;
     public List<Company> companies;
@@ -89,6 +116,11 @@ public class MainActivity extends AppCompatActivity {
     private ImageView shoppingList;
 
     private Context context;
+    private SupportMapFragment mapFragment;
+    private GoogleMap mMap;
+    private boolean locationPermissionGranted;
+    private Location lastKnownLocation;
+    private PlacesClient placesClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,28 +141,213 @@ public class MainActivity extends AppCompatActivity {
         buildLocationView();
         buildMessageRecyclerView();
         buildShoppingListView();
-        buildMap();buildBottomSheet();
+        buildBottomSheet();
+        buildMap();
+        mapIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mapFragment.getView().setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.INVISIBLE);
+                mapIcon.setVisibility(View.INVISIBLE);
+                closeIcon.setVisibility(View.VISIBLE);
+            }
+        });
+        closeIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mapFragment.getView().setVisibility(View.INVISIBLE);
+                recyclerView.setVisibility(View.VISIBLE);
+                mapIcon.setVisibility(View.VISIBLE);
+                closeIcon.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 
     private void buildMap() {
         mapIcon = findViewById(R.id.main_map);
+        closeIcon = findViewById(R.id.close_map);
+        // Construct a PlacesClient
+        Places.initialize(getApplicationContext(), getString(R.string.google_api_key));
+        placesClient = Places.createClient(this);
 
-        mapIcon.setOnClickListener(new View.OnClickListener() {
+        // Construct a FusedLocationProviderClient.
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.google_map);
+        mapFragment.getView().setVisibility(View.GONE);
+        assert mapFragment != null;
+        mapFragment.getMapAsync(this::onMapReady);
+    }
+
+
+
+    private void updateMarker(GoogleMap mMap) {
+        mMap.clear();
+        for (Company company : filteredCompanies) {
+            MarkerOptions marker = new MarkerOptions().icon(getIcon(company))
+                    .position(new LatLng(company.getLocation().getLatitude(), company.getLocation().getLongitude()))
+                    .title(company.getName())
+                    .draggable(false);
+            //markers.add(marker);
+            mMap.addMarker(marker);
+
+        }
+
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.getUiSettings().setMyLocationButtonEnabled(true);
+        // Add a marker in Sydney and move the camera
+        for (Company company : filteredCompanies) {
+            MarkerOptions marker = new MarkerOptions().icon(getIcon(company))
+                    .position(new LatLng(company.getLocation().getLatitude(), company.getLocation().getLongitude()))
+                    .title(company.getName())
+                    .draggable(false);
+           // markers.add(marker);
+            mMap.addMarker(marker);
+
+        }
+        mMap.setOnInfoWindowLongClickListener(new GoogleMap.OnInfoWindowLongClickListener() {
             @Override
-            public void onClick(View v) {
-                MapsActivity.setCompanyList(filteredCompanies);
-                MapsActivity.setBottomSheetFilter(settingsDialog);
-                MapsActivity.setPickedTime(pickedTime);
-                Intent intent = new Intent( context, MapsActivity.class);
-                MapsActivity.setCategories(categories);
-                MapsActivity.setOrganisations(organisations);
-                MapsActivity.setTypes(types);
-                intent.putExtra("isOpen",isOpen);
-                intent.putExtra("isDelivery",isDelivery);
-                MapsActivity.setRestrictions( restrictions);
+            public void onInfoWindowLongClick(@NonNull Marker marker) {
+                final Company[] selectedCompany = new Company[1];
+                Intent intent = new Intent(MainActivity.this, CompanyActivity.class);
+                filteredCompanies.iterator().forEachRemaining(x -> {
+                    if (x.getName().equals(marker.getTitle()))
+                        selectedCompany[0] = x;
+
+                });
+                Company.save(selectedCompany[0]);
+
                 startActivity(intent);
             }
         });
+
+        // Turn on the My Location layer and the related control on the map.
+        updateLocationUI();
+
+        // Get the current location of the device and set the position of the map.
+        getDeviceLocation();
+
+
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(filteredCompanies.get(0).getLocation().getLatitude() , filteredCompanies.get(0).getLocation().getLongitude()), 10f));
+    }
+
+
+
+    private void updateLocationUI() {
+        try {
+            if (locationPermissionGranted) {
+                mMap.setMyLocationEnabled(true);
+                mMap.getUiSettings().setMyLocationButtonEnabled(true);
+            } else {
+                mMap.setMyLocationEnabled(false);
+                mMap.getUiSettings().setMyLocationButtonEnabled(false);
+                lastKnownLocation = null;
+                getLocationPermission();
+            }
+        } catch (SecurityException e)  {
+            Log.e("Exception: %s", e.getMessage());
+        }
+    }
+
+    private void getDeviceLocation() {
+        /*
+         * Get the best and most recent location of the device, which may be null in rare
+         * cases when a location is not available.
+         */
+
+        try {
+            if (locationPermissionGranted) {
+                Task<Location> locationResult = fusedLocationProviderClient.getLastLocation();
+                locationResult.addOnCompleteListener(MainActivity.this, new OnCompleteListener<Location>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Location> task) {
+                        if (task.isSuccessful()) {
+                            // Set the map's camera position to the current location of the device.
+                            lastKnownLocation = task.getResult();
+                            if (lastKnownLocation != null) {
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                        new LatLng(lastKnownLocation.getLatitude(),
+                                                lastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                            }
+                        } else {
+                            Log.d(TAG, "Current location is null. Using defaults.");
+                            Log.e(TAG, "Exception: %s", task.getException());
+                            mMap.moveCamera(CameraUpdateFactory
+                                    .newLatLngZoom(defaultLocation, DEFAULT_ZOOM));
+                            mMap.getUiSettings().setMyLocationButtonEnabled(false);
+                        }
+                    }
+                });
+            }
+        } catch (SecurityException e)  {
+            Log.e("Exception: %s", e.getMessage(), e);
+        }
+    }
+
+    private void getLocationPermission() {
+        /*
+         * Request location permission, so that we can get the location of the
+         * device. The result of the permission request is handled by a callback,
+         * onRequestPermissionsResult.
+         */
+        if (ContextCompat.checkSelfPermission(MainActivity.this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            locationPermissionGranted = true;
+        } else {
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull  String[] permissions, @NonNull int[] grantResults) {
+        locationPermissionGranted = false;
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    locationPermissionGranted = true;
+                }
+            }
+        }
+        updateLocationUI();
+    }
+
+    private BitmapDescriptor getIcon(Company company) {
+        BitmapDescriptor marker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+        for(ShopType shopType : company.getTypes()){
+            switch (shopType){
+                case MART:
+                    marker =  BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE);
+                    break;
+                case SHOP:
+                    marker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
+                    break;
+                case HOTEL:
+                    marker =BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
+                    break;
+                case PRODUCER:
+                    marker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
+                    break;
+                case RESTAURANT:
+                    marker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA);
+                    break;
+            }
+        }
+        if (company.isFavorite())
+            marker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
+        return marker;
     }
 
     private void buildBottomSheet(){
@@ -142,60 +359,70 @@ public class MainActivity extends AppCompatActivity {
             public void onOrganisationClick(int position, boolean isChecked) {
                 organisations[position].check(isChecked);
                 filterAndUpdateRecyclerview();
+                updateMarker(mMap);
             }
 
             @Override
             public void onTypeClick(int position, boolean isChecked) {
                 types[position].check(isChecked);
                 filterAndUpdateRecyclerview();
+                updateMarker(mMap);
             }
 
             @Override
             public void onCategoryClick(int position, boolean isChecked) {
                 categories[position].check(isChecked);
                 filterAndUpdateRecyclerview();
+                updateMarker(mMap);
             }
 
             @Override
             public void onRestrictionClick(int position, boolean isChecked) {
                 restrictions[position].check(isChecked);
                 filterAndUpdateRecyclerview();
+                updateMarker(mMap);
             }
 
             @Override
             public void onTimeStartChanged(String time) {
                 pickedTime.setStartTime(TimeConverter.convertToDate(time));
                 filterAndUpdateRecyclerview();
+                updateMarker(mMap);
             }
 
             @Override
             public void onTimeEndChanged(String time) {
                 pickedTime.setEndTime(TimeConverter.convertToDate(time));
                 filterAndUpdateRecyclerview();
+                updateMarker(mMap);
             }
 
             @Override
             public void onTimeDateChanged(String weekday) {
                 pickedTime.setWeekday(weekday);
                 filterAndUpdateRecyclerview();
+                updateMarker(mMap);
             }
 
             @Override
             public void onDeliveryClick(boolean isD) {
                 isDelivery = isD;
                 filterAndUpdateRecyclerview();
+                updateMarker(mMap);
             }
 
             @Override
             public void onOpenedClick(boolean isO) {
                 isOpen = isO;
                 filterAndUpdateRecyclerview();
+                updateMarker(mMap);
             }
 
             @Override
             public void onResetTimePickerClick() {
                 resetTimePicker();
                 filterAndUpdateRecyclerview();
+                updateMarker(mMap);
             }
         });
     }
@@ -292,7 +519,6 @@ public class MainActivity extends AppCompatActivity {
         filteredCompanies.clear();
         filteredCompanies.addAll(Filter.filter(searchView.getQuery().toString(), companies, types, organisations, categories, restrictions, isDelivery, isOpen, pickedTime));
         sortFilteredCompanies();
-       MapsActivity.setCompanyList(filteredCompanies);
         adapter.notifyDataSetChanged();
     }
 
@@ -356,10 +582,7 @@ public class MainActivity extends AppCompatActivity {
         categories = Category.createCheckItemArray();
         types = ShopType.createCheckItemArray();
         organisations = getOrganisations();
-        restrictions = new CheckItem[]{new CheckItem(getResources().getString(R.string.name_company)), new CheckItem(getResources().getString(R.string.name_owner)), new CheckItem(getResources().getString(R.string.shop_types_without_colon)),
-                new CheckItem(getResources().getString(R.string.address)), new CheckItem(getResources().getString(R.string.description_company)), new CheckItem(getResources().getString(R.string.description_products)),
-                new CheckItem(getResources().getString(R.string.product_tags)), new CheckItem(getResources().getString(R.string.opening_hours_comment)), new CheckItem(getResources().getString(R.string.name_organisation)),
-                new CheckItem(getResources().getString(R.string.messages_company))};
+        restrictions = Restriction.createCheckItemArray();
         resetTimePicker();
     }
 
@@ -398,6 +621,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 filterAndUpdateRecyclerview();
+                updateMarker(mMap);
                 return false;
             }
         });
@@ -446,4 +670,6 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         filterAndUpdateRecyclerview();
     }
+
+
 }
