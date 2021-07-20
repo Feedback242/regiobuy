@@ -20,13 +20,13 @@ public enum Restriction {
 
 
     /**
-     * Creates a Array of CheckItems from all Categories
-     * @return Array of CheckItems that represent all Categories
+     * Creates a Array of CheckItems from all Restrictions
+     * @return Array of CheckItems that represent all Restrictions
      */
     public static CheckItem[] createCheckItemArray(){
-        CheckItem[] checkItem = new CheckItem[Category.values().length];
+        CheckItem[] checkItem = new CheckItem[Restriction.values().length];
         for (int i = 0; i < checkItem.length; i++){
-            checkItem[i] = new CheckItem(Category.values()[i].toString());
+            checkItem[i] = new CheckItem(Restriction.values()[i].toString());
         }
         return checkItem;
     }
