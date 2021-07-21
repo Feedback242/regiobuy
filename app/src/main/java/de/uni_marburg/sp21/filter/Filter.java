@@ -12,6 +12,7 @@ import java.util.Map;
 import de.uni_marburg.sp21.TimeConverter;
 import de.uni_marburg.sp21.company_data_structure.Category;
 import de.uni_marburg.sp21.company_data_structure.Company;
+import de.uni_marburg.sp21.company_data_structure.Location;
 import de.uni_marburg.sp21.company_data_structure.Message;
 import de.uni_marburg.sp21.company_data_structure.Organization;
 import de.uni_marburg.sp21.company_data_structure.ProductGroup;
@@ -31,7 +32,47 @@ public class Filter {
      * @param isOpen true if is open field has been clicked.
      * @param pickedTime The time interval and weekday that has been picked by the TimePicker
      */
-    public static List<Company> filter(String searchString, List<Company> companies, CheckItem[] types, CheckItem[] organisations, CheckItem[] categories, CheckItem[] restrictions, boolean isDelivery, boolean isOpen, PickedTime pickedTime) {
+    public static List<Company> filter(String searchString, List<Company> companies, CheckItem[] types, CheckItem[] organisations, CheckItem[] categories, CheckItem[] restrictions, boolean isDelivery, boolean isOpen, PickedTime pickedTime, double radius) {
+        //the search is not case sensitive
+        searchString = searchString.toLowerCase();
+
+        //HashSets doesn't insert duplicates
+        HashSet<Company> filterCompaniesSet = new HashSet<>();
+
+        //multiple search
+        String[] searchTherms = searchString.split("/");
+        for (Company company : companies) {
+            // is true when searchString = term1 && term2 && term3 ... = true
+            boolean isFulfillingAllTherms = true;
+            for (String searchTherm : searchTherms) {
+                String[] therm = searchTherm.split("/");
+                // is true when Therm = keyword1 || keyword2 || keyword3 ... = true
+                boolean isFulFillingTherm = false;
+                for (String keyWord : therm) {
+                    if (isCompanyFulfillingAllFilters(company, types, organisations, categories, isDelivery, isOpen, pickedTime)) {
+                        //search in that company
+                        if (isDefaultSearch(restrictions)) {
+                            //default search (only company name and city)
+                            isFulFillingTherm = isFulFillingTherm || defaultSearch(keyWord, company);
+                        } else {
+                            //restrictions (search in all restrictions)
+                            isFulFillingTherm = isFulFillingTherm || searchWithRestrictions(keyWord, restrictions, company);
+                        }
+                    }
+                }
+                isFulfillingAllTherms = isFulfillingAllTherms && isFulFillingTherm;
+            }
+            if(isFulfillingAllTherms){
+                filterCompaniesSet.add(company);
+            }
+        }
+        List<Company> filteredCompanies = new ArrayList<>();
+        filteredCompanies.addAll(filterCompaniesSet);
+        filteredCompanies = searchRadius(filteredCompanies, radius);
+        return filteredCompanies;
+    }
+
+    public static List<Company> filterAndProximity(String searchString, List<Company> companies, CheckItem[] types, CheckItem[] organisations, CheckItem[] categories, CheckItem[] restrictions, boolean isDelivery, boolean isOpen, PickedTime pickedTime, double radius) {
         //the search is not case sensitive
         searchString = searchString.toLowerCase();
 
@@ -352,6 +393,48 @@ public class Filter {
             return true;
         }
         return false;
+    }
+
+    //Filters Companies by radius from user
+    private static List<Company> searchRadius(List<Company> input, double radius){
+
+        if (radius == 0) return input;
+
+        Location userLocation = new Location(50.754497,8.49947293); //TODO: implement correct user location
+
+        List<Company> in = input;
+        List<Company> out = new ArrayList<Company>();
+
+        for(int i = 0; i < in.size(); i++){
+            if (coordinateDistance(in.get(i).getLocation(), userLocation) < (radius * 10)){
+                out.add(in.get(i));
+            }
+        }
+
+        return out;
+
+    }
+
+    //calculate distance between two locations
+    private static double coordinateDistance(Location location1, Location location2) {
+
+        double lat1 = location1.getLatitude();
+        double lat2 = location2.getLatitude();
+        double long1 = location1.getLongitude();
+        double long2 = location2.getLongitude();
+
+        final int R = 6371; // Radius of the earth
+
+        double lastDistance = Math.toRadians(lat2 - lat1);
+        double longDistance = Math.toRadians(long2 - long1);
+        double a = Math.sin(Math.toRadians(lat2 - lat1) / 2) * Math.sin(Math.toRadians(lat2 - lat1) / 2)
+                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                * Math.sin(Math.toRadians(long2 - long1) / 2) * Math.sin(Math.toRadians(long2 - long1) / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double distance = R * c * 1000;
+
+        return Math.sqrt(distance);
+
     }
 
 }
