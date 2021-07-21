@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapIcon = findViewById(R.id.main_map);
         closeIcon = findViewById(R.id.close_map);
         // Construct a PlacesClient
-        Places.initialize(getApplicationContext(), getString(R.string.google_api_key));
+        Places.initialize(getApplicationContext(), getString(R.string.google_maps_key));
         placesClient = Places.createClient(this);
 
         // Construct a FusedLocationProviderClient.
@@ -235,7 +235,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         getDeviceLocation();
 
 
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(filteredCompanies.get(0).getLocation().getLatitude() , filteredCompanies.get(0).getLocation().getLongitude()), 10f));
+        if(!filteredCompanies.isEmpty()){
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(filteredCompanies.get(0).getLocation().getLatitude() , filteredCompanies.get(0).getLocation().getLongitude()), 10f));
+        }
     }
 
 
@@ -543,12 +545,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         if(c.isFavorite()){
                             companies.add(c);
                             filterAndUpdateRecyclerview();
+                            updateMarker(mMap);
                         }
                     }
                 }else {
                     favoriteButton.setImageResource(R.drawable.ic_baseline_star_border_24);
                     companies.addAll(defaultCompany);
                     filterAndUpdateRecyclerview();
+                    updateMarker(mMap);
                 }
             }
         });
