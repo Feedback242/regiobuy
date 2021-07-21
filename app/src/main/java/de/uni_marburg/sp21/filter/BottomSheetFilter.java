@@ -22,7 +22,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import de.uni_marburg.sp21.MyApplication;
+
+import de.uni_marburg.sp21.FilterAdapter;
 import de.uni_marburg.sp21.R;
 
 public class BottomSheetFilter extends BottomSheetDialogFragment {

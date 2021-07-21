@@ -1,13 +1,11 @@
 package de.uni_marburg.sp21;
 
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,10 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.uni_marburg.sp21.company_data_structure.Category;
-import de.uni_marburg.sp21.company_data_structure.Company;
-import de.uni_marburg.sp21.company_data_structure.ProductGroup;
 import de.uni_marburg.sp21.filter.CheckItem;
-import de.uni_marburg.sp21.filter.FilterAdapter;
 
 public class BottomSheetShoppingList extends BottomSheetDialogFragment {
 

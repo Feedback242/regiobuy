@@ -1,4 +1,4 @@
-package de.uni_marburg.sp21.filter;
+package de.uni_marburg.sp21;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import de.uni_marburg.sp21.R;
+import de.uni_marburg.sp21.filter.CheckItem;
 
 public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder> {
 

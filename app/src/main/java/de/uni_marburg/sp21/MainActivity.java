@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private boolean isDelivery;
     private PickedTime pickedTime;
     private boolean favoriteIsClicked;
-    private int radius;
+    private double radius;
 
     //Favorites
     private FavoritesManager favoritesManager;
@@ -567,9 +567,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 locationBottomSheet.show(getSupportFragmentManager(), "SETTINGS_SHEET");
                 locationBottomSheet.setLocationSettingsListener(new LocationBottomSheet.LocationSettingsListener() {
                     @Override
-                    public void onLocationChange(int rad) {
+                    public void onLocationChange(double rad) {
                         radius = rad;
                         filterAndUpdateRecyclerview();
+                        updateMarker(mMap);
                     }
                 });
             }
