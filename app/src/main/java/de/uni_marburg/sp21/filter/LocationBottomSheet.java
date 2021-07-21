@@ -20,6 +20,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -29,12 +31,12 @@ import de.uni_marburg.sp21.R;
 public class LocationBottomSheet extends BottomSheetDialogFragment {
 
     private View itemView;
-    private int radius;
+    private double radius;
     private LocationSettingsListener listener;
     private SeekBar seekBar;
     private TextView radiusTextView;
 
-    public LocationBottomSheet(int radius){
+    public LocationBottomSheet(double radius){
         this.radius = radius;
     }
     @Override
@@ -60,10 +62,10 @@ public class LocationBottomSheet extends BottomSheetDialogFragment {
         seekBar = itemView.findViewById(R.id.seekBar);
         radiusTextView = itemView.findViewById(R.id.radius);
 
-        if(radius == 0){
+        if(radius == 0d){
             radiusTextView.setText(R.string.without_radius);
         } else {
-            radiusTextView.setText(radius + "km");
+            radiusTextView.setText(new DecimalFormat("##").format(radius)+ "km");
         }
 
         seekBar.setProgress(radiusToPercent(radius));
@@ -71,10 +73,10 @@ public class LocationBottomSheet extends BottomSheetDialogFragment {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 radius = percentToRadius(progress);
-                if(radius == 0){
+                if(radius == 0d){
                     radiusTextView.setText(R.string.without_radius);
                 } else {
-                    radiusTextView.setText(radius + "km");
+                    radiusTextView.setText(new DecimalFormat("##").format(radius)+ "km");
                 }
                 if(listener != null){
                     listener.onLocationChange(radius);
@@ -93,14 +95,20 @@ public class LocationBottomSheet extends BottomSheetDialogFragment {
         });
     }
 
-    private int percentToRadius(int progress){
+    private double percentToRadius(int progress){
         // progress is in the interval [0,100] -> max = 500, min = 0, f(x)=x^2/20
-        return (int) ((float) Math.pow(progress, 2) / 20f);
+        double temp = Math.pow(progress, 2d) / 150d;
+        if(temp == 0 || temp >= 1){
+            return temp;
+        }
+        else {
+            return 1;
+        }
     }
 
-    private int radiusToPercent(int radius){
+    private int radiusToPercent(double radius){
         if(radius >= 0){
-            return (int) (Math.sqrt(radius) * Math.sqrt(20));
+            return (int) (Math.sqrt(radius) * Math.sqrt(150));
         }
         return 0;
     }
@@ -117,6 +125,6 @@ public class LocationBottomSheet extends BottomSheetDialogFragment {
      * This interface is for passing values to the MainActivity
      */
     public interface LocationSettingsListener{
-        void onLocationChange(int radius);
+        void onLocationChange(double radius);
     }
 }

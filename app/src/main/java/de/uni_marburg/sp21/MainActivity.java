@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     ImageView mapIcon;
     ImageView closeIcon;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-    private static final float DEFAULT_ZOOM = 16;
+    private static final float DEFAULT_ZOOM = 10;
     private static final String TAG = MainActivity.class.getSimpleName();
     BottomSheetFilter settingsDialog;
     FusedLocationProviderClient fusedLocationProviderClient;
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private RecyclerView recyclerView;
 
     //PushMessages
-    private final Date MESSAGES_DATE = new Date(2020 - 1900, 5, 25, 16, 18, 45);
+    private final Date MESSAGES_DATE = new Date(2020 - 1900,5,25,16,18,45);
     private List<Message> messages = new ArrayList<>();
     private MessageAdapter messageAdapter;
     private RecyclerView messageRecyclerView;
@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private boolean isDelivery;
     private PickedTime pickedTime;
     private boolean favoriteIsClicked;
-    private int radius;
+    private double radius;
 
     //Favorites
     private FavoritesManager favoritesManager;
@@ -233,6 +233,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
+
 
         if(!filteredCompanies.isEmpty()){
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(filteredCompanies.get(0).getLocation().getLatitude() , filteredCompanies.get(0).getLocation().getLongitude()), 10f));
@@ -518,7 +519,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void filterAndUpdateRecyclerview(){
         filteredCompanies.clear();
-        filteredCompanies.addAll(Filter.filter(searchView.getQuery().toString(), companies, types, organisations, categories, restrictions, isDelivery, isOpen, pickedTime, radius));
+        de.uni_marburg.sp21.company_data_structure.Location loc;
+        if(lastKnownLocation != null){
+            loc = new de.uni_marburg.sp21.company_data_structure.Location(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+        }
+        else {
+            loc = null;
+        }
+        filteredCompanies.addAll(Filter.filter(searchView.getQuery().toString(), companies, types, organisations, categories, restrictions, isDelivery, isOpen, pickedTime, radius, loc));
         sortFilteredCompanies();
         adapter.notifyDataSetChanged();
     }
@@ -566,9 +574,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 locationBottomSheet.show(getSupportFragmentManager(), "SETTINGS_SHEET");
                 locationBottomSheet.setLocationSettingsListener(new LocationBottomSheet.LocationSettingsListener() {
                     @Override
-                    public void onLocationChange(int rad) {
+                    public void onLocationChange(double rad) {
                         radius = rad;
                         filterAndUpdateRecyclerview();
+                        updateMarker(mMap);
                     }
                 });
             }

@@ -39,6 +39,7 @@ import java.util.Map;
 import de.uni_marburg.sp21.company_data_structure.Address;
 import de.uni_marburg.sp21.company_data_structure.Category;
 import de.uni_marburg.sp21.company_data_structure.Company;
+import de.uni_marburg.sp21.company_data_structure.Location;
 import de.uni_marburg.sp21.company_data_structure.Message;
 import de.uni_marburg.sp21.company_data_structure.Organization;
 import de.uni_marburg.sp21.company_data_structure.ProductGroup;
@@ -73,7 +74,9 @@ public class FilterTest {
     CheckItem[] type;
     CheckItem[] organizations;
     CheckItem[] restrictions;
-     CheckItem[] categories;
+    CheckItem[] categories;
+    Location defaultLocation;
+    double defaultRadius = 500;
 
     @Mock
     Context mMockContext;
@@ -91,6 +94,8 @@ public class FilterTest {
         categories = Category.createCheckItemArray();
         organizations = new CheckItem[]{new CheckItem("Blue Organization")};
         restrictions = Restriction.createCheckItemArray();
+        defaultLocation = new Location(20,20);
+
 
 
 
@@ -143,6 +148,7 @@ public class FilterTest {
         company1.setProductsDescription("Its a test description");
         company1.setDescription("Its an another test description ");
         company1.setOpeningHoursComments("Its a test for opening hours comment");
+        company1.setLocation(defaultLocation);
 
 
         List<String> types = new ArrayList<>();
@@ -220,10 +226,10 @@ public class FilterTest {
     }
     @Test
     public void searchFilterTest(){
-        List<Company> searchFilter = Filter.filter("Rosen", companies, type, organizations, categories, restrictions, false, false,  new PickedTime());
+        List<Company> searchFilter = Filter.filter("Rosen", companies, type, organizations, categories, restrictions, false, false,  new PickedTime(), defaultRadius, defaultLocation);
         assertEquals(companies,searchFilter);
 
-        List<Company> multipleSearchFilter = Filter.filter("Rosen/marburg", companies, type, organizations, categories, restrictions, false, false,  new PickedTime());
+        List<Company> multipleSearchFilter = Filter.filter("Rosen\"marburg", companies, type, organizations, categories, restrictions, false, false,  new PickedTime(), defaultRadius, defaultLocation);
         assertEquals(companies,multipleSearchFilter);
     }
     @Test
@@ -231,62 +237,62 @@ public class FilterTest {
         List<Company> emptyList = new ArrayList<>();
 
         categories[0].check(true);
-        List<Company> categoryFilter1 = Filter.filter("", companies, type, organizations, categories, restrictions, false, false, new PickedTime());
+        List<Company> categoryFilter1 = Filter.filter("", companies, type, organizations, categories, restrictions, false, false, new PickedTime(), defaultRadius, defaultLocation);
         assertEquals(emptyList, categoryFilter1);
         categories[0].check(false);
 
         categories[1].check(true);
-        List<Company> categoryFilter2 = Filter.filter("", companies, type, organizations, categories, restrictions, false, false, new PickedTime());
+        List<Company> categoryFilter2 = Filter.filter("", companies, type, organizations, categories, restrictions, false, false, new PickedTime(), defaultRadius, defaultLocation);
         assertEquals(emptyList, categoryFilter2);
         categories[1].check(false);
 
         categories[2].check(true);
-        List<Company> categoryFilter3 = Filter.filter("", companies, type, organizations, categories, restrictions, false, false, new PickedTime());
+        List<Company> categoryFilter3 = Filter.filter("", companies, type, organizations, categories, restrictions, false, false, new PickedTime(), defaultRadius, defaultLocation);
         assertEquals(companies, categoryFilter3);
         categories[2].check(false);
 
         categories[3].check(true);
-        List<Company> categoryFilter4 = Filter.filter("", companies, type, organizations, categories, restrictions, false, false, new PickedTime());
+        List<Company> categoryFilter4 = Filter.filter("", companies, type, organizations, categories, restrictions, false, false, new PickedTime(), defaultRadius, defaultLocation);
         assertEquals(emptyList, categoryFilter4);
         categories[3].check(false);
 
         categories[4].check(true);
-        List<Company> categoryFilter5 = Filter.filter("", companies, type, organizations, categories, restrictions, false, false, new PickedTime());
+        List<Company> categoryFilter5 = Filter.filter("", companies, type, organizations, categories, restrictions, false, false, new PickedTime(), defaultRadius, defaultLocation);
         assertEquals(emptyList, categoryFilter5);
         categories[4].check(false);
 
         categories[5].check(true);
-        List<Company> categoryFilter6 = Filter.filter("", companies, type, organizations, categories, restrictions, false, false, new PickedTime());
+        List<Company> categoryFilter6 = Filter.filter("", companies, type, organizations, categories, restrictions, false, false, new PickedTime(), defaultRadius, defaultLocation);
         assertEquals(emptyList, categoryFilter6);
         categories[5].check(false);
 
         categories[6].check(true);
-        List<Company> categoryFilter7 = Filter.filter("", companies, type, organizations, categories, restrictions, false, false, new PickedTime());
+        List<Company> categoryFilter7 = Filter.filter("", companies, type, organizations, categories, restrictions, false, false, new PickedTime(), defaultRadius, defaultLocation);
         assertEquals(emptyList, categoryFilter7);
         categories[6].check(false);
 
         categories[7].check(true);
-        List<Company> categoryFilter8 = Filter.filter("", companies, type, organizations, categories, restrictions, false, false, new PickedTime());
+        List<Company> categoryFilter8 = Filter.filter("", companies, type, organizations, categories, restrictions, false, false, new PickedTime(), defaultRadius, defaultLocation);
         assertEquals(emptyList, categoryFilter8);
         categories[7].check(false);
 
         categories[8].check(true);
-        List<Company> categoryFilter9 = Filter.filter("", companies, type, organizations, categories, restrictions, false, false, new PickedTime());
+        List<Company> categoryFilter9 = Filter.filter("", companies, type, organizations, categories, restrictions, false, false, new PickedTime(), defaultRadius, defaultLocation);
         assertEquals(emptyList, categoryFilter9);
         categories[8].check(false);
 
         categories[9].check(true);
-        List<Company> categoryFilter10 = Filter.filter("", companies, type, organizations, categories, restrictions, false, false, new PickedTime());
+        List<Company> categoryFilter10 = Filter.filter("", companies, type, organizations, categories, restrictions, false, false, new PickedTime(), defaultRadius, defaultLocation);
         assertEquals(emptyList, categoryFilter10);
         categories[9].check(false);
 
         categories[10].check(true);
-        List<Company> categoryFilter11 = Filter.filter("", companies, type, organizations, categories, restrictions, false, false, new PickedTime());
+        List<Company> categoryFilter11 = Filter.filter("", companies, type, organizations, categories, restrictions, false, false, new PickedTime(), defaultRadius, defaultLocation);
         assertEquals(emptyList, categoryFilter11);
         categories[10].check(false);
 
         categories[11].check(true);
-        List<Company> categoryFilter12 = Filter.filter("", companies, type, organizations, categories, restrictions, false, false, new PickedTime());
+        List<Company> categoryFilter12 = Filter.filter("", companies, type, organizations, categories, restrictions, false, false, new PickedTime(), defaultRadius, defaultLocation);
         assertEquals(emptyList, categoryFilter12);
         categories[11].check(false);
     }
@@ -295,34 +301,34 @@ public class FilterTest {
         List<Company> emptyList = new ArrayList<Company>();
 
         type[2].check(true);
-        List<Company> typeFilter1 = Filter.filter("", companies, type, organizations, categories, restrictions, false, false,  new PickedTime());
+        List<Company> typeFilter1 = Filter.filter("", companies, type, organizations, categories, restrictions, false, false,  new PickedTime(), defaultRadius, defaultLocation);
         //assertEquals(companies, typeFilter1);
         type[2].check(false);
 
         type[0].check(true);
-        List<Company> typeFilter2 = Filter.filter("", companies, type, organizations, categories, restrictions, false, false,  new PickedTime());
+        List<Company> typeFilter2 = Filter.filter("", companies, type, organizations, categories, restrictions, false, false,  new PickedTime(), defaultRadius, defaultLocation);
         assertEquals(emptyList, typeFilter2);
         type[0].check(false);
 
         type[1].check(true);
-        List<Company> typeFilter3 = Filter.filter("", companies, type, organizations, categories, restrictions, false, false,  new PickedTime());
+        List<Company> typeFilter3 = Filter.filter("", companies, type, organizations, categories, restrictions, false, false,  new PickedTime(), defaultRadius, defaultLocation);
         //assertEquals(emptyList, typeFilter3);
         type[1].check(false);
 
         type[3].check(true);
-        List<Company> typeFilter4 = Filter.filter("", companies, type, organizations, categories, restrictions, false, false,  new PickedTime());
+        List<Company> typeFilter4 = Filter.filter("", companies, type, organizations, categories, restrictions, false, false,  new PickedTime(), defaultRadius, defaultLocation);
         //assertEquals(companies, typeFilter4);
         type[3].check(false);
 
         type[4].check(true);
-        List<Company> typeFilter5 = Filter.filter("", companies, type, organizations, categories, restrictions, false, false,  new PickedTime());
+        List<Company> typeFilter5 = Filter.filter("", companies, type, organizations, categories, restrictions, false, false,  new PickedTime(), defaultRadius, defaultLocation);
         assertEquals(emptyList, typeFilter5);
         type[4].check(false);
     }
     @Test
     public void organizationsFilterTest(){
         organizations[0].check(true);
-        List<Company> organizationFilter = Filter.filter("", companies, type, organizations, categories, restrictions, false, false, new PickedTime());
+        List<Company> organizationFilter = Filter.filter("", companies, type, organizations, categories, restrictions, false, false, new PickedTime(), defaultRadius, defaultLocation);
         assertEquals(companies, organizationFilter);
         organizations[0].check(false);
     }
@@ -330,52 +336,52 @@ public class FilterTest {
     @Test
     public void restrictionsFilterTest(){
         restrictions[1].check(true);
-        List<Company> restrictionFilter1 = Filter.filter("Baronin", companies, type, organizations, categories, restrictions, false, false, new PickedTime());
+        List<Company> restrictionFilter1 = Filter.filter("Baronin", companies, type, organizations, categories, restrictions, false, false, new PickedTime(), defaultRadius, defaultLocation);
         assertEquals(companies, restrictionFilter1);
         restrictions[1].check(false);
 
         restrictions[0].check(true);
-        List<Company> restrictionFilter2 = Filter.filter("Rosen", companies, type, organizations, categories, restrictions, false, false, new PickedTime());
+        List<Company> restrictionFilter2 = Filter.filter("Rosen", companies, type, organizations, categories, restrictions, false, false, new PickedTime(), defaultRadius, defaultLocation);
         assertEquals(companies, restrictionFilter2);
         restrictions[0].check(false);
 
         restrictions[2].check(true);
-        List<Company> restrictionFilter3 = Filter.filter("Hotel", companies, type, organizations, categories, restrictions, false, false, new PickedTime());
+        List<Company> restrictionFilter3 = Filter.filter("Hotel", companies, type, organizations, categories, restrictions, false, false, new PickedTime(), defaultRadius, defaultLocation);
         assertEquals(companies, restrictionFilter3);
         restrictions[2].check(false);
 
         restrictions[3].check(true);
-        List<Company> restrictionFilter4 = Filter.filter("Marburg", companies, type, organizations, categories, restrictions, false, false, new PickedTime());
+        List<Company> restrictionFilter4 = Filter.filter("Marburg", companies, type, organizations, categories, restrictions, false, false, new PickedTime(), defaultRadius, defaultLocation);
         assertEquals(companies, restrictionFilter4);
         restrictions[3].check(false);
 
         restrictions[4].check(true);
-        List<Company> restrictionFilter5 = Filter.filter("Its an another test description", companies, type, organizations, categories, restrictions, false, false, new PickedTime());
+        List<Company> restrictionFilter5 = Filter.filter("Its an another test description", companies, type, organizations, categories, restrictions, false, false, new PickedTime(), defaultRadius, defaultLocation);
         assertEquals(companies, restrictionFilter5);
         restrictions[4].check(false);
 
         restrictions[5].check(true);
-        List<Company> restrictionFilter6 = Filter.filter("Its a test description", companies, type, organizations, categories, restrictions, false, false, new PickedTime());
+        List<Company> restrictionFilter6 = Filter.filter("Its a test description", companies, type, organizations, categories, restrictions, false, false, new PickedTime(), defaultRadius, defaultLocation);
         assertEquals(companies, restrictionFilter6);
         restrictions[5].check(false);
 
         restrictions[6].check(true);
-        List<Company> restrictionFilter7 = Filter.filter(Category.MEAT.toString(), companies, type, organizations, categories, restrictions, false, false, new PickedTime());
+        List<Company> restrictionFilter7 = Filter.filter(Category.MEAT.toString(), companies, type, organizations, categories, restrictions, false, false, new PickedTime(), defaultRadius, defaultLocation);
         assertEquals(companies, restrictionFilter7);
         restrictions[6].check(false);
 
         restrictions[7].check(true);
-        List<Company> restrictionFilter8 = Filter.filter("Its a test for opening hours comment", companies, type, organizations, categories, restrictions, false, false, new PickedTime());
+        List<Company> restrictionFilter8 = Filter.filter("Its a test for opening hours comment", companies, type, organizations, categories, restrictions, false, false, new PickedTime(), defaultRadius, defaultLocation);
         assertEquals(companies, restrictionFilter8);
         restrictions[7].check(false);
 
         restrictions[8].check(true);
-        List<Company> restrictionFilter9 = Filter.filter("Blue Organization", companies, type, organizations, categories, restrictions, false, false, new PickedTime());
+        List<Company> restrictionFilter9 = Filter.filter("Blue Organization", companies, type, organizations, categories, restrictions, false, false, new PickedTime(), defaultRadius, defaultLocation);
         assertEquals(companies, restrictionFilter9);
         restrictions[8].check(false);
 
         restrictions[9].check(true);
-        List<Company> restrictionFilter10 = Filter.filter("Its good", companies, type, organizations, categories, restrictions, false, false, new PickedTime());
+        List<Company> restrictionFilter10 = Filter.filter("Its good", companies, type, organizations, categories, restrictions, false, false, new PickedTime(), defaultRadius, defaultLocation);
         assertEquals(companies, restrictionFilter10);
         restrictions[9].check(false);
     }
@@ -386,13 +392,13 @@ public class FilterTest {
 
         pickedTime.setStartTime(TimeConverter.convertToDate("10:05"));
         pickedTime.setEndTime(TimeConverter.convertToDate("11:00"));
-        List<Company> isOpn = Filter.filter("", companies, type, organizations, categories, restrictions, false, true, pickedTime);
+        List<Company> isOpn = Filter.filter("", companies, type, organizations, categories, restrictions, false, true, pickedTime, defaultRadius, defaultLocation);
         assertEquals(companies, isOpn);
     }
 
      @Test
     public void isDeliveryFilterTest(){
-         List<Company> isDelivery = Filter.filter("", companies, type, organizations, categories, restrictions, true, false, new PickedTime());
+         List<Company> isDelivery = Filter.filter("", companies, type, organizations, categories, restrictions, true, false, new PickedTime(), defaultRadius, defaultLocation);
          List<Company> empty = new ArrayList<>();
          assertEquals(empty, isDelivery);
     }
@@ -402,7 +408,7 @@ public class FilterTest {
         testTime.setWeekday("monday");
         testTime.setStartTime(TimeConverter.convertToDate("10:00"));
         testTime.setEndTime(TimeConverter.convertToDate("11:00"));
-        List<Company> timeFilter = Filter.filter("", companies, type, organizations, categories, restrictions, false, false, testTime);
+        List<Company> timeFilter = Filter.filter("", companies, type, organizations, categories, restrictions, false, false, testTime, defaultRadius, defaultLocation);
         assertEquals(companies, timeFilter);
 
         PickedTime testTime2 = new PickedTime();
@@ -410,7 +416,7 @@ public class FilterTest {
         testTime2.setStartTime(TimeConverter.convertToDate("10:00"));
         testTime2.setEndTime(TimeConverter.convertToDate("14:00"));
         List<Company> empty = new ArrayList<>();
-        List<Company> timeFilter2 = Filter.filter("", companies, type, organizations, categories, restrictions, false, false,testTime2);
+        List<Company> timeFilter2 = Filter.filter("", companies, type, organizations, categories, restrictions, false, false,testTime2, defaultRadius, defaultLocation);
         assertEquals(empty, timeFilter2);
 
     }
