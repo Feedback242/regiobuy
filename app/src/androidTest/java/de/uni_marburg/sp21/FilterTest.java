@@ -102,9 +102,9 @@ public class FilterTest {
 
         //List<Company> companies = DataBaseManager.getCompanyList(database);
 
-        Message message1 = new Message("24-02-2020", "Its good" );
-        Message message2 = new Message("25-03-2020", "Its fine" );
-        Message message3 = new Message("26-04-2020", "Its bad" );
+        Message message1 = new Message("24-02-2020", "Its good", "companyName");
+        Message message2 = new Message("25-03-2020", "Its fine" , "companyName");
+        Message message3 = new Message("26-04-2020", "Its bad" , "companyName");
         List<Message> messageList = new ArrayList<>();
         messageList.add(message1);
         messageList.add(message3);
