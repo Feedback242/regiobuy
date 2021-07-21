@@ -2,7 +2,6 @@ package de.uni_marburg.sp21.filter;
 
 import android.app.Application;
 import android.content.Context;
-import android.location.Location;
 import android.widget.TableLayout;
 import android.widget.Toast;
 
@@ -18,6 +17,7 @@ import de.uni_marburg.sp21.TimeConverter;
 import de.uni_marburg.sp21.company_data_structure.Category;
 import de.uni_marburg.sp21.company_data_structure.Company;
 
+import de.uni_marburg.sp21.company_data_structure.Location;
 import de.uni_marburg.sp21.company_data_structure.Message;
 import de.uni_marburg.sp21.company_data_structure.Organization;
 import de.uni_marburg.sp21.company_data_structure.ProductGroup;
@@ -385,7 +385,7 @@ public class Filter {
     }
 
     //calculate distance between two locations
-    private static double coordinateDistance(de.uni_marburg.sp21.company_data_structure.Location location1, Location location2) {
+    private static double coordinateDistance(Location location1, Location location2) {
 
         double lat1 = location1.getLatitude();
         double lat2 = location2.getLatitude();

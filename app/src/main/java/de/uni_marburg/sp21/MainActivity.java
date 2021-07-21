@@ -519,7 +519,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void filterAndUpdateRecyclerview(){
         filteredCompanies.clear();
-        filteredCompanies.addAll(Filter.filter(searchView.getQuery().toString(), companies, types, organisations, categories, restrictions, isDelivery, isOpen, pickedTime, radius, lastKnownLocation));
+        de.uni_marburg.sp21.company_data_structure.Location loc;
+        if(lastKnownLocation != null){
+            loc = new de.uni_marburg.sp21.company_data_structure.Location(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+        }
+        else {
+            loc = null;
+        }
+        filteredCompanies.addAll(Filter.filter(searchView.getQuery().toString(), companies, types, organisations, categories, restrictions, isDelivery, isOpen, pickedTime, radius, loc));
         sortFilteredCompanies();
         adapter.notifyDataSetChanged();
     }
