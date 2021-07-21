@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     ImageView mapIcon;
     ImageView closeIcon;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-    private static final float DEFAULT_ZOOM = 16;
+    private static final float DEFAULT_ZOOM = 10;
     private static final String TAG = MainActivity.class.getSimpleName();
     BottomSheetFilter settingsDialog;
     FusedLocationProviderClient fusedLocationProviderClient;

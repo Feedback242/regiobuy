@@ -1,7 +1,10 @@
 package de.uni_marburg.sp21.filter;
 
+import android.app.Application;
 import android.content.Context;
 import android.location.Location;
+import android.widget.TableLayout;
+import android.widget.Toast;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -10,6 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import de.uni_marburg.sp21.MyApplication;
 import de.uni_marburg.sp21.TimeConverter;
 import de.uni_marburg.sp21.company_data_structure.Category;
 import de.uni_marburg.sp21.company_data_structure.Company;
@@ -69,46 +73,12 @@ public class Filter {
         }
         List<Company> filteredCompanies = new ArrayList<>();
         filteredCompanies.addAll(filterCompaniesSet);
-        filteredCompanies = searchRadius(filteredCompanies, radius, userLocation);
-        return filteredCompanies;
-    }
-
-    public static List<Company> filterAndProximity(String searchString, List<Company> companies, CheckItem[] types, CheckItem[] organisations, CheckItem[] categories, CheckItem[] restrictions, boolean isDelivery, boolean isOpen, PickedTime pickedTime, double radius) {
-        //the search is not case sensitive
-        searchString = searchString.toLowerCase();
-
-        //HashSets doesn't insert duplicates
-        HashSet<Company> filterCompaniesSet = new HashSet<>();
-
-        //multiple search
-        String[] searchTherms = searchString.split("/");
-        for (Company company : companies) {
-            // is true when searchString = term1 && term2 && term3 ... = true
-            boolean isFulfillingAllTherms = true;
-            for (String searchTherm : searchTherms) {
-                String[] therm = searchTherm.split("/");
-                // is true when Therm = keyword1 || keyword2 || keyword3 ... = true
-                boolean isFulFillingTherm = false;
-                for (String keyWord : therm) {
-                    if (isCompanyFulfillingAllFilters(company, types, organisations, categories, isDelivery, isOpen, pickedTime)) {
-                        //search in that company
-                        if (isDefaultSearch(restrictions)) {
-                            //default search (only company name and city)
-                            isFulFillingTherm = isFulFillingTherm || defaultSearch(keyWord, company);
-                        } else {
-                            //restrictions (search in all restrictions)
-                            isFulFillingTherm = isFulFillingTherm || searchWithRestrictions(keyWord, restrictions, company);
-                        }
-                    }
-                }
-                isFulfillingAllTherms = isFulfillingAllTherms && isFulFillingTherm;
-            }
-            if(isFulfillingAllTherms){
-                filterCompaniesSet.add(company);
-            }
+        if(userLocation != null){
+            filteredCompanies = searchRadius(filteredCompanies, radius, userLocation);
+        } else {
+            Toast toast = Toast.makeText(MyApplication.getAppContext(),"Your Location is unknown",Toast.LENGTH_SHORT);
+            toast.show();
         }
-        List<Company> filteredCompanies = new ArrayList<>();
-        filteredCompanies.addAll(filterCompaniesSet);
         return filteredCompanies;
     }
 
