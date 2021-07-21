@@ -519,7 +519,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void filterAndUpdateRecyclerview(){
         filteredCompanies.clear();
-        filteredCompanies.addAll(Filter.filter(searchView.getQuery().toString(), companies, types, organisations, categories, restrictions, isDelivery, isOpen, pickedTime));
+        filteredCompanies.addAll(Filter.filter(searchView.getQuery().toString(), companies, types, organisations, categories, restrictions, isDelivery, isOpen, pickedTime, radius));
         sortFilteredCompanies();
         adapter.notifyDataSetChanged();
     }
@@ -569,6 +569,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     @Override
                     public void onLocationChange(int rad) {
                         radius = rad;
+                        filterAndUpdateRecyclerview();
                     }
                 });
             }
