@@ -1,6 +1,7 @@
 package de.uni_marburg.sp21.filter;
 
 import android.content.Context;
+import android.location.Location;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.Map;
 import de.uni_marburg.sp21.TimeConverter;
 import de.uni_marburg.sp21.company_data_structure.Category;
 import de.uni_marburg.sp21.company_data_structure.Company;
-import de.uni_marburg.sp21.company_data_structure.Location;
+
 import de.uni_marburg.sp21.company_data_structure.Message;
 import de.uni_marburg.sp21.company_data_structure.Organization;
 import de.uni_marburg.sp21.company_data_structure.ProductGroup;
@@ -32,7 +33,7 @@ public class Filter {
      * @param isOpen true if is open field has been clicked.
      * @param pickedTime The time interval and weekday that has been picked by the TimePicker
      */
-    public static List<Company> filter(String searchString, List<Company> companies, CheckItem[] types, CheckItem[] organisations, CheckItem[] categories, CheckItem[] restrictions, boolean isDelivery, boolean isOpen, PickedTime pickedTime, double radius) {
+    public static List<Company> filter(String searchString, List<Company> companies, CheckItem[] types, CheckItem[] organisations, CheckItem[] categories, CheckItem[] restrictions, boolean isDelivery, boolean isOpen, PickedTime pickedTime, double radius, Location userLocation) {
         //the search is not case sensitive
         searchString = searchString.toLowerCase();
 
@@ -40,12 +41,12 @@ public class Filter {
         HashSet<Company> filterCompaniesSet = new HashSet<>();
 
         //multiple search
-        String[] searchTherms = searchString.split("/");
+        String[] searchTherms = searchString.split("\"");
         for (Company company : companies) {
             // is true when searchString = term1 && term2 && term3 ... = true
             boolean isFulfillingAllTherms = true;
             for (String searchTherm : searchTherms) {
-                String[] therm = searchTherm.split("/");
+                String[] therm = searchTherm.split(" ");
                 // is true when Therm = keyword1 || keyword2 || keyword3 ... = true
                 boolean isFulFillingTherm = false;
                 for (String keyWord : therm) {
@@ -68,7 +69,7 @@ public class Filter {
         }
         List<Company> filteredCompanies = new ArrayList<>();
         filteredCompanies.addAll(filterCompaniesSet);
-        filteredCompanies = searchRadius(filteredCompanies, radius);
+        filteredCompanies = searchRadius(filteredCompanies, radius, userLocation);
         return filteredCompanies;
     }
 
@@ -396,11 +397,9 @@ public class Filter {
     }
 
     //Filters Companies by radius from user
-    private static List<Company> searchRadius(List<Company> input, double radius){
+    private static List<Company> searchRadius(List<Company> input, double radius, Location userLocation){
 
         if (radius == 0) return input;
-
-        Location userLocation = new Location(50.754497,8.49947293); //TODO: implement correct user location
 
         List<Company> in = input;
         List<Company> out = new ArrayList<Company>();
@@ -416,7 +415,7 @@ public class Filter {
     }
 
     //calculate distance between two locations
-    private static double coordinateDistance(Location location1, Location location2) {
+    private static double coordinateDistance(de.uni_marburg.sp21.company_data_structure.Location location1, Location location2) {
 
         double lat1 = location1.getLatitude();
         double lat2 = location2.getLatitude();

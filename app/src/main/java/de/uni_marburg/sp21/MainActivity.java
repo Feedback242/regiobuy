@@ -519,7 +519,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void filterAndUpdateRecyclerview(){
         filteredCompanies.clear();
-        filteredCompanies.addAll(Filter.filter(searchView.getQuery().toString(), companies, types, organisations, categories, restrictions, isDelivery, isOpen, pickedTime, radius));
+        filteredCompanies.addAll(Filter.filter(searchView.getQuery().toString(), companies, types, organisations, categories, restrictions, isDelivery, isOpen, pickedTime, radius, lastKnownLocation));
         sortFilteredCompanies();
         adapter.notifyDataSetChanged();
     }
