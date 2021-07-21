@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private RecyclerView recyclerView;
 
     //PushMessages
-    private final Date MESSAGES_DATE = new Date(2020 - 1900,5,25,16,18,45);
+    private final Date MESSAGES_DATE = new Date(2020 - 1900, 5, 25, 16, 18, 45);
     private List<Message> messages = new ArrayList<>();
     private MessageAdapter messageAdapter;
     private RecyclerView messageRecyclerView;
@@ -233,7 +233,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
-
 
         if(!filteredCompanies.isEmpty()){
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(filteredCompanies.get(0).getLocation().getLatitude() , filteredCompanies.get(0).getLocation().getLongitude()), 10f));
